@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CODEX DEI — Encyclopédie Biblique Universelle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ═══ THEME VARIABLES ═══ */
+[data-theme="dark"] {
+  --bg: #0c0a07; --bg2: #141009; --bg3: #1a1510;
+  --gold: #b8860b; --gold2: #d4a017; --gold3: #f0c040;
+  --text: #e8dcc8; --text2: #a89878; --text3: #6a5838;
+  --border: rgba(184,134,11,0.25); --border2: rgba(184,134,11,0.12);
+  --panel: rgba(20,16,9,0.88); --overlay: rgba(12,10,7,0.95);
+  --shadow: rgba(0,0,0,0.5);
+}
+[data-theme="light"] {
+  --bg: #f5edd8; --bg2: #ede0c0; --bg3: #e5d3a8;
+  --gold: #8b6010; --gold2: #a07818; --gold3: #7a5800;
+  --text: #1a1208; --text2: #4a3820; --text3: #8a7050;
+  --border: rgba(139,96,16,0.3); --border2: rgba(139,96,16,0.15);
+  --panel: rgba(245,237,216,0.9); --overlay: rgba(245,237,216,0.97);
+  --shadow: rgba(0,0,0,0.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'EB Garamond',serif; min-height:100vh; overflow-x:hidden;
+  transition: background 0.4s, color 0.4s;
+}
+/* BG */
+.bg-canvas {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(184,134,11,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(139,26,26,0.05) 0%, transparent 60%);
+}
+[data-theme="light"] .bg-canvas { opacity:0.3; }
+.bg-canvas::before {
+  content:"'; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle 1px at 10% 15%, rgba(184,134,11,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 25% 35%, rgba(184,134,11,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 42% 8%, rgba(184,134,11,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 60% 25%, rgba(184,134,11,0.25) 0%, transparent 100%),
+    radial-gradient(circle 1px at 75% 12%, rgba(184,134,11,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 88% 40%, rgba(184,134,11,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 5% 55%, rgba(184,134,11,0.35) 0%, transparent 100%),
+    radial-gradient(circle 1px at 55% 60%, rgba(184,134,11,0.3) 0%, transparent 100%),
+    radial-gradient(circle 2px at 48% 45%, rgba(184,134,11,0.12) 0%, transparent 100%);
+  animation:starPulse 6s ease-in-out infinite alternate;
+}
+@keyframes starPulse { 0%{opacity:.5} 100%{opacity:1} }
+/* HEADER */
+header {
+  position:relative; z-index:10; text-align:center;
+  padding:50px 20px 28px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, var(--overlay) 0%, transparent 100%);
+}
+.header-top {
+  font-family:'Share Tech Mono",monospace; font-size:.72rem;
+  color:var(--gold); letter-spacing:8px; text-transform:uppercase;
+  margin-bottom:14px; opacity:0; animation:riseIn .8s ease forwards .1s;
+}
+.site-title {
+  font-family:'Cinzel',serif; font-size:clamp(2.6rem,8vw,5.5rem); font-weight:900;
+  background:linear-gradient(160deg,#8b6914 0%,#c9a84c 35%,#f0c040 55%,#c9a84c 75%,#8b6914 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  letter-spacing:.1em; filter:drop-shadow(0 0 40px rgba(201,168,76,.2));
+  opacity:0; animation:riseIn 1s ease forwards .3s;
+}
+.site-subtitle {
+  font-size:1rem; color:var(--text2); font-style:italic;
+  letter-spacing:3px; margin-top:8px;
+  opacity:0; animation:riseIn .8s ease forwards .5s;
+}
+.header-orn {
+  display:flex; align-items:center; justify-content:center;
+  gap:12px; margin:16px 0 12px;
+  opacity:0; animation:riseIn .8s ease forwards .7s;
+}
+.orn-line { width:100px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.header-desc {
+  max-width:680px; margin:0 auto; font-size:.95rem; color:var(--text3);
+  line-height:1.7; opacity:0; animation:riseIn .8s ease forwards .9s;
+}
+/* VERSET DU JOUR BANNER */
+.vdj-banner {
+  position:relative; z-index:9;
+  background:rgba(184,134,11,0.07); border-bottom:1px solid var(--border2);
+  padding:12px 20px; text-align:center; display:flex;
+  align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+}
+.vdj-label {
+  font-family:'Share Tech Mono',monospace; font-size:.7rem;
+  color:var(--gold); letter-spacing:3px; white-space:nowrap;
+}
+.vdj-text {
+  font-style:italic; color:var(--text2); font-size:.95rem;
+  flex:1; min-width:200px; max-width:700px;
+}
+.vdj-ref { color:var(--gold3); font-size:.85rem; white-space:nowrap; }
+.vdj-btn {
+  background:transparent; border:1px solid var(--border);
+  color:var(--gold); padding:4px 12px; font-size:.78rem;
+  font-family:'Share Tech Mono',monospace; cursor:pointer;
+  transition:all .25s; white-space:nowrap;
+}
+.vdj-btn:hover { background:rgba(184,134,11,.1); border-color:var(--gold2); }
+/* COUNTER BANNER */
+.counter-banner {
+  position:relative; z-index:9;
+  background:rgba(184,134,11,0.04); border-bottom:1px solid var(--border2);
+  padding:8px 20px; display:flex; align-items:center;
+  justify-content:center; gap:24px; flex-wrap:wrap;
+}
+.counter-item {
+  display:flex; align-items:center; gap:7px;
+  font-size:.82rem; color:var(--text3); font-style:italic;
+}
+.counter-num { font-family:'Cinzel',serif; color:var(--gold2); font-size:.95rem; }
+/* NAV */
+.main-nav {
+  position:sticky; top:0; z-index:20;
+  background:var(--overlay); border-bottom:1px solid var(--border2);
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:2px; padding:8px 12px; backdrop-filter:blur(12px);
+}
+.nav-item {
+  background:transparent; border:1px solid transparent;
+  color:var(--text3); padding:6px 13px;
+  font-family:'EB Garamond',serif; font-size:.9rem; font-style:italic;
+  cursor:pointer; transition:all .25s; white-space:nowrap;
+}
+.nav-item:hover,.nav-item.active { color:var(--gold2); border-color:var(--border); background:rgba(184,134,11,.07); }
+.nav-item.special { color:var(--gold3); border-color:rgba(184,134,11,.3); }
+/* THEME TOGGLE */
+.theme-toggle {
+  position:fixed; top:14px; right:16px; z-index:100;
+  background:var(--panel); border:1px solid var(--border);
+  color:var(--gold2); width:38px; height:38px; border-radius:50%;
+  font-size:1.1rem; cursor:pointer; transition:all .3s;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 15px var(--shadow);
+}
+.theme-toggle:hover { transform:scale(1.1); border-color:var(--gold2); }
+@keyframes riseIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+/* LAYOUT */
+.app-body { position:relative; z-index:5; max-width:1200px; margin:0 auto; padding:20px 16px 60px; }
+.section { display:none; }
+.section.active { display:block; animation:fadeS .4s ease; }
+@keyframes fadeS { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+/* COMPONENTS */
+.sec-title { font-family:'Cinzel',serif; font-size:1.5rem; color:var(--gold2); text-align:center; margin:24px 0 5px; letter-spacing:2px; }
+.sec-desc { text-align:center; color:var(--text3); font-style:italic; font-size:.92rem; margin-bottom:24px; }
+.gold-div { border:none; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:18px 0; }
+.panel {
+  background:var(--panel); border:1px solid var(--border2);
+  padding:22px; margin-bottom:16px; position:relative; backdrop-filter:blur(4px);
+}
+.panel-accent { position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(180deg,var(--gold2),var(--gold)); }
+.panel-title { font-family:'Cinzel',serif; font-size:.95rem; color:var(--gold3); letter-spacing:2px; margin-bottom:13px; padding-left:10px; }
+.search-wrap { position:relative; margin-bottom:9px; }
+.search-input {
+  width:100%; background:var(--bg); border:1px solid var(--border);
+  color:var(--text); font-family:'EB Garamond',serif; font-size:1.1rem;
+  padding:13px 50px 13px 16px; outline:none; transition:all .3s; font-style:italic;
+}
+.search-input::placeholder { color:var(--text3); font-style:italic; }
+.search-input:focus { border-color:var(--gold2); box-shadow:0 0 20px rgba(184,134,11,.08); }
+.search-btn {
+  position:absolute; right:0; top:0; bottom:0; width:48px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none; color:var(--bg); font-size:1.1rem; cursor:pointer; transition:all .25s;
+}
+.search-btn:hover { background:linear-gradient(135deg,var(--gold2),var(--gold3)); }
+.chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+.chip {
+  background:transparent; border:1px solid var(--border2); color:var(--text3);
+  padding:4px 13px; font-family:'EB Garamond',serif; font-size:.86rem;
+  font-style:italic; cursor:pointer; transition:all .22s;
+}
+.chip:hover { border-color:var(--gold2); color:var(--gold3); background:rgba(184,134,11,.07); }
+.action-btn {
+  display:inline-block; background:linear-gradient(135deg,#8b6914,var(--gold2));
+  color:var(--bg); border:none; padding:12px 26px;
+  font-family:'Cinzel',serif; font-size:.88rem; font-weight:600;
+  letter-spacing:2px; cursor:pointer; transition:all .3s; text-transform:uppercase;
+}
+.action-btn:hover:not(:disabled) { background:linear-gradient(135deg,var(--gold2),var(--gold3)); transform:translateY(-2px); box-shadow:0 8px 28px rgba(184,134,11,.25); }
+.action-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
+.action-btn.full { width:100%; text-align:center; display:block; }
+.ai-result {
+  background:var(--panel); border:1px solid var(--border2);
+  padding:24px; margin-top:14px; animation:fadeS .5s ease;
+  line-height:1.95; font-size:1.02rem; color:var(--text);
+}
+.ai-result strong { color:var(--gold3); font-weight:600; }
+.ai-result h3 { font-family:'Cinzel',serif; color:var(--gold2); font-size:1rem; margin:16px 0 7px; letter-spacing:1px; border-bottom:1px solid var(--border2); padding-bottom:5px; }
+.ai-result ul { padding-left:18px; margin:7px 0; }
+.ai-result li { margin-bottom:5px; }
+.result-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border2); }
+.result-label { font-family:'Cinzel',serif; color:var(--gold2); font-size:1rem; letter-spacing:1px; }
+/* Share buttons */
+.share-row { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.share-btn {
+  display:flex; align-items:center; gap:6px; padding:7px 14px;
+  font-family:'EB Garamond',serif; font-size:.88rem; font-style:italic;
+  border:1px solid; cursor:pointer; transition:all .25s; background:transparent;
+  text-decoration:none;
+}
+.share-wa { border-color:rgba(37,211,102,.3); color:#25d366; }
+.share-wa:hover { background:rgba(37,211,102,.1); }
+.share-fb { border-color:rgba(66,103,178,.3); color:#4267b2; }
+.share-fb:hover { background:rgba(66,103,178,.1); }
+.share-copy { border-color:var(--border); color:var(--text2); }
+.share-copy:hover { background:rgba(184,134,11,.07); color:var(--gold2); }
+.share-print { border-color:var(--border); color:var(--text2); }
+.share-print:hover { background:rgba(184,134,11,.07); color:var(--gold2); }
+/* Fav button */
+.fav-btn {
+  background:transparent; border:1px solid var(--border); color:var(--text3);
+  padding:6px 14px; font-size:.85rem; cursor:pointer; transition:all .25s;
+  font-family:'EB Garamond',serif; font-style:italic;
+}
+.fav-btn:hover,.fav-btn.saved { border-color:var(--gold2); color:var(--gold2); }
+/* LOADING */
+.loading-state { text-align:center; padding:44px 20px; color:var(--text3); }
+.loader { display:inline-block; width:36px; height:36px; border:2px solid var(--border2); border-top-color:var(--gold2); border-radius:50%; animation:spin 1.2s linear infinite; margin-bottom:14px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-verse { font-style:italic; font-size:.88rem; color:var(--gold); opacity:.5; margin-top:8px; }
+.error-state { padding:18px; border:1px solid rgba(192,57,43,.35); background:rgba(139,26,26,.08); color:#e08070; font-style:italic; }
+/* GRID */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; }
+.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:11px; }
+@media(max-width:768px){.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.g2,.g3,.g4{grid-template-columns:1fr}}
+/* CARD */
+.card {
+  background:var(--panel); border:1px solid var(--border2);
+  padding:17px; cursor:pointer; transition:all .28s; position:relative; overflow:hidden;
+}
+.card::before { content:"'; position:absolute; inset:0; background:linear-gradient(135deg,rgba(184,134,11,.04) 0%,transparent 60%); opacity:0; transition:opacity .3s; }
+.card:hover { border-color:var(--border); transform:translateY(-2px); box-shadow:0 8px 28px var(--shadow); }
+.card:hover::before { opacity:1; }
+.card-num { font-family:'Cinzel",serif; font-size:2.2rem; color:var(--gold2); line-height:1; margin-bottom:6px; opacity:.8; }
+.card-title { font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-bottom:7px; }
+.card-desc { font-size:.88rem; color:var(--text3); font-style:italic; line-height:1.5; }
+/* TABLE */
+.data-table { width:100%; border-collapse:collapse; font-size:.9rem; }
+.data-table th { font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--gold); letter-spacing:3px; text-transform:uppercase; padding:9px 13px; text-align:left; border-bottom:1px solid var(--border); font-weight:400; background:rgba(184,134,11,.04); }
+.data-table td { padding:9px 13px; border-bottom:1px solid var(--border2); color:var(--text); vertical-align:top; line-height:1.5; }
+.data-table tr:hover td { background:rgba(184,134,11,.03); }
+.ref-tag { display:inline-block; border:1px solid; padding:2px 8px; font-size:.72rem; font-family:'Share Tech Mono',monospace; margin:2px; }
+.ref-bible{border-color:var(--gold);color:var(--gold)}
+.ref-science{border-color:#4a8caa;color:#7ab8d4}
+.ref-cosmos{border-color:#7a5aa8;color:#a87adc}
+.ref-culture{border-color:#4a8a4a;color:#7aaa7a}
+.ref-math{border-color:#aa8040;color:#d4a060}
+.ref-hebrew{border-color:#aa4040;color:#d47070}
+/* TEXTAREA */
+.txt-area {
+  width:100%; background:var(--bg); border:1px solid var(--border);
+  color:var(--text); font-family:'EB Garamond',serif; font-size:1rem;
+  padding:13px 15px; resize:vertical; min-height:100px; outline:none;
+  transition:border-color .3s; font-style:italic; line-height:1.6;
+}
+.txt-area::placeholder{color:var(--text3)}
+.txt-area:focus{border-color:var(--gold2);box-shadow:0 0 18px rgba(184,134,11,.07)}
+/* TABS */
+.tabs{display:flex;gap:2px;margin-bottom:14px;border-bottom:1px solid var(--border2)}
+.tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);padding:7px 16px;font-family:'EB Garamond',serif;font-size:.92rem;font-style:italic;cursor:pointer;transition:all .22s;margin-bottom:-1px}
+.tab.active,.tab:hover{color:var(--gold2);border-bottom-color:var(--gold2)}
+/* BOOKS */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:5px;max-height:300px;overflow-y:auto;padding-right:3px}
+.books-grid::-webkit-scrollbar{width:3px}
+.books-grid::-webkit-scrollbar-thumb{background:rgba(184,134,11,.3)}
+.book-btn{background:var(--bg2);border:1px solid var(--border2);color:var(--text3);padding:7px 9px;font-family:'EB Garamond',serif;font-size:.8rem;cursor:pointer;transition:all .22s;text-align:center;font-style:italic}
+.book-btn:hover,.book-btn.active{border-color:var(--gold2);color:var(--gold3);background:rgba(184,134,11,.08)}
+/* SELECT */
+.styled-select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'EB Garamond',serif;font-size:.95rem;padding:9px 13px;outline:none;cursor:pointer;font-style:italic;width:100%}
+/* STAT */
+.stat-box{background:var(--panel);border:1px solid var(--border2);padding:18px;text-align:center}
+.stat-number{font-family:'Cinzel',serif;font-size:2rem;color:var(--gold2);line-height:1;margin-bottom:5px}
+.stat-label{font-size:.8rem;color:var(--text3);font-style:italic}
+/* TIMELINE */
+.timeline{position:relative;padding-left:30px}
+.timeline::before{content:"';position:absolute;left:10px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold),var(--gold),transparent)}
+.tl-item{position:relative;margin-bottom:20px;padding:14px 16px;background:var(--panel);border:1px solid var(--border2);transition:all .25s;cursor:pointer}
+.tl-item:hover{border-color:var(--border);transform:translateX(3px)}
+.tl-dot{position:absolute;left:-24px;top:18px;width:10px;height:10px;background:var(--gold2);border-radius:50%;box-shadow:0 0 8px rgba(184,134,11,.5)}
+.tl-era{font-family:'Share Tech Mono",monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:5px}
+.tl-event{font-size:1rem;color:var(--text);font-weight:500;margin-bottom:3px}
+.tl-ref{font-size:.82rem;color:var(--text3);font-style:italic}
+/* MAP */
+.map-wrap{background:var(--panel);border:1px solid var(--border2);padding:10px;position:relative;overflow:hidden}
+.map-svg{width:100%;height:auto;display:block}
+.map-dot{cursor:pointer;transition:all .25s}
+.map-dot:hover{transform:scale(1.5)}
+.map-tooltip{position:absolute;background:var(--overlay);border:1px solid var(--border);padding:8px 12px;font-size:.82rem;color:var(--text);pointer-events:none;z-index:50;max-width:200px;display:none;font-style:italic}
+/* NEWSLETTER */
+.nl-form{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.nl-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'EB Garamond',serif;font-size:1rem;padding:11px 14px;outline:none;transition:border-color .3s;font-style:italic}
+.nl-input:focus{border-color:var(--gold2)}
+/* TESTIMONIAL */
+.testi-card{background:var(--panel);border:1px solid var(--border2);border-left:3px solid var(--gold);padding:18px;margin-bottom:12px}
+.testi-text{font-style:italic;font-size:1rem;color:var(--text2);line-height:1.8;margin-bottom:10px}
+.testi-author{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--gold);letter-spacing:2px}
+/* FAVORIS */
+.fav-card{background:var(--panel);border:1px solid var(--border2);padding:14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all .25s}
+.fav-card:hover{border-color:var(--border);transform:translateX(2px)}
+.fav-icon{font-size:1.2rem;flex-shrink:0}
+.fav-content{flex:1}
+.fav-title{font-family:'Cinzel',serif;font-size:.88rem;color:var(--gold2);margin-bottom:4px;letter-spacing:.5px}
+.fav-preview{font-size:.85rem;color:var(--text3);font-style:italic;line-height:1.4}
+.fav-del{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem;padding:2px 6px;transition:color .2s;flex-shrink:0}
+.fav-del:hover{color:#e08070}
+/* DON */
+.don-amount{display:block;background:rgba(184,134,11,.07);border:1px solid var(--border);color:var(--gold2);padding:11px;font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:1px;text-decoration:none;text-align:center;transition:all .3s}
+.don-amount:hover{background:rgba(184,134,11,.18);border-color:var(--gold2);transform:translateY(-2px)}
+
+/* AUTH */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);padding:32px;width:100%;max-width:420px;position:relative;animation:fadeS .3s ease}
+.modal h2{font-family:'Cinzel',serif;color:var(--gold2);font-size:1.2rem;letter-spacing:2px;margin-bottom:6px;text-align:center}
+.modal p{color:var(--text3);font-style:italic;font-size:.9rem;text-align:center;margin-bottom:20px}
+.modal-close{position:absolute;top:12px;right:16px;background:transparent;border:none;color:var(--text3);font-size:1.3rem;cursor:pointer}
+.modal-close:hover{color:var(--gold2)}
+.modal-input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'EB Garamond',serif;font-size:1rem;padding:11px 14px;outline:none;margin-bottom:10px;transition:border-color .3s}
+.modal-input:focus{border-color:var(--gold2)}
+.modal-btn{width:100%;background:linear-gradient(135deg,#8b6914,var(--gold2));color:var(--bg);border:none;padding:13px;font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;letter-spacing:2px;cursor:pointer;transition:all .3s;margin-bottom:8px}
+.modal-btn:hover{background:linear-gradient(135deg,var(--gold2),var(--gold3))}
+.modal-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.modal-btn.secondary:hover{border-color:var(--gold2);color:var(--gold2)}
+.modal-err{color:#e08070;font-size:.85rem;font-style:italic;margin-bottom:8px;display:none;text-align:center}
+.modal-ok{color:var(--gold);font-size:.85rem;font-style:italic;margin-bottom:8px;display:none;text-align:center}
+.modal-tabs{display:flex;gap:2px;margin-bottom:20px}
+.modal-tab{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);padding:8px;font-family:'EB Garamond',serif;font-size:.95rem;font-style:italic;cursor:pointer;transition:all .22s}
+.modal-tab.active{color:var(--gold2);border-bottom-color:var(--gold2)}
+/* USER BAR */
+.user-bar{position:fixed;bottom:16px;right:16px;z-index:100;display:flex;align-items:center;gap:8px}
+.user-btn{background:var(--panel);border:1px solid var(--border);color:var(--gold2);padding:8px 16px;font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:1px;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px var(--shadow)}
+.user-btn:hover{border-color:var(--gold2);background:rgba(184,134,11,.12)}
+.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:.9rem;color:var(--bg);cursor:pointer;border:1px solid var(--border);box-shadow:0 4px 15px var(--shadow)}
+/* MY SPACE */
+.my-tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);padding:8px 16px;font-family:'EB Garamond',serif;font-size:.92rem;font-style:italic;cursor:pointer;transition:all .22s;margin-bottom:-1px}
+.my-tab.active,.my-tab:hover{color:var(--gold2);border-bottom-color:var(--gold2)}
+.note-card{background:var(--panel);border:1px solid var(--border2);padding:16px;margin-bottom:10px;position:relative}
+.note-card-title{font-family:'Cinzel',serif;color:var(--gold2);font-size:.9rem;margin-bottom:6px;letter-spacing:.5px}
+.note-card-body{font-size:.92rem;color:var(--text2);line-height:1.7;font-style:italic}
+.note-card-date{font-size:.72rem;color:var(--text3);font-family:'Share Tech Mono',monospace;margin-top:8px}
+.note-del{position:absolute;top:10px;right:12px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;transition:color .2s}
+.note-del:hover{color:#e08070}
+
+
+/* DONATION POPUP */
+.don-popup-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.don-popup-bg.open{display:flex;animation:fadeS .3s ease}
+.don-popup{background:var(--bg2);border:1px solid var(--border);padding:32px;width:100%;max-width:420px;position:relative;text-align:center;animation:fadeS .3s ease}
+.don-popup-close{position:absolute;top:10px;right:14px;background:transparent;border:none;color:var(--text3);font-size:1.3rem;cursor:pointer;transition:color .2s}
+.don-popup-close:hover{color:var(--gold2)}
+.don-popup-icon{font-size:2.8rem;margin-bottom:12px}
+.don-popup-title{font-family:"Cinzel",serif;color:var(--gold2);font-size:1.15rem;letter-spacing:2px;margin-bottom:10px}
+.don-popup-text{color:var(--text3);font-style:italic;font-size:.95rem;line-height:1.75;margin-bottom:20px}
+.don-popup-amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.don-popup-amounts a{display:block;background:rgba(184,134,11,.08);border:1px solid var(--border);color:var(--gold2);padding:10px;font-family:"Cinzel",serif;font-size:.88rem;letter-spacing:1px;text-decoration:none;transition:all .3s}
+.don-popup-amounts a:hover{background:rgba(184,134,11,.2);border-color:var(--gold2);transform:translateY(-2px)}
+.don-popup-skip{background:transparent;border:none;color:var(--text3);font-size:.82rem;font-style:italic;cursor:pointer;text-decoration:underline;margin-top:4px;transition:color .2s}
+.don-popup-skip:hover{color:var(--text2)}
+.don-popup-counter{font-size:.75rem;color:var(--gold);font-family:"Share Tech Mono",monospace;letter-spacing:2px;margin-bottom:14px;opacity:.7}
+
+/* FORUM */
+/* FREEMIUM */
+/* FOOTER */
+footer{position:relative;z-index:10;text-align:center;padding:22px;color:var(--text3);font-size:.83rem;font-style:italic;border-top:1px solid var(--border2);margin-top:40px}
+/* PRINT */
+@media print{
+  .main-nav,.theme-toggle,.counter-banner,.vdj-banner,.share-row,.fav-btn,.action-btn,header{display:none!important}
+  body{background:white;color:black}
+  .ai-result{border:1px solid #ccc;padding:20px}
+  .ai-result strong{color:#8b6010}
+}
+/* MOBILE */
+@media(max-width:600px){
+  .site-title{font-size:2.4rem}
+  .vdj-banner{flex-direction:column;gap:6px;text-align:center}
+  .counter-banner{gap:12px}
+  .main-nav{padding:6px 8px}
+  .nav-item{padding:5px 9px;font-size:.82rem}
+  .app-body{padding:14px 10px 40px}
+}
+</style>
+</head>
+<body>
+<div class="bg-canvas"></div>
+<button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème" id="themeBtn">☀️</button>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">✦ Encyclopédie Biblique Universelle ✦</div>
+  <div class="site-title">CODEX DEI</div>
+  <div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div>
+  <div class="header-orn">
+    <span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span>
+  </div>
+  <p class="header-desc">Recherchez n'importe quel mot, thème, nombre ou personnage de la Bible.</p>
+</header>
+
+<!-- VERSET DU JOUR -->
+<div class="vdj-banner" id="vdjBanner">
+  <span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span>
+  <span class="vdj-text" id="vdjText">Chargement...</span>
+  <span class="vdj-ref" id="vdjRef"></span>
+  <button class="vdj-btn" onclick="analyzeVDJ()">Analyser ✦</button>
+  <button class="vdj-btn" onclick="loadVDJ()">Nouveau ↻</button>
+</div>
+
+<!-- COUNTER -->
+<div class="counter-banner">
+  <div class="counter-item">👁️ <span class="counter-num" id="visitCount">—</span> visites aujourd'hui</div>
+  <div class="counter-item">🔍 <span class="counter-num" id="searchCount">—</span> analyses effectuées</div>
+  <div class="counter-item">📖 <span class="counter-num" id="favCount">—</span> favoris sauvegardés</div>
+  <div class="counter-item">🌍 <span class="counter-num">66</span> livres couverts</div>
+</div>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <button class="nav-item active" onclick="goTo('search')">🔍 Recherche</button>
+  <button class="nav-item" onclick="goTo('word')">📖 Mots</button>
+  <button class="nav-item" onclick="goTo('numbers')">🔢 Nombres</button>
+  <button class="nav-item" onclick="goTo('books')">📚 Livres</button>
+  <button class="nav-item" onclick="goTo('characters')">👤 Personnages</button>
+  <button class="nav-item" onclick="goTo('themes')">🌿 Thèmes</button>
+  <button class="nav-item" onclick="goTo('correspondences')">⚡ Correspondances</button>
+  <button class="nav-item" onclick="goTo('prophecies')">🎯 Prophéties</button>
+  <button class="nav-item" onclick="goTo('hebrew')">א Langues</button>
+  <button class="nav-item" onclick="goTo('timeline')">📅 Chronologie</button>
+  <button class="nav-item" onclick="goTo('map')">🗺️ Carte</button>
+  <button class="nav-item" onclick="goTo('prayer')">🙏 Prière IA</button>
+  <button class="nav-item" onclick="goTo('reading')">📋 Plan Lecture</button>
+  <button class="nav-item" onclick="goTo('compare')">🔀 Comparaison</button>
+  <button class="nav-item" onclick="goTo('favorites')">⭐ Favoris</button>
+  <button class="nav-item special" onclick="goTo('daily')">📸 Image du Jour</button>
+  <button class="nav-item" onclick="goTo('forum')">💬 Forum</button>
+  <button class="nav-item" onclick="goTo('myspace')">👤 Mon Espace</button>
+  <button class="nav-item" onclick="goTo('studies')">📚 Études</button>
+  <button class="nav-item" onclick="goTo('testimonials')">💬 Témoignages</button>
+  <button class="nav-item" onclick="goTo('about')">ℹ️ À propos</button>
+  <button class="nav-item special" onclick="goTo('don')">💛 Soutenir</button>
+  <button class="nav-item" onclick="goTo('contact')">✉️ Contact</button>
+</nav>
+
+<div class="app-body">
+<!-- ══ 1. RECHERCHE ══ -->
+<div id="sec-search" class="section active">
+  <div class="sec-title">Recherche Universelle</div>
+  <div class="sec-desc">N'importe quel mot, phrase, nombre ou concept — l'IA explore toute la Bible</div>
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="panel-title">✦ Moteur Biblique</div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="uniSearch" placeholder="lumière, eau, 40, alliance, résurrection, agneau, pierre..." onkeydown="if(event.key==='Enter')universalSearch()">
+      <button class="search-btn" onclick="universalSearch()">→</button>
+    </div>
+    <div class="chips">
+      <button class="chip" onclick="qs('lumière')">lumière</button>
+      <button class="chip" onclick="qs('eau')">eau</button>
+      <button class="chip" onclick="qs('alliance')">alliance</button>
+      <button class="chip" onclick="qs('agneau')">agneau</button>
+      <button class="chip" onclick="qs('feu')">feu</button>
+      <button class="chip" onclick="qs('sang')">sang</button>
+      <button class="chip" onclick="qs('esprit')">esprit</button>
+      <button class="chip" onclick="qs('gloire')">gloire</button>
+      <button class="chip" onclick="qs('grâce')">grâce</button>
+      <button class="chip" onclick="qs('vérité')">vérité</button>
+      <button class="chip" onclick="qs('amour agapé')">amour</button>
+      <button class="chip" onclick="qs('pain')">pain</button>
+    </div>
+  </div>
+  <div id="uniResult"></div>
+  <div class="g4" style="margin-top:20px">
+    <div class="stat-box"><div class="stat-number">66</div><div class="stat-label">Livres</div></div>
+    <div class="stat-box"><div class="stat-number">1,189</div><div class="stat-label">Chapitres</div></div>
+    <div class="stat-box"><div class="stat-number">31,173</div><div class="stat-label">Versets</div></div>
+    <div class="stat-box"><div class="stat-number">783K</div><div class="stat-label">Mots</div></div>
+  </div>
+</div>
+
+<!-- ══ 2. MOTS ══ -->
+<div id="sec-word" class="section">
+  <div class="sec-title">Analyse de Mot</div>
+  <div class="sec-desc">Étymologie hébraïque/grecque · Gématrie · Occurrences · Symbolisme profond</div>
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="wordInput" placeholder="shalom, logos, amen, éden, maranatha, selah, hosanna..." onkeydown="if(event.key==='Enter')analyzeWord()">
+      <button class="search-btn" onclick="analyzeWord()">→</button>
+    </div>
+    <div class="chips">
+      <button class="chip" onclick="sw('shalom')">shalom</button>
+      <button class="chip" onclick="sw('logos')">logos</button>
+      <button class="chip" onclick="sw('amen')">amen</button>
+      <button class="chip" onclick="sw('alléluia')">alléluia</button>
+      <button class="chip" onclick="sw('éden')">éden</button>
+      <button class="chip" onclick="sw('maranatha')">maranatha</button>
+      <button class="chip" onclick="sw('selah')">selah</button>
+      <button class="chip" onclick="sw('hosanna')">hosanna</button>
+      <button class="chip" onclick="sw('abba')">abba</button>
+      <button class="chip" onclick="sw('tohu vabohu')">tohu vabohu</button>
+    </div>
+  </div>
+  <div id="wordResult"></div>
+</div>
+
+<!-- ══ 3. NOMBRES ══ -->
+<div id="sec-numbers" class="section">
+  <div class="sec-title">Nombres Sacrés</div>
+  <div class="sec-desc">Cliquez pour une analyse exhaustive · Gématrie · Occurrences · Correspondances</div>
+  <div class="g4" style="margin-bottom:18px">
+    <div class="card" onclick="an(1,'L\'Unité Divine')"><div class="card-num">1</div><div class="card-title">Unité</div><div class="card-desc">Shema · Monothéisme · Singularité</div></div>
+    <div class="card" onclick="an(3,'La Trinité')"><div class="card-num">3</div><div class="card-title">Trinité</div><div class="card-desc">Père · Fils · Esprit · 3e jour</div></div>
+    <div class="card" onclick="an(7,'La Perfection')"><div class="card-num">7</div><div class="card-title">Perfection</div><div class="card-desc">7 jours · 7 notes · 700+ occurrences</div></div>
+    <div class="card" onclick="an(8,'La Nouvelle Création')"><div class="card-num">8</div><div class="card-title">Renouveau</div><div class="card-desc">Arche · 8 groupes sanguins</div></div>
+    <div class="card" onclick="an(10,'La Loi Divine')"><div class="card-num">10</div><div class="card-title">La Loi</div><div class="card-desc">10 commandements · 10 plaies</div></div>
+    <div class="card" onclick="an(12,'L\'Élection')"><div class="card-num">12</div><div class="card-title">Élection</div><div class="card-desc">12 tribus · 12 apôtres · 12 mois</div></div>
+    <div class="card" onclick="an(40,'L\'Épreuve')"><div class="card-num">40</div><div class="card-title">Épreuve</div><div class="card-desc">Déluge · Désert · Grossesse</div></div>
+    <div class="card" onclick="an(70,'Les Nations')"><div class="card-num">70</div><div class="card-title">Nations</div><div class="card-desc">70 nations · 70 semaines</div></div>
+    <div class="card" onclick="an(120,'La Plénitude')"><div class="card-num">120</div><div class="card-title">Plénitude</div><div class="card-desc">Cénacle · Moïse · Globule rouge</div></div>
+    <div class="card" onclick="an(153,'Le Mystère de Jean 21')"><div class="card-num">153</div><div class="card-title">Mystère</div><div class="card-desc">153 poissons · Triangle de 17</div></div>
+    <div class="card" onclick="an(666,'Le Nombre de la Bête')"><div class="card-num">666</div><div class="card-title">La Bête</div><div class="card-desc">Apocalypse 13:18 · Gématrie</div></div>
+    <div class="card" onclick="an(144000,'Le Sceau des Élus')"><div class="card-num" style="font-size:1.3rem">144K</div><div class="card-title">Les Élus</div><div class="card-desc">12×12×1000 · Apocalypse</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="panel-title">🔢 Analyser n'importe quel nombre</div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <input type="number" class="search-input" id="customNum" placeholder="Entrez un nombre..." style="flex:1" onkeydown="if(event.key==='Enter')anCustom()">
+      <button class="action-btn" onclick="anCustom()">Analyser</button>
+    </div>
+  </div>
+  <div id="numberResult"></div>
+</div>
+
+<!-- ══ 4. LIVRES ══ -->
+<div id="sec-books" class="section">
+  <div class="sec-title">Les 66 Livres de la Bible</div>
+  <div class="sec-desc">Analyse complète : contexte · auteur · thèmes · prophéties · symbolisme</div>
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('at',this)">Ancien Testament (39)</button>
+      <button class="tab" onclick="switchTab('nt',this)">Nouveau Testament (27)</button>
+    </div>
+    <div id="booksAT" class="books-grid">
+      <button class="book-btn" onclick="ab('Genèse')">Genèse</button><button class="book-btn" onclick="ab('Exode')">Exode</button><button class="book-btn" onclick="ab('Lévitique')">Lévitique</button><button class="book-btn" onclick="ab('Nombres')">Nombres</button><button class="book-btn" onclick="ab('Deutéronome')">Deutéronome</button><button class="book-btn" onclick="ab('Josué')">Josué</button><button class="book-btn" onclick="ab('Juges')">Juges</button><button class="book-btn" onclick="ab('Ruth')">Ruth</button><button class="book-btn" onclick="ab('1 Samuel')">1 Samuel</button><button class="book-btn" onclick="ab('2 Samuel')">2 Samuel</button><button class="book-btn" onclick="ab('1 Rois')">1 Rois</button><button class="book-btn" onclick="ab('2 Rois')">2 Rois</button><button class="book-btn" onclick="ab('1 Chroniques')">1 Chroniques</button><button class="book-btn" onclick="ab('2 Chroniques')">2 Chroniques</button><button class="book-btn" onclick="ab('Esdras')">Esdras</button><button class="book-btn" onclick="ab('Néhémie')">Néhémie</button><button class="book-btn" onclick="ab('Esther')">Esther</button><button class="book-btn" onclick="ab('Job')">Job</button><button class="book-btn" onclick="ab('Psaumes')">Psaumes</button><button class="book-btn" onclick="ab('Proverbes')">Proverbes</button><button class="book-btn" onclick="ab('Ecclésiaste')">Ecclésiaste</button><button class="book-btn" onclick="ab('Cantique')">Cantique</button><button class="book-btn" onclick="ab('Ésaïe')">Ésaïe</button><button class="book-btn" onclick="ab('Jérémie')">Jérémie</button><button class="book-btn" onclick="ab('Lamentations')">Lamentations</button><button class="book-btn" onclick="ab('Ézéchiel')">Ézéchiel</button><button class="book-btn" onclick="ab('Daniel')">Daniel</button><button class="book-btn" onclick="ab('Osée')">Osée</button><button class="book-btn" onclick="ab('Joël')">Joël</button><button class="book-btn" onclick="ab('Amos')">Amos</button><button class="book-btn" onclick="ab('Jonas')">Jonas</button><button class="book-btn" onclick="ab('Michée')">Michée</button><button class="book-btn" onclick="ab('Nahum')">Nahum</button><button class="book-btn" onclick="ab('Habacuc')">Habacuc</button><button class="book-btn" onclick="ab('Sophonie')">Sophonie</button><button class="book-btn" onclick="ab('Aggée')">Aggée</button><button class="book-btn" onclick="ab('Zacharie')">Zacharie</button><button class="book-btn" onclick="ab('Malachie')">Malachie</button>
+    </div>
+    <div id="booksNT" class="books-grid" style="display:none">
+      <button class="book-btn" onclick="ab('Matthieu')">Matthieu</button><button class="book-btn" onclick="ab('Marc')">Marc</button><button class="book-btn" onclick="ab('Luc')">Luc</button><button class="book-btn" onclick="ab('Jean')">Jean</button><button class="book-btn" onclick="ab('Actes')">Actes</button><button class="book-btn" onclick="ab('Romains')">Romains</button><button class="book-btn" onclick="ab('1 Corinthiens')">1 Cor.</button><button class="book-btn" onclick="ab('2 Corinthiens')">2 Cor.</button><button class="book-btn" onclick="ab('Galates')">Galates</button><button class="book-btn" onclick="ab('Éphésiens')">Éphésiens</button><button class="book-btn" onclick="ab('Philippiens')">Philippiens</button><button class="book-btn" onclick="ab('Colossiens')">Colossiens</button><button class="book-btn" onclick="ab('1 Thessaloniciens')">1 Thess.</button><button class="book-btn" onclick="ab('2 Thessaloniciens')">2 Thess.</button><button class="book-btn" onclick="ab('1 Timothée')">1 Tim.</button><button class="book-btn" onclick="ab('2 Timothée')">2 Tim.</button><button class="book-btn" onclick="ab('Tite')">Tite</button><button class="book-btn" onclick="ab('Philémon')">Philémon</button><button class="book-btn" onclick="ab('Hébreux')">Hébreux</button><button class="book-btn" onclick="ab('Jacques')">Jacques</button><button class="book-btn" onclick="ab('1 Pierre')">1 Pierre</button><button class="book-btn" onclick="ab('2 Pierre')">2 Pierre</button><button class="book-btn" onclick="ab('1 Jean')">1 Jean</button><button class="book-btn" onclick="ab('2 Jean')">2 Jean</button><button class="book-btn" onclick="ab('3 Jean')">3 Jean</button><button class="book-btn" onclick="ab('Jude')">Jude</button><button class="book-btn" onclick="ab('Apocalypse')">Apocalypse</button>
+    </div>
+  </div>
+  <div id="bookResult"></div>
+</div>
+
+<!-- ══ 5. PERSONNAGES ══ -->
+<div id="sec-characters" class="section">
+  <div class="sec-title">Personnages Bibliques</div>
+  <div class="sec-desc">Biographie · Symbolisme · Typologie · Prophéties · Signification du nom</div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="charInput" placeholder="Adam, Noé, Abraham, Moïse, David, Salomon, Élie, Jésus, Pierre, Paul..." onkeydown="if(event.key==='Enter')analyzeChar()">
+      <button class="search-btn" onclick="analyzeChar()">→</button>
+    </div>
+  </div>
+  <div class="g4" style="margin-bottom:18px">
+    <div class="card" onclick="qc('Adam')"><div style="font-size:1.6rem;margin-bottom:6px">🌱</div><div class="card-title">Adam</div><div class="card-desc">Premier homme · Type du Christ</div></div>
+    <div class="card" onclick="qc('Noé')"><div style="font-size:1.6rem;margin-bottom:6px">🌊</div><div class="card-title">Noé</div><div class="card-desc">Déluge · Arche · Alliance</div></div>
+    <div class="card" onclick="qc('Abraham')"><div style="font-size:1.6rem;margin-bottom:6px">⭐</div><div class="card-title">Abraham</div><div class="card-desc">Père des croyants · Foi</div></div>
+    <div class="card" onclick="qc('Moïse')"><div style="font-size:1.6rem;margin-bottom:6px">⚡</div><div class="card-title">Moïse</div><div class="card-desc">Libérateur · Loi · Type du Christ</div></div>
+    <div class="card" onclick="qc('David')"><div style="font-size:1.6rem;margin-bottom:6px">👑</div><div class="card-title">David</div><div class="card-desc">Roi · Psaumes · Lignée messianique</div></div>
+    <div class="card" onclick="qc('Salomon')"><div style="font-size:1.6rem;margin-bottom:6px">🏛️</div><div class="card-title">Salomon</div><div class="card-desc">Sagesse · Temple</div></div>
+    <div class="card" onclick="qc('Élie')"><div style="font-size:1.6rem;margin-bottom:6px">🔥</div><div class="card-title">Élie</div><div class="card-desc">Prophète du feu · Retour</div></div>
+    <div class="card" onclick="qc('Jésus-Christ')"><div style="font-size:1.6rem;margin-bottom:6px">✝️</div><div class="card-title">Jésus</div><div class="card-desc">Logos · Agneau · 300+ prophéties</div></div>
+    <div class="card" onclick="qc('Marie mère de Jésus')"><div style="font-size:1.6rem;margin-bottom:6px">🕊️</div><div class="card-title">Marie</div><div class="card-desc">Theotokos · Nouvelle Ève</div></div>
+    <div class="card" onclick="qc('Paul apôtre')"><div style="font-size:1.6rem;margin-bottom:6px">✉️</div><div class="card-title">Paul</div><div class="card-desc">13 épîtres · Théologien</div></div>
+    <div class="card" onclick="qc('Jean l\'Évangéliste')"><div style="font-size:1.6rem;margin-bottom:6px">📖</div><div class="card-title">Jean</div><div class="card-desc">Logos · Amour · Apocalypse</div></div>
+    <div class="card" onclick="qc('Marie-Madeleine')"><div style="font-size:1.6rem;margin-bottom:6px">🌹</div><div class="card-title">Marie-Madeleine</div><div class="card-desc">Premier témoin · Résurrection</div></div>
+  </div>
+  <div id="charResult"></div>
+</div>
+
+<!-- ══ 6. THÈMES ══ -->
+<div id="sec-themes" class="section">
+  <div class="sec-title">Thèmes Profonds</div>
+  <div class="sec-desc">Analyses thématiques complètes — de la Genèse à l'Apocalypse</div>
+  <div class="g3" style="margin-bottom:18px">
+    <div class="card" onclick="at2('La lumière dans la Bible : symbolisme, physique de la lumière, photons, correspondances cosmiques')">☀️<br><div class="card-title" style="margin-top:8px">Lumière</div><div class="card-desc">Genèse → Apocalypse · Photons</div></div>
+    <div class="card" onclick="at2('L\'eau dans la Bible : déluge, baptême, eau vive, correspondances biologiques H2O')">💧<br><div class="card-title" style="margin-top:8px">L'Eau</div><div class="card-desc">Déluge · Baptême · H₂O sacré</div></div>
+    <div class="card" onclick="at2('Le sang dans la Bible : sacrifice, rédemption, alliance, biologie du sang')">🩸<br><div class="card-title" style="margin-top:8px">Le Sang</div><div class="card-desc">Sacrifice · Alliance · Fer</div></div>
+    <div class="card" onclick="at2('Le feu dans la Bible : présence divine, jugement, purification, Pentecôte')">🔥<br><div class="card-title" style="margin-top:8px">Le Feu</div><div class="card-desc">Présence divine · Purification</div></div>
+    <div class="card" onclick="at2('Le vent et l\'Esprit dans la Bible : ruach, pneuma, correspondances atmosphériques')">🌬️<br><div class="card-title" style="margin-top:8px">Vent & Esprit</div><div class="card-desc">Ruach · Pneuma · Souffle</div></div>
+    <div class="card" onclick="at2('Les arbres dans la Bible : Arbre de Vie, croix, cèdre, olivier, figuier')">🌳<br><div class="card-title" style="margin-top:8px">Les Arbres</div><div class="card-desc">Éden · Croix · Olivier</div></div>
+    <div class="card" onclick="at2('Les animaux dans la Bible : agneau, lion, serpent, aigle, colombe — symbolisme complet')">🦁<br><div class="card-title" style="margin-top:8px">Animaux</div><div class="card-desc">Agneau · Lion · Serpent · Aigle</div></div>
+    <div class="card" onclick="at2('La géométrie sacrée dans la Bible : Temple de Salomon, Arche, Tabernacle — Pi, Phi, proportions')">📐<br><div class="card-title" style="margin-top:8px">Géométrie Sacrée</div><div class="card-desc">Temple · Pi · Phi · Arche</div></div>
+    <div class="card" onclick="at2('Les montagnes sacrées : Sinaï, Sion, Horeb, Carmel, Golgotha — géographie spirituelle')">⛰️<br><div class="card-title" style="margin-top:8px">Montagnes</div><div class="card-desc">Sinaï · Sion · Golgotha</div></div>
+    <div class="card" onclick="at2('Les rêves et visions dans la Bible : Joseph, Daniel, Ézéchiel, Jean')">🌙<br><div class="card-title" style="margin-top:8px">Rêves & Visions</div><div class="card-desc">Joseph · Daniel · Apocalypse</div></div>
+    <div class="card" onclick="at2('La musique dans la Bible : harpe de David, trompettes de Jéricho, 7 notes, vibration cosmique')">🎵<br><div class="card-title" style="margin-top:8px">Musique Sacrée</div><div class="card-desc">Harpe · Trompette · 7 notes</div></div>
+    <div class="card" onclick="at2('Les pierres et gemmes dans la Bible : 12 pierres du pectoral, fondation, rocher, saphir')">💎<br><div class="card-title" style="margin-top:8px">Pierres & Gemmes</div><div class="card-desc">12 gemmes · Fondation</div></div>
+  </div>
+  <div id="themeResult"></div>
+</div>
+
+<!-- ══ 7. CORRESPONDANCES ══ -->
+<div id="sec-correspondences" class="section">
+  <div class="sec-title">Correspondances Universelles</div>
+  <div class="sec-desc">Bible × Science × Cosmos × Mathématiques × Cultures</div>
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-accent"></div>
+    <div class="panel-title">⚡ Générer par domaine</div>
+    <div class="chips">
+      <button class="chip" onclick="gc('biologie et médecine')">🧬 Biologie</button>
+      <button class="chip" onclick="gc('astronomie et cosmologie')">🌌 Astronomie</button>
+      <button class="chip" onclick="gc('mathématiques et géométrie')">📐 Mathématiques</button>
+      <button class="chip" onclick="gc('physique quantique')">⚛️ Physique Quantique</button>
+      <button class="chip" onclick="gc('chimie et matière')">🧪 Chimie</button>
+      <button class="chip" onclick="gc('musique et acoustique')">🎵 Acoustique</button>
+      <button class="chip" onclick="gc('psychologie et conscience')">🧠 Psychologie</button>
+      <button class="chip" onclick="gc('autres religions et cultures')">🌐 Cultures</button>
+    </div>
+    <div id="corrGenResult" style="margin-top:12px"></div>
+  </div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="panel-title">📊 Tableau Fondamental</div>
+    <table class="data-table"><thead><tr><th>Élément Biblique</th><th>Correspondance</th><th>Domaine</th><th>Réf.</th></tr></thead>
+    <tbody>
+      <tr><td>8 dans l'Arche de Noé</td><td>8 groupes sanguins (ABO+Rhésus)</td><td><span class="ref-tag ref-science">Science</span></td><td>Gn 7:13</td></tr>
+      <tr><td>120 au Cénacle</td><td>120 jours vie d'un globule rouge</td><td><span class="ref-tag ref-science">Science</span></td><td>Ac 1:15</td></tr>
+      <tr><td>Moïse meurt à 120 ans</td><td>120 battements cardiaques max/min</td><td><span class="ref-tag ref-science">Science</span></td><td>Dt 34:7</td></tr>
+      <tr><td>40 semaines de gestation</td><td>40 jours désert · 40 ans errance</td><td><span class="ref-tag ref-bible">Bible</span></td><td>Mt 4:2</td></tr>
+      <tr><td>7 jours de la Création</td><td>7 notes · 7 couleurs · 7 os cervicaux</td><td><span class="ref-tag ref-cosmos">Cosmos</span></td><td>Gn 1</td></tr>
+      <tr><td>Arc-en-ciel de l'Alliance</td><td>7 couleurs = spectre lumineux complet</td><td><span class="ref-tag ref-science">Science</span></td><td>Gn 9:13</td></tr>
+      <tr><td>153 poissons (Jean 21)</td><td>Somme 1→17, nombre narcissique</td><td><span class="ref-tag ref-math">Math</span></td><td>Jn 21:11</td></tr>
+      <tr><td>Lev (לב=cœur) = 32 en hébreu</td><td>~32 millions battements cardiaques/an</td><td><span class="ref-tag ref-hebrew">Hébreu</span></td><td>Gématrie</td></tr>
+      <tr><td>Éclipses totales parfaites</td><td>Lune = 1/400 Soleil, à 1/400 distance</td><td><span class="ref-tag ref-cosmos">Cosmos</span></td><td>Ps 19</td></tr>
+      <tr><td>Pi dans le Temple (mer d'airain)</td><td>1 Rois 7:23 — diamètre/circonférence</td><td><span class="ref-tag ref-math">Math</span></td><td>1 R 7:23</td></tr>
+      <tr><td>ADN = 4 bases nucléotidiques</td><td>YHWH = Tétragramme (4 lettres)</td><td><span class="ref-tag ref-science">Science</span></td><td>Gématrie</td></tr>
+      <tr><td>Nombre d'or Φ dans le Tabernacle</td><td>Exode 25-27 : proportions = 1.618…</td><td><span class="ref-tag ref-math">Math</span></td><td>Ex 25</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ══ 8. PROPHÉTIES ══ -->
+<div id="sec-prophecies" class="section">
+  <div class="sec-title">Prophéties Bibliques</div>
+  <div class="sec-desc">Accomplissement · Probabilités · Précision historique</div>
+  <div class="g3" style="margin-bottom:18px">
+    <div class="card" onclick="ap('Les 300+ prophéties messianiques accomplies par Jésus-Christ — analyse probabiliste complète')">🎯<br><div class="card-title" style="margin-top:8px">300+ Prophéties Messianiques</div><div class="card-desc">Probabilités · Accomplissement</div></div>
+    <div class="card" onclick="ap('Les 70 semaines de Daniel 9:24-27 — prophétie de la venue du Messie')">📅<br><div class="card-title" style="margin-top:8px">70 Semaines de Daniel</div><div class="card-desc">Daniel 9 · Chronologie exacte</div></div>
+    <div class="card" onclick="ap('Ésaïe 53 : le serviteur souffrant — prophétie 700 ans avant la croix')">📜<br><div class="card-title" style="margin-top:8px">Ésaïe 53</div><div class="card-desc">700 ans avant · Détails précis</div></div>
+    <div class="card" onclick="ap('La prophétie de la destruction de Tyr (Ézéchiel 26) — accomplissement historique')">🏙️<br><div class="card-title" style="margin-top:8px">Destruction de Tyr</div><div class="card-desc">Ézéchiel 26 · Accompli</div></div>
+    <div class="card" onclick="ap('Le retour d\'Israël en 1948 — prophéties bibliques sur la renaissance d\'Israël')">🕎<br><div class="card-title" style="margin-top:8px">Retour d'Israël 1948</div><div class="card-desc">Ézéchiel 37 · Nation en un jour</div></div>
+    <div class="card" onclick="ap('L\'Apocalypse de Jean — 7 sceaux, 7 trompettes, 7 coupes, analyse symbolique complète')">🔮<br><div class="card-title" style="margin-top:8px">L'Apocalypse</div><div class="card-desc">7 sceaux · 7 trompettes</div></div>
+  </div>
+  <div id="prophecyResult"></div>
+</div>
+
+<!-- ══ 9. LANGUES ══ -->
+<div id="sec-hebrew" class="section">
+  <div class="sec-title">Hébreu Biblique & Grec Koinè</div>
+  <div class="sec-desc">Langues originales · Gématrie · Étymologie · Sens profond</div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="hebrewInput" placeholder="YHWH, Elohim, Shabbat, Logos, Pneuma, Agapé, Christos..." onkeydown="if(event.key==='Enter')analyzeHebrew()">
+      <button class="search-btn" onclick="analyzeHebrew()">→</button>
+    </div>
+    <div class="chips">
+      <button class="chip" onclick="qh('YHWH')">YHWH</button>
+      <button class="chip" onclick="qh('Elohim')">Elohim</button>
+      <button class="chip" onclick="qh('Shabbat')">Shabbat</button>
+      <button class="chip" onclick="qh('Torah')">Torah</button>
+      <button class="chip" onclick="qh('Logos')">Logos</button>
+      <button class="chip" onclick="qh('Agapé')">Agapé</button>
+      <button class="chip" onclick="qh('Ruach')">Ruach</button>
+      <button class="chip" onclick="qh('Christos')">Christos</button>
+    </div>
+  </div>
+  <div id="hebrewResult"></div>
+  <div class="panel" style="margin-top:16px"><div class="panel-accent"></div>
+    <div class="panel-title">🔢 Calculateur de Gématrie</div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <input type="text" class="search-input" id="gematriaInput" placeholder="Mot hébreu ou nombre..." style="flex:1" onkeydown="if(event.key==='Enter')calcGem()">
+      <button class="action-btn" onclick="calcGem()">Calculer</button>
+    </div>
+    <div id="gematriaResult" style="margin-top:10px"></div>
+  </div>
+</div>
+<!-- ══ 10. CHRONOLOGIE ══ -->
+<div id="sec-timeline" class="section">
+  <div class="sec-title">Chronologie Biblique</div>
+  <div class="sec-desc">De la Création à l'Apocalypse — cliquez sur chaque événement pour une analyse IA</div>
+  <div class="timeline" id="timelineEl">
+    <div class="tl-item" onclick="analyzeTL('La Création du monde en 6 jours selon Genèse 1 — signification théologique et scientifique')"><div class="tl-dot"></div><div class="tl-era">∞ — CRÉATION</div><div class="tl-event">La Création</div><div class="tl-ref">Genèse 1-2 · En 6 jours · Repos le 7e</div></div>
+    <div class="tl-item" onclick="analyzeTL('La chute d\'Adam et Ève dans le jardin d\'Éden — symbolisme, conséquences, proto-évangile')"><div class="tl-dot"></div><div class="tl-era">PRIMORDIAL</div><div class="tl-event">La Chute — Éden</div><div class="tl-ref">Genèse 3 · Proto-évangile (Gn 3:15)</div></div>
+    <div class="tl-item" onclick="analyzeTL('Le Déluge de Noé — chronologie des 40 jours, symbolisme de l\'Arche, alliance de l\'arc-en-ciel')"><div class="tl-dot"></div><div class="tl-era">~2350 AV. J.-C.</div><div class="tl-event">Le Déluge de Noé</div><div class="tl-ref">Genèse 6-9 · 40 jours · 8 personnes · Arc-en-ciel</div></div>
+    <div class="tl-item" onclick="analyzeTL('La Tour de Babel — confusion des langues, dispersion des peuples, signification prophétique')"><div class="tl-dot"></div><div class="tl-era">~2200 AV. J.-C.</div><div class="tl-event">Tour de Babel</div><div class="tl-ref">Genèse 11 · 70 nations · Dispersion</div></div>
+    <div class="tl-item" onclick="analyzeTL('L\'appel d\'Abraham et les promesses divines — père des croyants, Alliance, terre promise')"><div class="tl-dot"></div><div class="tl-era">~2000 AV. J.-C.</div><div class="tl-event">Appel d'Abraham</div><div class="tl-ref">Genèse 12 · Alliance · Promesse</div></div>
+    <div class="tl-item" onclick="analyzeTL('Joseph en Égypte — type prophétique du Christ, providence divine, 11 frères')"><div class="tl-dot"></div><div class="tl-era">~1900 AV. J.-C.</div><div class="tl-event">Joseph en Égypte</div><div class="tl-ref">Genèse 37-50 · Type du Christ</div></div>
+    <div class="tl-item" onclick="analyzeTL('L\'Exode et les 10 plaies d\'Égypte — libération, Pâque, passage de la Mer Rouge')"><div class="tl-dot"></div><div class="tl-era">~1446 AV. J.-C.</div><div class="tl-event">L'Exode d'Égypte</div><div class="tl-ref">Exode 1-15 · 10 plaies · Pâque · Mer Rouge</div></div>
+    <div class="tl-item" onclick="analyzeTL('Moïse et les 10 commandements sur le Sinaï — Loi divine, Tabernacle, 40 ans au désert')"><div class="tl-dot"></div><div class="tl-era">~1446 AV. J.-C.</div><div class="tl-event">Le Sinaï et la Loi</div><div class="tl-ref">Exode 19-20 · 10 commandements · 40 ans</div></div>
+    <div class="tl-item" onclick="analyzeTL('Le règne de David et Salomon — Temple de Jérusalem, Psaumes, âge d\'or d\'Israël')"><div class="tl-dot"></div><div class="tl-era">~1010-931 AV. J.-C.</div><div class="tl-event">David et Salomon</div><div class="tl-ref">1-2 Samuel · 1 Rois · Temple · Psaumes</div></div>
+    <div class="tl-item" onclick="analyzeTL('L\'exil à Babylone — 70 ans de captivité, prophéties de Daniel, signification spirituelle')"><div class="tl-dot"></div><div class="tl-era">~605-536 AV. J.-C.</div><div class="tl-event">Exil à Babylone</div><div class="tl-ref">Daniel · Jérémie · 70 ans · Prophéties</div></div>
+    <div class="tl-item" onclick="analyzeTL('La naissance de Jésus-Christ — accomplissement de 300+ prophéties, Bethléem, étoile, Mages')"><div class="tl-dot"></div><div class="tl-era">~6-4 AV. J.-C.</div><div class="tl-event">Naissance de Jésus</div><div class="tl-ref">Matthieu 1-2 · Luc 1-2 · Bethléem · Étoile</div></div>
+    <div class="tl-item" onclick="analyzeTL('Le ministère de Jésus — 3 ans, miracles, enseignements, Sermon sur la montagne')"><div class="tl-dot"></div><div class="tl-era">~27-30 AP. J.-C.</div><div class="tl-event">Ministère de Jésus</div><div class="tl-ref">4 Évangiles · 3 ans · Miracles · Paroles</div></div>
+    <div class="tl-item" onclick="analyzeTL('La crucifixion et résurrection de Jésus — accomplissement parfait, signification cosmique')"><div class="tl-dot"></div><div class="tl-era">~30 AP. J.-C.</div><div class="tl-event">Crucifixion & Résurrection</div><div class="tl-ref">Jean 19-20 · 3e jour · 500 témoins</div></div>
+    <div class="tl-item" onclick="analyzeTL('La Pentecôte et naissance de l\'Église — feu de l\'Esprit, 120 au cénacle, langues')"><div class="tl-dot"></div><div class="tl-era">~30 AP. J.-C.</div><div class="tl-event">Pentecôte</div><div class="tl-ref">Actes 2 · 120 · Feu · 3000 convertis</div></div>
+    <div class="tl-item" onclick="analyzeTL('La destruction de Jérusalem en 70 ap. J.-C. — prophétie de Jésus accomplie (Matthieu 24)')"><div class="tl-dot"></div><div class="tl-era">70 AP. J.-C.</div><div class="tl-event">Destruction du Temple</div><div class="tl-ref">Matthieu 24 · Prophétie accomplie</div></div>
+    <div class="tl-item" onclick="analyzeTL('L\'Apocalypse de Jean — Révélation finale, Nouvelle Jérusalem, éternité, récapitulation cosmique')"><div class="tl-dot"></div><div class="tl-era">ÉTERNITÉ</div><div class="tl-event">Nouvelle Jérusalem</div><div class="tl-ref">Apocalypse 21-22 · Toutes choses nouvelles</div></div>
+  </div>
+  <div id="tlResult" style="margin-top:18px"></div>
+</div>
+
+<!-- ══ 11. CARTE ══ -->
+<div id="sec-map" class="section">
+  <div class="sec-title">Carte Biblique Interactive</div>
+  <div class="sec-desc">Cliquez sur un lieu pour son analyse historique et spirituelle complète</div>
+  <div class="map-wrap">
+    <div class="map-tooltip" id="mapTooltip"></div>
+    <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fond mer -->
+      <rect width="800" height="500" fill="#0d1a2a"/>
+      <!-- Méditerranée -->
+      <ellipse cx="300" cy="200" rx="280" ry="120" fill="#1a3a5c" opacity="0.7"/>
+      <!-- Mer Rouge -->
+      <ellipse cx="520" cy="320" rx="30" ry="80" fill="#1a3a5c" opacity="0.6"/>
+      <!-- Nil -->
+      <path d="M420 400 Q410 350 415 280 Q420 230 430 200" stroke="#2a5a8c" stroke-width="6" fill="none" opacity="0.6"/>
+      <!-- Jourdain -->
+      <path d="M530 180 Q535 220 530 260 Q528 280 530 300" stroke="#2a5a8c" stroke-width="4" fill="none" opacity="0.7"/>
+      <!-- Terres -->
+      <!-- Égypte -->
+      <rect x="400" y="280" width="120" height="140" rx="5" fill="#2d2010" opacity="0.8"/>
+      <text x="460" y="360" fill="#6a5030" font-size="14" text-anchor="middle" font-family="serif" font-style="italic">Égypte</text>
+      <!-- Canaan/Israël -->
+      <rect x="490" y="160" width="80" height="140" rx="5" fill="#2d2510" opacity="0.8"/>
+      <text x="530" y="240" fill="#6a6030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Canaan</text>
+      <!-- Mésopotamie -->
+      <rect x="620" y="140" width="150" height="160" rx="5" fill="#252010" opacity="0.8"/>
+      <text x="695" y="225" fill="#6a5530" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Mésopotamie</text>
+      <!-- Grèce -->
+      <ellipse cx="200" cy="230" rx="60" ry="50" fill="#202530" opacity="0.7"/>
+      <text x="200" y="235" fill="#405060" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Grèce</text>
+      <!-- Rome -->
+      <ellipse cx="80" cy="200" rx="55" ry="45" fill="#252020" opacity="0.7"/>
+      <text x="80" y="205" fill="#504030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Rome</text>
+      <!-- Arabie -->
+      <rect x="560" y="290" width="120" height="180" rx="5" fill="#2a2010" opacity="0.7"/>
+      <text x="620" y="390" fill="#5a5030" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Arabie</text>
+      <!-- Désert du Sinaï -->
+      <ellipse cx="490" cy="320" rx="45" ry="40" fill="#332808" opacity="0.6"/>
+      <text x="490" y="326" fill="#7a6020" font-size="10" text-anchor="middle" font-family="serif" font-style="italic">Sinaï</text>
+
+      <!-- POINTS CLÉS -->
+      <!-- Jérusalem -->
+      <g class="map-dot" onclick="analyzePlace('Jérusalem')">
+        <circle cx="530" cy="255" r="10" fill="#d4a017" opacity="0.9"/>
+        <circle cx="530" cy="255" r="6" fill="#f0c040"/>
+        <circle cx="530" cy="255" r="3" fill="white"/>
+        <text x="530" y="245" fill="#f0c040" font-size="11" text-anchor="middle" font-family="serif" font-weight="bold">Jérusalem</text>
+        <text x="530" y="235" fill="rgba(240,192,64,0.6)" font-size="9" text-anchor="middle">✦</text>
+      </g>
+      <!-- Bethléem -->
+      <g class="map-dot" onclick="analyzePlace('Bethléem')">
+        <circle cx="525" cy="268" r="6" fill="#b8860b" opacity="0.9"/>
+        <circle cx="525" cy="268" r="3" fill="#f0c040"/>
+        <text x="512" y="278" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Bethléem</text>
+      </g>
+      <!-- Nazareth -->
+      <g class="map-dot" onclick="analyzePlace('Nazareth')">
+        <circle cx="520" cy="205" r="6" fill="#b8860b" opacity="0.9"/>
+        <circle cx="520" cy="205" r="3" fill="#f0c040"/>
+        <text x="508" y="196" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Nazareth</text>
+      </g>
+      <!-- Mer de Galilée -->
+      <g class="map-dot" onclick="analyzePlace('Mer de Galilée')">
+        <ellipse cx="535" cy="210" rx="12" ry="18" fill="#1a4a6a" opacity="0.8" stroke="#2a7aaa" stroke-width="1"/>
+        <text x="558" y="214" fill="#4a9aaa" font-size="9" font-family="serif">Galilée</text>
+      </g>
+      <!-- Babylone -->
+      <g class="map-dot" onclick="analyzePlace('Babylone')">
+        <circle cx="660" cy="190" r="7" fill="#8b4a0b" opacity="0.9"/>
+        <circle cx="660" cy="190" r="3" fill="#c07020"/>
+        <text x="660" y="180" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Babylone</text>
+      </g>
+      <!-- Ur des Chaldéens -->
+      <g class="map-dot" onclick="analyzePlace('Ur des Chaldéens')">
+        <circle cx="700" cy="240" r="6" fill="#8b4a0b" opacity="0.8"/>
+        <circle cx="700" cy="240" r="3" fill="#c07020"/>
+        <text x="700" y="255" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Ur</text>
+      </g>
+      <!-- Mont Sinaï -->
+      <g class="map-dot" onclick="analyzePlace('Mont Sinaï')">
+        <polygon points="490,290 480,315 500,315" fill="#d4a017" opacity="0.9"/>
+        <text x="490" y="285" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Mt Sinaï</text>
+      </g>
+      <!-- Alexandrie -->
+      <g class="map-dot" onclick="analyzePlace('Alexandrie en Égypte')">
+        <circle cx="420" cy="265" r="6" fill="#8b4a0b" opacity="0.8"/>
+        <circle cx="420" cy="265" r="3" fill="#c07020"/>
+        <text x="410" y="256" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Alexandrie</text>
+      </g>
+      <!-- Antioche -->
+      <g class="map-dot" onclick="analyzePlace('Antioche de Syrie')">
+        <circle cx="575" cy="165" r="6" fill="#8b4a0b" opacity="0.8"/>
+        <circle cx="575" cy="165" r="3" fill="#c07020"/>
+        <text x="575" y="155" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Antioche</text>
+      </g>
+      <!-- Rome -->
+      <g class="map-dot" onclick="analyzePlace('Rome')">
+        <circle cx="80" cy="195" r="7" fill="#8b1a1a" opacity="0.9"/>
+        <circle cx="80" cy="195" r="3" fill="#c03030"/>
+        <text x="80" y="183" fill="#c04040" font-size="10" text-anchor="middle" font-family="serif" font-weight="bold">Rome</text>
+      </g>
+      <!-- Éphèse -->
+      <g class="map-dot" onclick="analyzePlace('Éphèse')">
+        <circle cx="270" cy="215" r="6" fill="#8b4a0b" opacity="0.8"/>
+        <circle cx="270" cy="215" r="3" fill="#c07020"/>
+        <text x="270" y="205" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Éphèse</text>
+      </g>
+      <!-- Patmos -->
+      <g class="map-dot" onclick="analyzePlace('Île de Patmos')">
+        <circle cx="248" cy="232" r="5" fill="#7a5aa8" opacity="0.9"/>
+        <text x="240" y="245" fill="#a87adc" font-size="8" text-anchor="middle" font-family="serif">Patmos</text>
+      </g>
+      <!-- Athènes -->
+      <g class="map-dot" onclick="analyzePlace('Athènes')">
+        <circle cx="195" cy="240" r="6" fill="#8b4a0b" opacity="0.8"/>
+        <circle cx="195" cy="240" r="3" fill="#c07020"/>
+        <text x="195" y="255" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Athènes</text>
+      </g>
+
+      <!-- Légende -->
+      <rect x="10" y="440" width="200" height="55" rx="3" fill="rgba(10,8,5,0.8)" stroke="rgba(184,134,11,0.3)" stroke-width="1"/>
+      <circle cx="26" cy="456" r="5" fill="#f0c040"/><text x="36" y="460" fill="#d4a017" font-size="9" font-family="serif">Ville principale</text>
+      <circle cx="26" cy="472" r="5" fill="#b8860b"/><text x="36" y="476" fill="#a07020" font-size="9" font-family="serif">Ville secondaire</text>
+      <polygon points="26,484 21,489 31,489" fill="#d4a017"/><text x="36" y="490" fill="#a07020" font-size="9" font-family="serif">Montagne sacrée</text>
+
+      <text x="400" y="25" fill="rgba(184,134,11,0.4)" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Cliquez sur un lieu pour son analyse biblique</text>
+    </svg>
+  </div>
+  <div id="mapResult" style="margin-top:16px"></div>
+</div>
+
+<!-- ══ 12. PRIÈRE IA ══ -->
+<div id="sec-prayer" class="section">
+  <div class="sec-title">Prière Générée par l'IA</div>
+  <div class="sec-desc">Décrivez votre situation ou thème — l'IA compose une prière biblique personnalisée</div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="panel-title">🙏 Votre intention de prière</div>
+    <textarea class="txt-area" id="prayerInput" placeholder="Ex: Je traverse une période difficile et j'ai besoin de paix... / Prière d'action de grâce pour une guérison... / Intercession pour ma famille... / Force face à une épreuve..."></textarea>
+    <div class="chips" style="margin-bottom:10px">
+      <button class="chip" onclick="setPrayer('une période de doute et d\'anxiété — j\'ai besoin de paix et de foi')">Paix & Foi</button>
+      <button class="chip" onclick="setPrayer('une guérison — action de grâce et intercession')">Guérison</button>
+      <button class="chip" onclick="setPrayer('ma famille et mes proches — protection et unité')">Famille</button>
+      <button class="chip" onclick="setPrayer('le matin — pour bien commencer la journée avec Dieu')">Matin</button>
+      <button class="chip" onclick="setPrayer('le soir — remerciements et confiance pour la nuit')">Soir</button>
+      <button class="chip" onclick="setPrayer('une épreuve difficile — force et persévérance')">Épreuve</button>
+      <button class="chip" onclick="setPrayer('action de grâce générale — louange et reconnaissance')">Louange</button>
+      <button class="chip" onclick="setPrayer('repentance et pardon — renouveau spirituel')">Repentance</button>
+    </div>
+    <button class="action-btn full" onclick="generatePrayer()">✦ Composer une prière ✦</button>
+  </div>
+  <div id="prayerResult"></div>
+</div>
+
+<!-- ══ 13. PLAN LECTURE ══ -->
+<div id="sec-reading" class="section">
+  <div class="sec-title">Plan de Lecture Personnalisé</div>
+  <div class="sec-desc">L'IA crée un plan adapté à vos objectifs, votre niveau et votre temps disponible</div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="panel-title">📋 Configurez votre plan</div>
+    <div class="g2" style="gap:12px;margin-bottom:14px">
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">DURÉE</div>
+        <select class="styled-select" id="planDuration">
+          <option>30 jours</option>
+          <option>3 mois</option>
+          <option>6 mois</option>
+          <option>1 an — Bible complète</option>
+          <option>Personnalisé</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">OBJECTIF</div>
+        <select class="styled-select" id="planGoal">
+          <option>Découvrir la Bible pour la première fois</option>
+          <option>Approfondir les Évangiles</option>
+          <option>Étudier l'Ancien Testament</option>
+          <option>Comprendre les prophéties</option>
+          <option>Lire la Bible en entier</option>
+          <option>Étudier les épîtres de Paul</option>
+          <option>Approfondir les Psaumes</option>
+          <option>Comprendre l'Apocalypse</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">NIVEAU</div>
+        <select class="styled-select" id="planLevel">
+          <option>Débutant — je commence</option>
+          <option>Intermédiaire — quelques bases</option>
+          <option>Avancé — lecteur régulier</option>
+          <option>Studieux — étude approfondie</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">TEMPS/JOUR</div>
+        <select class="styled-select" id="planTime">
+          <option>10 minutes</option>
+          <option>20 minutes</option>
+          <option>30 minutes</option>
+          <option>1 heure</option>
+          <option>Plus d'1 heure</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">PRÉCISIONS (optionnel)</div>
+      <input type="text" class="search-input" id="planNotes" placeholder="Ex: je suis particulièrement intéressé par les prophéties messianiques...">
+    </div>
+    <button class="action-btn full" onclick="generatePlan()" style="margin-top:12px">✦ Créer mon plan de lecture ✦</button>
+  </div>
+  <div id="planResult"></div>
+</div>
+
+<!-- ══ 14. COMPARAISON ══ -->
+<div id="sec-compare" class="section">
+  <div class="sec-title">Comparaison Biblique</div>
+  <div class="sec-desc">Comparez deux passages, personnages, thèmes ou concepts</div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="g2" style="margin-bottom:12px">
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">ÉLÉMENT A</div>
+        <input type="text" class="search-input" id="compA" placeholder="Moïse, eau, Genèse 1, nombre 7...">
+      </div>
+      <div>
+        <div style="font-size:.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">ÉLÉMENT B</div>
+        <input type="text" class="search-input" id="compB" placeholder="Jésus, lumière, Jean 1, nombre 8...">
+      </div>
+    </div>
+    <button class="action-btn full" onclick="doCompare()">✦ Comparer ✦</button>
+    <div class="chips" style="margin-top:12px">
+      <button class="chip" onclick="sc('Moïse','Jésus')">Moïse ↔ Jésus</button>
+      <button class="chip" onclick="sc('Adam','Jésus')">Adam ↔ Jésus</button>
+      <button class="chip" onclick="sc('Genèse','Apocalypse')">Genèse ↔ Apocalypse</button>
+      <button class="chip" onclick="sc('Élie','Jean-Baptiste')">Élie ↔ Jean-Baptiste</button>
+      <button class="chip" onclick="sc('Temple de Salomon','Corps humain')">Temple ↔ Corps humain</button>
+      <button class="chip" onclick="sc('nombre 7','nombre 8')">7 ↔ 8</button>
+    </div>
+  </div>
+  <div id="compareResult"></div>
+</div>
+
+<!-- ══ 15. FAVORIS ══ -->
+<div id="sec-favorites" class="section">
+  <div class="sec-title">Mes Favoris</div>
+  <div class="sec-desc">Vos analyses sauvegardées — accessibles à tout moment</div>
+  <div id="favList">
+    <div style="text-align:center;padding:40px;color:var(--text3);font-style:italic">
+      <div style="font-size:2rem;margin-bottom:12px">⭐</div>
+      Aucun favori pour l'instant.<br>Après chaque analyse, cliquez sur « ⭐ Sauvegarder » pour retrouver vos résultats ici.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 16. À PROPOS ══ -->
+<div id="sec-about" class="section">
+  <div class="sec-title">À Propos</div>
+  <div class="sec-desc">Notre vision · Notre mission · Notre histoire</div>
+  <div class="panel" style="max-width:720px;margin:0 auto 20px"><div class="panel-accent"></div>
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:3rem;margin-bottom:12px">✦</div>
+      <div style="font-family:'Cinzel',serif;font-size:1.4rem;color:var(--gold2);letter-spacing:2px;margin-bottom:4px">CODEX DEI</div>
+      <div style="color:var(--text3);font-style:italic;font-size:.9rem">Encyclopédie Biblique Universelle</div>
+    </div>
+    <hr class="gold-div">
+    <div style="font-size:1.05rem;color:var(--text2);line-height:1.9;font-style:italic">
+      <p style="margin-bottom:16px">Ce projet est né d'une conviction profonde : que la Bible est un livre vivant, dont les profondeurs sont inépuisables, et que la technologie moderne peut aider à en révéler les merveilles cachées à tous ceux qui cherchent.</p>
+      <p style="margin-bottom:16px">Le CODEX DEI n'est pas un outil de remplacement de la prière, de l'Église ou de l'étude personnelle. C'est un compagnon d'exploration — un moyen d'aller plus loin, de découvrir des correspondances étonnantes entre la Parole de Dieu et la création qu'il a faite.</p>
+      <p style="margin-bottom:16px">Chaque correspondance entre la Bible et la science, entre les nombres sacrés et la biologie, entre les prophéties et l'histoire — n'est pas le fruit du hasard. Comme le disait Anatole France : <em>"Le hasard, c'est le pseudonyme de Dieu quand il ne veut pas signer."</em></p>
+      <p>Ce site est une <strong>œuvre du cœur</strong>, gratuite et ouverte à tous — chrétiens, catholiques, orthodoxes, protestants, curieux, chercheurs. Que la Parole soit lumière sur votre chemin. 🕊️</p>
+    </div>
+    <hr class="gold-div">
+    <div class="g3" style="margin-top:16px">
+      <div class="stat-box"><div class="stat-number">66</div><div class="stat-label">Livres couverts</div></div>
+      <div class="stat-box"><div class="stat-number">18</div><div class="stat-label">Sections d'analyse</div></div>
+      <div class="stat-box"><div class="stat-number">∞</div><div class="stat-label">Analyses possibles</div></div>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="action-btn" onclick="goTo('don')">💛 Soutenir ce projet</button>
+      <button class="action-btn" onclick="goTo('contact')" style="margin-left:10px;background:transparent;border:1px solid var(--border);color:var(--gold2)">✉️ Nous écrire</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 17. NEWSLETTER / TÉMOIGNAGES ══ -->
+<div id="sec-don" class="section">
+  <div class="sec-title">Soutenir le Codex Dei</div>
+  <div class="sec-desc">Ce projet est gratuit pour tous — votre soutien le garde vivant</div>
+  <div class="g2" style="gap:16px;margin-bottom:20px">
+    <!-- DON -->
+    <div class="panel" style="text-align:center"><div class="panel-accent"></div>
+      <div style="font-size:2.5rem;margin-bottom:14px">💛</div>
+      <div style="font-family:'Cinzel',serif;color:var(--gold2);font-size:1.1rem;margin-bottom:12px;letter-spacing:1px">Faire un Don</div>
+      <div style="color:var(--text3);font-style:italic;font-size:.92rem;line-height:1.7;margin-bottom:18px">Si cet outil vous a aidé dans votre étude de la Parole, votre soutien, même symbolique, fait une grande différence.</div>
+      <div style="background:rgba(184,134,11,.06);border:1px solid var(--border2);padding:18px;margin-bottom:14px">
+        <a href="https://paypal.me/cadexdi" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:13px 30px;font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;letter-spacing:2px;text-decoration:none;margin-bottom:10px">☆ Faire un don ☆</a>
+        <div style="font-size:.8rem;color:var(--text3);font-style:italic">paypal.me/cadexdi</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount">5 CHF</a>
+        <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount">10 CHF</a>
+        <a href="https://paypal.me/cadexdi/20" target="_blank" class="don-amount">20 CHF</a>
+      </div>
+    </div>
+    <!-- NEWSLETTER -->
+    <div class="panel"><div class="panel-accent"></div>
+      <div style="font-size:2.5rem;margin-bottom:14px;text-align:center">📬</div>
+      <div style="font-family:'Cinzel',serif;color:var(--gold2);font-size:1.1rem;margin-bottom:12px;letter-spacing:1px;text-align:center">Newsletter Hebdomadaire</div>
+      <div style="color:var(--text3);font-style:italic;font-size:.92rem;line-height:1.7;margin-bottom:16px">Recevez chaque semaine une correspondance biblique fascinante, un nombre sacré analysé, et une découverte spirituelle — directement dans votre boîte mail.</div>
+      <div class="nl-form">
+        <input type="email" class="nl-input" id="nlEmail" placeholder="votre@email.com">
+        <button class="action-btn" onclick="subscribeNL()">S'inscrire</button>
+      </div>
+      <div id="nlResult" style="margin-top:10px;font-size:.85rem;color:var(--gold);font-style:italic;display:none">✓ Merci ! Vous recevrez votre première newsletter très bientôt.</div>
+      <hr class="gold-div">
+      <div style="font-size:.82rem;color:var(--text3);font-style:italic;text-align:center">Gratuit · Pas de spam · Désinscription en un clic</div>
+    </div>
+  </div>
+
+  <!-- TÉMOIGNAGES -->
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="panel-title">💬 Témoignages</div>
+    <div id="testiList">
+      <div class="testi-card"><div class="testi-text">"Le CODEX DEI m'a ouvert des perspectives incroyables sur la Bible. La correspondance entre les 8 personnes de l'Arche et les 8 groupes sanguins m'a littéralement coupé le souffle."</div><div class="testi-author">— Marie-Claire, Lyon ✦ Lectrice biblique depuis 20 ans</div></div>
+      <div class="testi-card"><div class="testi-text">"Enfin un outil qui allie profondeur spirituelle et connaissance scientifique. J'utilise le Codex Dei dans mes études bibliques chaque semaine."</div><div class="testi-author">— Pasteur Jean-Pierre, Genève ✦ Théologien</div></div>
+      <div class="testi-card"><div class="testi-text">"La section sur les nombres sacrés est extraordinaire. Le nombre 153 et ses propriétés mathématiques m'ont complètement fasciné. Dieu est vraiment le grand Architecte."</div><div class="testi-author">— Samuel K., Kinshasa ✦ Étudiant en théologie</div></div>
+    </div>
+    <hr class="gold-div">
+    <div style="font-family:'Cinzel',serif;color:var(--gold2);font-size:.9rem;margin-bottom:10px;letter-spacing:1px">Partagez votre témoignage</div>
+    <textarea class="txt-area" id="testiInput" placeholder="Ce que le Codex Dei vous a apporté..." style="min-height:70px"></textarea>
+    <input type="text" class="search-input" id="testiName" placeholder="Votre prénom et ville (optionnel)" style="margin-top:8px">
+    <button class="action-btn" onclick="submitTesti()" style="margin-top:10px">Partager ✦</button>
+    <div id="testiMsg" style="margin-top:8px;color:var(--gold);font-style:italic;font-size:.85rem;display:none"></div>
+  </div>
+</div>
+
+<!-- ══ 18. CONTACT ══ -->
+<div id="sec-contact" class="section">
+  <div class="sec-title">Contact</div>
+  <div class="sec-desc">Une question, une suggestion, un témoignage ? Écrivez-nous</div>
+  <div class="panel" style="max-width:620px;margin:0 auto;text-align:center"><div class="panel-accent"></div>
+    <div style="font-size:2.5rem;margin-bottom:16px">✉️</div>
+    <div style="font-family:'Cinzel',serif;color:var(--gold2);font-size:1.15rem;margin-bottom:14px;letter-spacing:1px">Nous sommes à votre écoute</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.95rem;line-height:1.8;margin-bottom:22px">Pour toute question sur le Codex Dei, suggestion d'amélioration, retour d'expérience ou simplement pour partager ce que cet outil a apporté dans votre vie spirituelle.</div>
+    <div style="background:rgba(184,134,11,.06);border:1px solid var(--border2);padding:22px;margin-bottom:18px">
+      <div style="font-size:.72rem;font-family:'Share Tech Mono',monospace;color:var(--gold);letter-spacing:3px;margin-bottom:12px">ADRESSE EMAIL</div>
+      <a href="mailto:codexdei.app@gmail.com" style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold3);text-decoration:none;letter-spacing:1px">codexdei.app@gmail.com</a>
+      <div style="margin-top:14px">
+        <a href="mailto:codexdei.app@gmail.com" style="display:inline-block;background:linear-gradient(135deg,#8b6914,var(--gold2));color:var(--bg);padding:12px 28px;font-family:'Cinzel',serif;font-size:.88rem;font-weight:600;letter-spacing:2px;text-decoration:none">✦ Envoyer un email ✦</a>
+      </div>
+    </div>
+    <div class="g2" style="text-align:left;gap:10px">
+      <div style="background:var(--bg2);border:1px solid var(--border2);padding:14px"><div style="font-size:.7rem;font-family:'Share Tech Mono',monospace;color:var(--gold);letter-spacing:2px;margin-bottom:6px">SUGGESTIONS</div><div style="font-size:.88rem;color:var(--text3);font-style:italic">Idée de fonctionnalité ou de contenu à ajouter</div></div>
+      <div style="background:var(--bg2);border:1px solid var(--border2);padding:14px"><div style="font-size:.7rem;font-family:'Share Tech Mono',monospace;color:var(--gold);letter-spacing:2px;margin-bottom:6px">PARTENARIATS</div><div style="font-size:.88rem;color:var(--text3);font-style:italic">Église, ministère, librairie chrétienne</div></div>
+    </div>
+    <div style="font-size:.85rem;color:var(--text3);font-style:italic;margin-top:18px">Que la Paix soit avec vous. 🕊️</div>
+    <div style="margin-top:16px"><a href="https://www.instagram.com/codexdei.app?igsh=N200b2dzODhpODZs" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--gold2);font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:1px;border:1px solid var(--border);padding:9px 20px;transition:all .3s;" onmouseover="this.style.background='rgba(184,134,11,0.08)'" onmouseout="this.style.background=''"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> Suivre sur Instagram</a></div>
+  </div>
+</div>
+
+
+<!-- ══ ÉTUDES BIBLIQUES ══ -->
+<div id="sec-studies" class="section">
+  <div class="sec-title">Études Bibliques</div>
+  <div class="sec-desc">Études approfondies générées par l'IA · Partagez vos propres études</div>
+
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="panel-title">✦ Générer une étude complète</div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="studyTopic" placeholder="Ex: La foi selon Abraham, Le pardon dans les Psaumes, La lumière en Jean..." onkeydown="if(event.key==='Enter')generateStudy()">
+      <button class="search-btn" onclick="generateStudy()">→</button>
+    </div>
+    <div class="chips">
+      <button class="chip" onclick="setStudy('La foi — de Abraham à Hébreux 11')">La Foi</button>
+      <button class="chip" onclick="setStudy('Le pardon selon Jésus — Matthieu 18 et Luc 15')">Le Pardon</button>
+      <button class="chip" onclick="setStudy('La prière — modèles bibliques du Notre Père aux Psaumes')">La Prière</button>
+      <button class="chip" onclick="setStudy('L'amour agapé dans 1 Corinthiens 13 et 1 Jean')">L'Amour</button>
+      <button class="chip" onclick="setStudy('La résurrection — preuves et signification théologique')">La Résurrection</button>
+      <button class="chip" onclick="setStudy('Le Saint-Esprit dans la Bible — AT et NT')">Le Saint-Esprit</button>
+      <button class="chip" onclick="setStudy('Les promesses de Dieu — de l'alliance à l'accomplissement')">Les Promesses</button>
+      <button class="chip" onclick="setStudy('La souffrance et la grâce — Job, Paul, Jésus')">La Souffrance</button>
+    </div>
+  </div>
+  <div id="studyAIResult"></div>
+
+  <hr class="gold-div" style="margin:24px 0">
+
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="panel-title">📖 Partager votre étude</div>
+    <p style="color:var(--text3);font-style:italic;font-size:.92rem;margin-bottom:14px">Vous avez fait une étude biblique personnelle ? Partagez-la avec la communauté.</p>
+    <input type="text" class="search-input" id="studyTitle" placeholder="Titre de votre étude..." style="margin-bottom:10px">
+    <input type="text" class="search-input" id="studyAuthor" placeholder="Votre prénom et ville (ex: Jean, Paris)" style="margin-bottom:10px">
+    <textarea class="txt-area" id="studyContent" placeholder="Partagez votre étude, vos découvertes, vos références bibliques..." style="min-height:140px"></textarea>
+    <button class="action-btn full" onclick="submitStudy()" style="margin-top:10px">✦ Partager mon étude ✦</button>
+    <div id="studyMsg" style="margin-top:8px;color:var(--gold);font-style:italic;font-size:.88rem;display:none"></div>
+  </div>
+
+  <div id="studiesList" style="margin-top:20px"></div>
+</div>
+
+<!-- ══ TÉMOIGNAGES RÉELS ══ -->
+<div id="sec-testimonials" class="section">
+  <div class="sec-title">Témoignages</div>
+  <div class="sec-desc">Histoires vraies — comment la Parole a transformé des vies</div>
+
+  <div class="panel">
+    <div class="panel-accent"></div>
+    <div class="panel-title">💬 Partagez votre témoignage</div>
+    <p style="color:var(--text3);font-style:italic;font-size:.92rem;margin-bottom:14px">Comment la Bible ou le Codex Dei a-t-il changé votre vie ? Votre témoignage peut encourager des milliers de personnes.</p>
+    <input type="text" class="search-input" id="testiRealName" placeholder="Votre prénom et pays (ex: Sophie, Belgique)" style="margin-bottom:10px">
+    <input type="text" class="search-input" id="testiRealTitle" placeholder="Titre de votre témoignage (ex: Comment j'ai retrouvé la foi...)" style="margin-bottom:10px">
+    <textarea class="txt-area" id="testiRealContent" placeholder="Racontez votre histoire avec sincérité et profondeur..." style="min-height:160px"></textarea>
+    <button class="action-btn full" onclick="submitRealTesti()" style="margin-top:10px">✦ Partager mon témoignage ✦</button>
+    <div id="testiRealMsg" style="margin-top:8px;color:var(--gold);font-style:italic;font-size:.88rem;display:none"></div>
+  </div>
+
+  <div id="testiRealList" style="margin-top:20px"></div>
+</div>
+
+
+<!-- ══ MON ESPACE ══ -->
+<div id="sec-myspace" class="section">
+  <div class="sec-title">Mon Espace Biblique</div>
+  <div class="sec-desc" id="mySpaceDesc">Vos études, notes et favoris sauvegardés</div>
+
+  <div id="mySpaceGuest" style="text-align:center;padding:50px 20px">
+    <div style="font-size:3rem;margin-bottom:16px">🔐</div>
+    <div style="font-family:'Cinzel',serif;color:var(--gold2);font-size:1.1rem;margin-bottom:12px">Créez votre espace personnel</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.95rem;line-height:1.7;max-width:480px;margin:0 auto 22px">Connectez-vous pour sauvegarder vos études bibliques, prendre des notes sur chaque passage, retrouver vos favoris et suivre votre progression de lecture.</div>
+    <button class="action-btn" onclick="openAuth()">✦ Se connecter / Créer un compte ✦</button>
+  </div>
+
+  <div id="mySpaceContent" style="display:none">
+    <div style="display:flex;gap:2px;border-bottom:1px solid var(--border2);margin-bottom:20px;flex-wrap:wrap">
+      <button class="my-tab active" onclick="switchMyTab('notes',this)">📝 Mes Notes</button>
+      <button class="my-tab" onclick="switchMyTab('studies',this)">📖 Mes Études</button>
+      <button class="my-tab" onclick="switchMyTab('favs',this)">⭐ Mes Favoris</button>
+      <button class="my-tab" onclick="switchMyTab('progress',this)">📅 Ma Progression</button>
+    </div>
+
+    <!-- NOTES -->
+    <div id="myNotes">
+      <div class="panel"><div class="panel-accent"></div>
+        <div class="panel-title">📝 Nouvelle note</div>
+        <input type="text" class="search-input" id="noteRef" placeholder="Référence (ex: Jean 3:16, Psaume 23...)" style="margin-bottom:8px">
+        <textarea class="txt-area" id="noteContent" placeholder="Vos réflexions, insights, questions sur ce passage..." style="min-height:100px"></textarea>
+        <button class="action-btn" onclick="saveNote()" style="margin-top:8px">✦ Sauvegarder la note</button>
+        <div id="noteMsg" style="margin-top:6px;color:var(--gold);font-style:italic;font-size:.85rem;display:none"></div>
+      </div>
+      <div id="notesList"></div>
+    </div>
+
+    <!-- MES ÉTUDES -->
+    <div id="myStudies" style="display:none">
+      <div class="panel"><div class="panel-accent"></div>
+        <div class="panel-title">📖 Nouvelle étude personnelle</div>
+        <input type="text" class="search-input" id="myStudyTitle" placeholder="Titre de votre étude..." style="margin-bottom:8px">
+        <textarea class="txt-area" id="myStudyContent" placeholder="Votre étude, vos découvertes, références bibliques..." style="min-height:140px"></textarea>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap">
+          <button class="action-btn" onclick="saveMyStudy()">✦ Sauvegarder</button>
+          <label style="display:flex;align-items:center;gap:6px;color:var(--text3);font-style:italic;font-size:.9rem;cursor:pointer">
+            <input type="checkbox" id="studyPublic" style="accent-color:var(--gold2)"> Partager avec la communauté
+          </label>
+        </div>
+        <div id="myStudyMsg" style="margin-top:6px;color:var(--gold);font-style:italic;font-size:.85rem;display:none"></div>
+      </div>
+      <div id="myStudiesList"></div>
+    </div>
+
+    <!-- MES FAVORIS -->
+    <div id="myFavs" style="display:none">
+      <div id="myFavsList"></div>
+    </div>
+
+    <!-- MA PROGRESSION -->
+    <div id="myProgress" style="display:none">
+      <div class="panel"><div class="panel-accent"></div>
+        <div class="panel-title">📅 Suivi de lecture</div>
+        <p style="color:var(--text3);font-style:italic;font-size:.92rem;margin-bottom:14px">Cochez les livres que vous avez lus ou étudiés</p>
+        <div id="progressGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px"></div>
+        <button class="action-btn" onclick="saveProgress()" style="margin-top:14px">✦ Sauvegarder ma progression</button>
+        <div id="progressMsg" style="margin-top:6px;color:var(--gold);font-style:italic;font-size:.85rem;display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ IMAGE DU JOUR ══ -->
+<div id="sec-daily" class="section">
+  <div class="sec-title">Image du Jour</div>
+  <div class="sec-desc">Verset liturgique du jour · Format Instagram 1080×1080 · Prêt à publier</div>
+
+  <div style="max-width:600px;margin:0 auto">
+
+    <!-- Controls -->
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-accent"></div>
+      <div class="panel-title">🎨 Personnaliser l'image</div>
+      <div class="g2" style="gap:10px;margin-bottom:12px">
+        <div>
+          <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">STYLE</div>
+          <select class="styled-select" id="imgStyle" onchange="renderDaily()">
+            <option value="gold">✦ Or & Nuit (défaut)</option>
+            <option value="parch">📜 Parchemin Antique</option>
+            <option value="blue">🌊 Bleu Céleste</option>
+            <option value="fire">🔥 Feu & Gloire</option>
+            <option value="forest">🌿 Vert Éden</option>
+            <option value="purple">👑 Pourpre Royal</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">MOTIF</div>
+          <select class="styled-select" id="imgPattern" onchange="renderDaily()">
+            <option value="stars">✦ Étoiles</option>
+            <option value="cross">✝️ Croix</option>
+            <option value="mandala">⬡ Géométrie Sacrée</option>
+            <option value="waves">〰️ Ondes</option>
+            <option value="clean">◻️ Épuré</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:6px">VERSET PERSONNALISÉ (optionnel)</div>
+        <input type="text" class="search-input" id="customVerse" placeholder="Laissez vide pour le verset liturgique du jour..." style="margin-bottom:6px">
+        <input type="text" class="search-input" id="customRef" placeholder="Référence (ex: Jean 3:16)">
+      </div>
+      <button class="action-btn full" onclick="renderDaily()">✦ Générer l'image ✦</button>
+    </div>
+
+    <!-- Canvas Preview -->
+    <div style="position:relative;margin-bottom:16px">
+      <canvas id="dailyCanvas" width="1080" height="1080"
+        style="width:100%;height:auto;display:block;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5)">
+      </canvas>
+      <div id="canvasLoading" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-family:Cinzel,serif;color:var(--gold2);font-size:1.1rem;letter-spacing:2px">
+        Génération en cours…
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="panel">
+      <div class="panel-accent"></div>
+      <div class="panel-title">📱 Publier sur Instagram</div>
+
+      <div style="background:rgba(184,134,11,0.06);border:1px solid var(--border2);padding:16px;margin-bottom:14px">
+        <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:2px;margin-bottom:8px">TEXTE PRÊT À COPIER</div>
+        <div id="instaCaption" style="font-style:italic;color:var(--text2);font-size:.95rem;line-height:1.7;margin-bottom:10px"></div>
+        <button class="action-btn" onclick="copyCaption()" id="copyBtn">📋 Copier le texte</button>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="action-btn" onclick="downloadImage()" style="flex:1">
+          ⬇️ Télécharger l'image
+        </button>
+        <a id="instaShareBtn" href="https://www.instagram.com/codexdei.app?igsh=N200b2dzODhpODZs" target="_blank"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white;padding:12px;font-family:Cinzel,serif;font-size:.88rem;font-weight:600;letter-spacing:1px;text-decoration:none;text-align:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+          Ouvrir Instagram
+        </a>
+      </div>
+
+      <hr class="gold-div">
+
+      <div style="font-size:.82rem;color:var(--text3);font-style:italic;line-height:1.7">
+        <strong style="color:var(--gold2)">Comment publier en 30 secondes :</strong><br>
+        1. Téléchargez l'image sur votre téléphone<br>
+        2. Copiez le texte ci-dessus<br>
+        3. Ouvrez Instagram → Nouveau post → Sélectionnez l'image<br>
+        4. Collez le texte → Publier ✦
+      </div>
+    </div>
+
+    <!-- Historique -->
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-accent"></div>
+      <div class="panel-title">📅 Générer pour une autre date</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input type="date" class="search-input" id="targetDate" style="flex:1">
+        <button class="action-btn" onclick="renderForDate()">Générer</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ FORUM / TCHAT ══ -->
+<div id="sec-forum" class="section">
+  <div class="sec-title">Forum Communautaire</div>
+  <div class="sec-desc">Échangez, partagez, priez ensemble · Communauté Codex Dei</div>
+
+  <div class="forum-layout">
+    <!-- Channels -->
+    <div>
+      <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:3px;margin-bottom:10px;padding:0 4px">SALONS</div>
+      <div class="channel-list">
+        <button class="channel-btn active" onclick="switchChannel('general',this)">
+          <span class="channel-icon">💬</span><div><div>Général</div><div style="font-size:.75rem;opacity:.6">Discussion libre</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('priere',this)">
+          <span class="channel-icon">🙏</span><div><div>Prière</div><div style="font-size:.75rem;opacity:.6">Intercessions</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('etudes',this)">
+          <span class="channel-icon">📖</span><div><div>Études</div><div style="font-size:.75rem;opacity:.6">Partage biblique</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('nombres',this)">
+          <span class="channel-icon">🔢</span><div><div>Nombres Sacrés</div><div style="font-size:.75rem;opacity:.6">Correspondances</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('propheties',this)">
+          <span class="channel-icon">🎯</span><div><div>Prophéties</div><div style="font-size:.75rem;opacity:.6">Analyse</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('temoignages',this)">
+          <span class="channel-icon">✨</span><div><div>Témoignages</div><div style="font-size:.75rem;opacity:.6">Histoires vraies</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('hebreu',this)">
+          <span class="channel-icon">א</span><div><div>Hébreu & Grec</div><div style="font-size:.75rem;opacity:.6">Langues bibliques</div></div>
+        </button>
+        <button class="channel-btn" onclick="switchChannel('annonces',this)">
+          <span class="channel-icon">📢</span><div><div>Annonces</div><div style="font-size:.75rem;opacity:.6">Codex Dei</div></div>
+        </button>
+      </div>
+
+      <hr class="gold-div" style="margin:14px 0">
+
+      <div style="font-size:.7rem;color:var(--gold);font-family:'Share Tech Mono',monospace;letter-spacing:3px;margin-bottom:8px;padding:0 4px">RÈGLES</div>
+      <div style="font-size:.8rem;color:var(--text3);font-style:italic;line-height:1.7;padding:0 4px">
+        ✦ Respect et bienveillance<br>
+        ✦ Fondé sur la Parole<br>
+        ✦ Pas de polémiques<br>
+        ✦ Citez vos références<br>
+        ✦ Priez avant d'écrire
+      </div>
+    </div>
+
+    <!-- Chat area -->
+    <div>
+      <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+          <span class="chat-header-icon" id="chatIcon">💬</span>
+          <div>
+            <div class="chat-header-title" id="chatTitle">Général</div>
+            <div class="chat-header-desc" id="chatDesc">Discussion libre sur la Bible et la foi</div>
+          </div>
+          <div class="online-count" id="onlineCount">● En ligne</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="system-msg">Bienvenue dans le forum Codex Dei 🙏 Que la Paix soit avec vous.</div>
+        </div>
+
+        <div id="chatInputArea">
+          <div id="chatLoginPrompt" style="display:none" class="chat-login-prompt">
+            <div style="color:var(--text3);font-style:italic;margin-bottom:10px;font-size:.9rem">Connectez-vous pour participer à la discussion</div>
+            <button class="action-btn" onclick="openAuth()">✦ Se connecter ✦</button>
+          </div>
+          <div id="chatInputRow" class="chat-input-area">
+            <textarea class="chat-input" id="chatInput" placeholder="Écrivez votre message... (Entrée pour envoyer)" rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
+              oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+            <button class="chat-send" onclick="sendMessage()" title="Envoyer">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app-body -->
+
+<footer>
+  <p>CODEX DEI — Encyclopédie Biblique Universelle</p>
+  <p style="margin-top:7px;font-size:.78rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 &nbsp;·&nbsp; <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p>
+  <p style="margin-top:10px"><a href="https://www.instagram.com/codexdei.app?igsh=N200b2dzODhpODZs" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text3);font-style:normal;transition:all .3s;padding:7px 16px;border:1px solid rgba(184,134,11,0.2);border-radius:2px;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold2)'" onmouseout="this.style.borderColor='rgba(184,134,11,0.2)';this.style.color='var(--text3)'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> @codexdei</a></p>
+</footer>
+<script>
+// ═══ DATA ═══
+
+// ═══ CALENDRIER LITURGIQUE ═══
+function getEaster(year) {
+  var a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+  return new Date(year,month-1,day);
+}
+
+function getLiturgicalDay() {
+  var now=new Date(), year=now.getFullYear(), easter=getEaster(year);
+  function diff(d){var r=new Date(easter);r.setDate(r.getDate()+d);return r;}
+  function sameDay(a,b){return a.getDate()===b.getDate()&&a.getMonth()===b.getMonth();}
+  function inRange(d,s,e){return d>=s&&d<=e;}
+
+  var fixed=[
+    {d:1,m:1,  emoji:"🎆",label:"Nouvel An",               t:"Grace et paix vous soient donnees de la part de Dieu notre Pere.",r:"Romains 1:7"},
+    {d:6,m:1,  emoji:"⭐",label:"Epiphanie",                t:"Des mages d Orient arriverent a Jerusalem en disant : Ou est le roi des Juifs ?",r:"Matthieu 2:1-2"},
+    {d:2,m:2,  emoji:"🕯️",label:"Chandeleur",               t:"Mes yeux ont vu ton salut, que tu as prepare devant tous les peuples.",r:"Luc 2:30-31"},
+    {d:19,m:3, emoji:"🔨",label:"Saint Joseph",             t:"Joseph fit ce que l ange du Seigneur lui avait ordonne.",r:"Matthieu 1:24"},
+    {d:25,m:3, emoji:"🕊️",label:"Annonciation",             t:"Tu concevras et enfanteras un fils, et tu lui donneras le nom de Jesus.",r:"Luc 1:31"},
+    {d:24,m:6, emoji:"🌊",label:"Nativite de Jean-Baptiste", t:"Il marchera devant Dieu avec l esprit et la puissance d Elie.",r:"Luc 1:17"},
+    {d:29,m:6, emoji:"⛪",label:"Saints Pierre et Paul",    t:"Tu es Pierre, et sur cette pierre je batirai mon Eglise.",r:"Matthieu 16:18"},
+    {d:15,m:8, emoji:"👑",label:"Assomption",               t:"Il a regarde la bassesse de sa servante. Desormais tous les ages me diront bienheureuse.",r:"Luc 1:48"},
+    {d:1,m:11, emoji:"✨",label:"Toussaint",                t:"Heureux les purs de coeur, car ils verront Dieu.",r:"Matthieu 5:8"},
+    {d:2,m:11, emoji:"🕯️",label:"Commemoration des defunts", t:"Je suis la resurrection et la vie. Celui qui croit en moi vivra.",r:"Jean 11:25"},
+    {d:8,m:12, emoji:"🌹",label:"Immaculee Conception",     t:"Je te salue, toi a qui une grace a ete faite ; le Seigneur est avec toi.",r:"Luc 1:28"},
+    {d:24,m:12,emoji:"⭐",label:"Veille de Noel",           t:"Voici, la vierge concevra et enfantera un fils, et on lui donnera le nom d Emmanuel.",r:"Matthieu 1:23"},
+    {d:25,m:12,emoji:"🎄",label:"Noel - Nativite du Seigneur", t:"Un enfant nous est ne, un fils nous a ete donne.",r:"Esaie 9:5"},
+    {d:26,m:12,emoji:"🌟",label:"Saint Etienne",            t:"Je vois les cieux ouverts, et le Fils de l homme debout a la droite de Dieu.",r:"Actes 7:56"},
+    {d:27,m:12,emoji:"📖",label:"Saint Jean",               t:"Au commencement etait la Parole, et la Parole etait avec Dieu.",r:"Jean 1:1"},
+    {d:28,m:12,emoji:"🌿",label:"Saints Innocents",         t:"C est Rachel qui pleure ses enfants.",r:"Matthieu 2:18"},
+    {d:31,m:12,emoji:"🎇",label:"Saint Sylvestre",          t:"L Eternel te gardera de tout mal, il gardera ton ame.",r:"Psaume 121:7"},
+  ];
+
+  var mobile=[
+    {delta:-46,emoji:"✝️", label:"Mercredi des Cendres",     t:"Revenez a moi de tout votre coeur.",r:"Joel 2:12"},
+    {delta:-7, emoji:"🌿", label:"Dimanche des Rameaux",     t:"Hosanna au fils de David ! Beni soit celui qui vient au nom du Seigneur !",r:"Matthieu 21:9"},
+    {delta:-3, emoji:"🍷", label:"Jeudi Saint",              t:"Faites ceci en memoire de moi.",r:"Luc 22:19"},
+    {delta:-2, emoji:"✝️", label:"Vendredi Saint",           t:"Dieu a tant aime le monde qu il a donne son Fils unique.",r:"Jean 3:16"},
+    {delta:-1, emoji:"🕯️", label:"Samedi Saint",             t:"L Eternel regne ; qu il soit dans la joie !",r:"Psaume 99:1"},
+    {delta:0,  emoji:"🌅", label:"Paques - Resurrection",    t:"Il n est pas ici, il est ressuscite. Venez voir le lieu ou il etait couche.",r:"Matthieu 28:6"},
+    {delta:1,  emoji:"🌸", label:"Lundi de Paques",          t:"Jesus lui dit : Marie ! Elle se retourna et lui dit : Rabbouni !",r:"Jean 20:16"},
+    {delta:39, emoji:"☁️", label:"Ascension",                t:"Il fut eleve, et une nuee le deroba a leurs regards.",r:"Actes 1:9"},
+    {delta:49, emoji:"🔥", label:"Pentecote",                t:"Ils furent tous remplis du Saint-Esprit.",r:"Actes 2:4"},
+    {delta:50, emoji:"🕊️", label:"Lundi de Pentecote",       t:"L Esprit de verite vous conduira dans toute la verite.",r:"Jean 16:13"},
+    {delta:56, emoji:"✦",  label:"Sainte Trinite",           t:"Allez, baptisez-les au nom du Pere, du Fils et du Saint-Esprit.",r:"Matthieu 28:19"},
+    {delta:60, emoji:"🍞", label:"Fete-Dieu",                t:"Je suis le pain vivant descendu du ciel.",r:"Jean 6:51"},
+  ];
+
+  // Check fixed feasts
+  for(var i=0;i<fixed.length;i++){
+    var f=fixed[i];
+    if(now.getDate()===f.d&&now.getMonth()===f.m-1)
+      return {label:f.label,t:f.t,r:f.r,emoji:f.emoji,isFeast:true};
+  }
+  // Check mobile feasts
+  for(var j=0;j<mobile.length;j++){
+    var mv=mobile[j];
+    if(sameDay(now,diff(mv.delta)))
+      return {label:mv.label,t:mv.t,r:mv.r,emoji:mv.emoji,isFeast:true};
+  }
+
+  // Seasons
+  var christmas=new Date(year,11,25);
+  var ashWed=diff(-46), pentecost=diff(49);
+  var advent1=new Date(christmas); advent1.setDate(christmas.getDate()-((christmas.getDay()+21)%7+21));
+
+  if(inRange(now,advent1,christmas)){
+    var w=Math.min(Math.floor((now-advent1)/(7*86400000)),3);
+    var av=[
+      {t:"Une bonne nouvelle, qui sera pour tout le peuple sujet d une grande joie.",r:"Luc 2:10"},
+      {t:"Preparez le chemin du Seigneur, rendez droits ses sentiers.",r:"Matthieu 3:3"},
+      {t:"Rejouis-toi, fille de Sion ! Pousse des cris d allegresse.",r:"Zacharie 9:9"},
+      {t:"Voici, une vierge sera enceinte, elle enfantera un fils nomme Emmanuel.",r:"Esaie 7:14"},
+    ];
+    return {label:"Avent - Semaine "+(w+1),t:av[w].t,r:av[w].r,emoji:"⭐",isFeast:false};
+  }
+  if(inRange(now,christmas,new Date(year+1,0,7))||inRange(now,new Date(year-1,11,25),new Date(year,0,7))){
+    return {label:"Temps de Noel",t:"La Parole a ete faite chair, et elle a habite parmi nous.",r:"Jean 1:14",emoji:"🎄",isFeast:false};
+  }
+  if(inRange(now,ashWed,easter)){
+    var dl=Math.floor((now-ashWed)/86400000);
+    var lv=[
+      {t:"L homme ne vivra pas de pain seulement, mais de toute parole de Dieu.",r:"Matthieu 4:4"},
+      {t:"Revenez a moi de tout votre coeur, avec des jeunes, des pleurs.",r:"Joel 2:12"},
+      {t:"Creez en moi un coeur pur, o Dieu ! Renouvelez en moi un esprit bien dispose.",r:"Psaume 51:12"},
+      {t:"Je suis la resurrection et la vie. Celui qui croit en moi vivra.",r:"Jean 11:25"},
+      {t:"Si quelqu un veut venir apres moi, qu il renonce a lui-meme et se charge de sa croix.",r:"Matthieu 16:24"},
+      {t:"Voici, nous montons a Jerusalem, et le Fils de l homme sera livre.",r:"Matthieu 20:18"},
+    ];
+    return {label:"Temps du Careme",t:lv[Math.floor(dl/7)%6].t,r:lv[Math.floor(dl/7)%6].r,emoji:"✝️",isFeast:false};
+  }
+  if(inRange(now,easter,pentecost)){
+    var de=Math.floor((now-easter)/86400000);
+    var ev=[
+      {t:"Il est ressuscite ! Il n est pas ici.",r:"Marc 16:6"},
+      {t:"La paix soit avec vous ! Comme le Pere m a envoye, moi aussi je vous envoie.",r:"Jean 20:21"},
+      {t:"Mes brebis entendent ma voix ; je les connais, et elles me suivent.",r:"Jean 10:27"},
+      {t:"Je suis le chemin, la verite et la vie.",r:"Jean 14:6"},
+      {t:"Si vous demeurez en moi, et que mes paroles demeurent en vous, demandez ce que vous voudrez.",r:"Jean 15:7"},
+      {t:"Il vous sera utile que je m en aille, car le Consolateur viendra vers vous.",r:"Jean 16:7"},
+      {t:"Pere, je veux que ceux que tu m as donnes soient avec moi.",r:"Jean 17:24"},
+    ];
+    return {label:"Temps Pascal",t:ev[Math.floor(de/7)%7].t,r:ev[Math.floor(de/7)%7].r,emoji:"🌅",isFeast:false};
+  }
+
+  // Ordinary time
+  var ord=[
+    {t:"L Eternel est mon berger : je ne manquerai de rien.",r:"Psaume 23:1",emoji:"🌿"},
+    {t:"Tu aimeras le Seigneur ton Dieu de tout ton coeur.",r:"Matthieu 22:37",emoji:"❤️"},
+    {t:"Tout concourt au bien de ceux qui aiment Dieu.",r:"Romains 8:28",emoji:"✨"},
+    {t:"Ne crains pas, car je suis avec toi.",r:"Esaie 41:10",emoji:"🙏"},
+    {t:"La foi, c est la certitude des choses qu on espere.",r:"Hebreux 11:1",emoji:"⭐"},
+    {t:"Heureux les artisans de paix, ils seront appeles fils de Dieu.",r:"Matthieu 5:9",emoji:"🕊️"},
+    {t:"Je puis tout en Christ qui me fortifie.",r:"Philippiens 4:13",emoji:"💪"},
+    {t:"Dieu est amour, et celui qui demeure dans l amour demeure en Dieu.",r:"1 Jean 4:16",emoji:"❤️"},
+    {t:"Cherchez d abord le royaume et la justice de Dieu.",r:"Matthieu 6:33",emoji:"👑"},
+    {t:"Voici, je me tiens a la porte et je frappe.",r:"Apocalypse 3:20",emoji:"🚪"},
+    {t:"Car Dieu a tant aime le monde qu il a donne son Fils unique.",r:"Jean 3:16",emoji:"✝️"},
+    {t:"Que la paix de Dieu, qui surpasse toute intelligence, garde vos coeurs.",r:"Philippiens 4:7",emoji:"☮️"},
+    {t:"L Eternel est ma lumiere et mon salut : de qui aurais-je crainte ?",r:"Psaume 27:1",emoji:"☀️"},
+    {t:"Soyez dans la joie, priez sans cesse, rendez graces en toutes choses.",r:"1 Thessaloniciens 5:16",emoji:"🙏"},
+  ];
+  var idx=(now.getDate()+now.getMonth())%ord.length;
+  return {label:"Temps Ordinaire",t:ord[idx].t,r:ord[idx].r,emoji:ord[idx].emoji,isFeast:false};
+}
+
+const VERSES = []; // kept for compat
+
+
+const LOADING_VERSES=["Au commencement était la Parole…","Je suis le chemin, la vérité, la vie.","Cherchez et vous trouverez…","L'Éternel est mon berger…","Dieu est lumière."];
+
+// ═══ STATE ═══
+let favorites=JSON.parse(localStorage.getItem('codex_favs')||'[]');
+let visits=parseInt(localStorage.getItem('codex_visits')||'0')+1;
+let searches=parseInt(localStorage.getItem('codex_searches')||'0');
+localStorage.setItem('codex_visits',visits);
+
+// ═══ INIT ═══
+window.onload=()=>{
+  loadVDJ();
+  updateCounters();
+  renderFavs();
+};
+
+function updateCounters(){
+  document.getElementById('visitCount').textContent=visits.toLocaleString();
+  document.getElementById('searchCount').textContent=searches.toLocaleString();
+  document.getElementById('favCount').textContent=favorites.length;
+}
+
+// ═══ THEME ═══
+function toggleTheme(){
+  const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'☀️':'🌙';
+}
+
+// ═══ NAV ═══
+function goTo(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function switchTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('booksAT').style.display=tab==='at'?'grid':'none';
+  document.getElementById('booksNT').style.display=tab==='nt'?'grid':'none';
+}
+
+// ═══ VERSET DU JOUR ═══
+function loadVDJ(){
+  const v = getLiturgicalDay();
+  document.getElementById('vdjText').textContent = '"' + v.t + '"';
+  document.getElementById('vdjRef').textContent = v.r;
+  // Update banner label
+  const label = document.getElementById('vdjLabel');
+  if(label) label.textContent = (v.emoji||'✦') + ' ' + v.label.toUpperCase();
+  // Highlight feast days
+  const banner = document.getElementById('vdjBanner');
+  if(v.isFeast) {
+    banner.style.background = 'rgba(184,134,11,0.14)';
+    banner.style.borderBottom = '1px solid rgba(184,134,11,0.4)';
+  }
+}
+
+function analyzeVDJ(){
+  const ref=document.getElementById('vdjRef').textContent;
+  const text=document.getElementById('vdjText').textContent;
+  goSection('search');
+  document.getElementById('uniSearch').value=ref+' '+text;
+  universalSearch();
+}
+
+function goSection(n){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+n).classList.add('active');
+}
+
+// ═══ CLAUDE API ═══
+const SYS=`Tu es le CODEX DEI, encyclopédie biblique exhaustive. Expert en exégèse (AT/NT), langues bibliques (hébreu, araméen, grec koinè), gématrie, symbolisme, sciences (biologie, physique, astronomie, mathématiques), traditions juive et chrétienne, prophéties, archéologie biblique.
+Règles : TOUJOURS citer références bibliques précises (Livre ch:v). Structurer avec ### pour sections. Mettre **gras** les points importants. Répondre en français avec profondeur et élégance.`;
+
+async function callClaude(prompt,targetId,title){
+  const target=document.getElementById(targetId);
+  const lv=LOADING_VERSES[Math.floor(Math.random()*LOADING_VERSES.length)];
+  target.innerHTML=`<div class="loading-state"><div class="loader"></div><div style="color:var(--text3);font-style:italic">L'IA explore les Écritures…</div><div class="loading-verse">"${lv}"</div></div>`;
+  target.scrollIntoView({behavior:"smooth",block:'nearest'});
+  searches++;
+  localStorage.setItem('codex_searches',searches);
+  updateCounters();
+
+  try{
+    const r=await fetch('/.netlify/functions/claude',{
+      method:'POST',
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-5',
+        max_tokens:1000,
+        system:SYS,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await r.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.content.map(b=>b.text||'').join('');
+    target.innerHTML=formatResult(raw,title,prompt);
+  checkDonPopup();
+  }catch(e){
+    target.innerHTML=`<div class="error-state">❌ ${e.message}</div>`;
+  }
+}
+
+function formatResult(text,title,prompt){
+  let html=text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/###\s(.+)/g,'<h3>$1</h3>')
+    .replace(/##\s(.+)/g,'<h3>$1</h3>')
+    .replace(/^[-•]\s(.+)/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n/g,'<br>');
+  const shareText=encodeURIComponent('Découverte biblique sur CODEX DEI : '+title);
+  const shareUrl=encodeURIComponent(window.location.href);
+  return `<div class="ai-result">
+    <div class="result-header">
+      <span style="color:var(--gold);font-size:1.2rem">✦</span>
+      <span class="result-label">${title}</span>
+    </div>
+    <div>${html}</div>
+    <hr class="gold-div" style="margin:16px 0 12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div class="share-row">
+        <a class="share-btn share-wa" href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank">📱 WhatsApp</a>
+        <a class="share-btn share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank">📘 Facebook</a>
+        <button class="share-btn share-copy" onclick="copyResult(this,'${title}')">📋 Copier</button>
+        <button class="share-btn share-print" onclick="window.print()">🖨️ Imprimer</button>
+      </div>
+      <button class="fav-btn" onclick="saveFav('${title}',this)" id="fav-${Date.now()}">⭐ Sauvegarder</button>
+    </div>
+  </div>`;
+}
+
+function copyResult(btn,title){
+  const text=btn.closest('.ai-result').querySelector('div:nth-child(2)').innerText;
+  navigator.clipboard.writeText('CODEX DEI — '+title+'\n\n'+text);
+  btn.textContent='✓ Copié !';
+  setTimeout(()=>btn.textContent='📋 Copier',2000);
+}
+
+// ═══ FAVORIS ═══
+function saveFav(title,btn){
+  const content=btn.closest('.ai-result').querySelector('div:nth-child(2)').innerText.substring(0,200)+'…';
+  favorites.unshift({title,content,date:new Date().toLocaleDateString('fr-FR'),id:Date.now()});
+  if(favorites.length>50)favorites.pop();
+  localStorage.setItem('codex_favs',JSON.stringify(favorites));
+  btn.textContent='✓ Sauvegardé';
+  btn.classList.add('saved');
+  updateCounters();
+  renderFavs();
+}
+
+function renderFavs(){
+  const el=document.getElementById('favList');
+  if(!favorites.length){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);font-style:italic"><div style="font-size:2rem;margin-bottom:12px">⭐</div>Aucun favori pour l\'instant.<br>Après chaque analyse, cliquez sur « ⭐ Sauvegarder ».</div>';
+    return;
+  }
+  el.innerHTML=favorites.map((f,i)=>`
+    <div class="fav-card" onclick="replayFav(${i})">
+      <span class="fav-icon">✦</span>
+      <div class="fav-content">
+        <div class="fav-title">${f.title}</div>
+        <div class="fav-preview">${f.content}</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-top:5px;font-family:'Share Tech Mono',monospace">${f.date}</div>
+      </div>
+      <button class="fav-del" onclick="delFav(event,${i})">✕</button>
+    </div>`).join('');
+}
+
+function delFav(e,i){
+  e.stopPropagation();
+  favorites.splice(i,1);
+  localStorage.setItem('codex_favs',JSON.stringify(favorites));
+  updateCounters();
+  renderFavs();
+}
+
+function replayFav(i){
+  goSection('search');
+  document.getElementById('uniSearch').value=favorites[i].title;
+  universalSearch();
+}
+
+// ═══ SEARCH FUNCTIONS ═══
+function universalSearch(){
+  const q=document.getElementById('uniSearch').value.trim();
+  if(!q)return;
+  if(!checkSearchLimit())return;
+  callClaude(`Analyse biblique complète et universelle : "${q}"\n\n1. **Occurrences** — toutes les mentions significatives (AT et NT) avec références\n2. **Étymologie** — hébraïque et/ou grecque, sens littéral profond\n3. **Symbolisme théologique** dans chaque tradition\n4. **Correspondances scientifiques** — biologie, physique, astronomie, mathématiques\n5. **Correspondances cosmiques** et culturelles\n6. **Connexions numériques** — gématrie si applicable\n7. **Prophéties** et accomplissements\n8. **Insight rare** — quelque chose que peu de gens connaissent`,'uniResult',`"${q}"`);
+}
+function qs(t){document.getElementById('uniSearch').value=t;universalSearch();}
+
+function analyzeWord(){
+  const w=document.getElementById('wordInput').value.trim();
+  if(!w)return;
+  if(!checkSearchLimit())return;
+  callClaude(`Analyse philologique et théologique du mot biblique : "${w}"\n\n1. **Étymologie** — racine hébraïque ou grecque\n2. **Gématrie** — valeur numérique, mots partageant cette valeur\n3. **Occurrences bibliques** clés avec contexte\n4. **Évolution sémantique** AT→NT\n5. **Symbolisme caché** — sens mystique\n6. **Correspondances** avec d'autres langues sacrées\n7. **Fait étonnant** peu connu`,'wordResult',`Mot : "${w}"`);
+}
+function sw(w){document.getElementById('wordInput').value=w;analyzeWord();}
+
+function an(num,desc){
+  if(!checkSearchLimit())return;
+  callClaude(`Analyse exhaustive du nombre ${num} — ${desc}\n\n1. **Gématrie hébraïque** — valeur, mots correspondants\n2. **Occurrences bibliques** (AT et NT) avec références\n3. **Symbolisme théologique** juif et chrétien\n4. **Correspondances scientifiques** (biologie, physique, astronomie, mathématiques)\n5. **Propriétés mathématiques** remarquables\n6. **Correspondances culturelles** — autres religions\n7. **Insight le plus surprenant**`,'numberResult',`Nombre ${num} — ${desc}`);
+  setTimeout(()=>document.getElementById('numberResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+function anCustom(){const n=document.getElementById('customNum').value.trim();if(n)an(n,'analyse personnalisée');}
+
+function ab(book){
+  document.querySelectorAll('.book-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  callClaude(`Analyse complète du livre biblique : ${book}\n\n1. **Contexte historique** — auteur, date, lieu, destinataires\n2. **Structure** — grandes divisions, architecture littéraire\n3. **Thèmes majeurs** — messages centraux\n4. **Prophéties** — messianiques et autres\n5. **Personnages clés** et symbolisme\n6. **Symbolisme numérique** — nombres importants\n7. **Connexions** avec d'autres livres\n8. **Verset-clé** avec analyse profonde\n9. **Découverte remarquable** peu connue\n10. **Message universel** pour aujourd'hui`,'bookResult',`Livre de ${book}`);
+  setTimeout(()=>document.getElementById('bookResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function analyzeChar(){const c=document.getElementById('charInput').value.trim();if(c)qc(c);}
+function qc(name){
+  document.getElementById('charInput').value=name;
+  callClaude(`Analyse complète du personnage biblique : ${name}\n\n1. **Signification du nom** — étymologie hébraïque/grecque\n2. **Biographie biblique** — vie, appel, épreuves, accomplissements\n3. **Symbolisme typologique** — type du Christ si applicable\n4. **Prophéties** — sur lui ou accomplies par lui\n5. **Correspondances numériques** — âge, dates, nombres\n6. **Rôle cosmique** dans le plan divin\n7. **Connexions** avec d'autres personnages\n8. **Fait méconnu et fascinant**`,'charResult',`Personnage : ${name}`);
+  setTimeout(()=>document.getElementById('charResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function at2(theme){
+  callClaude(theme+'\n\nAnalyse exhaustive avec toutes les références bibliques et correspondances.','themeResult','Analyse thématique');
+  setTimeout(()=>document.getElementById('themeResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function gc(domain){
+  callClaude(`12 correspondances fascinantes entre la Bible et ${domain}.\n\nPour chacune : **élément biblique précis** (réf.) · **correspondance dans ${domain}** · **pourquoi c'est remarquable**. Priorise les moins connues.`,'corrGenResult',`Bible × ${domain}`);
+}
+
+function ap(topic){
+  callClaude(topic+'\n\nAnalyse complète avec références, contexte historique et signification profonde.','prophecyResult','Analyse prophétique');
+  setTimeout(()=>document.getElementById('prophecyResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function analyzeHebrew(){const w=document.getElementById('hebrewInput').value.trim();if(w)qh(w);}
+function qh(word){
+  document.getElementById('hebrewInput').value=word;
+  callClaude(`Analyse linguistique et mystique : "${word}"\n\n1. **Orthographe originale** — lettres hébraïques ou grecques\n2. **Racine** — famille de mots, évolution\n3. **Gématrie** — valeur numérique, mots partageant cette valeur\n4. **Signification littérale et spirituelle**\n5. **Occurrences clés** dans la Bible\n6. **Dimension kabbalistique** si applicable\n7. **Révélation cachée** dans les lettres`,'hebrewResult',`Analyse linguistique : "${word}"`);
+}
+
+function calcGem(){
+  const input=document.getElementById('gematriaInput').value.trim();
+  if(!input)return;
+  callClaude(`Gématrie pour : "${input}"\n\nSi mot hébreu/grec : calcule valeur lettre par lettre, liste les mots bibliques de même valeur, explique les connexions.\nSi nombre : liste les mots hébreux/grecs de cette valeur, analyse les connexions thématiques et occurrences bibliques.`,'gematriaResult',`Gématrie : "${input}"`);
+}
+
+function analyzeTL(topic){
+  callClaude(topic+'\n\nAnalyse profonde avec contexte historique, symbolisme et signification spirituelle.','tlResult','Analyse chronologique');
+  setTimeout(()=>document.getElementById('tlResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function analyzePlace(place){
+  callClaude(`Analyse biblique complète du lieu : ${place}\n\n1. **Géographie** — localisation, description\n2. **Occurrences bibliques** — tous les événements majeurs qui s'y déroulent\n3. **Signification du nom** — étymologie hébraïque\n4. **Symbolisme spirituel** — ce que ce lieu représente théologiquement\n5. **Prophéties** liées à ce lieu\n6. **Archéologie** — découvertes historiques confirmant la Bible\n7. **Importance aujourd'hui**`,'mapResult',`Lieu biblique : ${place}`);
+  setTimeout(()=>document.getElementById('mapResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
+}
+
+function generatePrayer(){
+  const intention=document.getElementById('prayerInput').value.trim();
+  if(!intention)return;
+  callClaude(`Compose une prière biblique personnalisée pour : ${intention}\n\nLa prière doit :\n- S'inspirer des prières bibliques (Psaumes, prières de Jésus, Paul, etc.)\n- Inclure des références bibliques pertinentes intégrées naturellement\n- Avoir une structure : Adoration · Confession · Action de grâces · Supplication\n- Être profonde, poétique et sincère\n- Se terminer par une promesse biblique de réconfort\n\nEcris la prière en italique et belle prose, puis propose 2-3 versets bibliques pour approfondir.`,'prayerResult','Prière personnalisée');
+}
+function setPrayer(t){document.getElementById('prayerInput').value=t;generatePrayer();}
+
+function generatePlan(){
+  const duration=document.getElementById('planDuration').value;
+  const goal=document.getElementById('planGoal').value;
+  const level=document.getElementById('planLevel').value;
+  const time=document.getElementById('planTime').value;
+  const notes=document.getElementById('planNotes').value;
+  callClaude(`Crée un plan de lecture biblique personnalisé :\n- Durée : ${duration}\n- Objectif : ${goal}\n- Niveau : ${level}\n- Temps disponible : ${time}/jour\n- Notes : ${notes||'aucune'}\n\nLe plan doit :\n1. Être structuré semaine par semaine (ou par période)\n2. Indiquer les livres/chapitres à lire chaque jour\n3. Suggérer des points de méditation clés\n4. Proposer des questions pour approfondir\n5. Inclure des jalons et encouragements\n6. Être réaliste et progressif`,'planResult','Plan de lecture personnalisé');
+}
+
+function doCompare(){
+  const a=document.getElementById('compA').value.trim();
+  const b=document.getElementById('compB').value.trim();
+  if(!a||!b)return;
+  callClaude(`Comparaison biblique approfondie : "${a}" vs "${b}"\n\n1. **Points communs** — parallèles, similitudes, typologies\n2. **Différences clés** — contrastes, complémentarités\n3. **Relation typologique** — l'un préfigure-t-il l'autre ?\n4. **Connexions numériques** partagées\n5. **Timeline biblique** — plan divin\n6. **Enseignements spirituels** révélés\n7. **La révélation** que cette comparaison apporte`,'compareResult',`${a} ↔ ${b}`);
+}
+function sc(a,b){document.getElementById('compA').value=a;document.getElementById('compB').value=b;doCompare();}
+
+async function subscribeNL(){
+  const email=document.getElementById('nlEmail').value.trim();
+  if(!email||!email.includes('@')){return;}
+  const btn=document.querySelector('.action-btn[onclick="subscribeNL()"]');
+  btn.disabled=true; btn.textContent='Envoi…';
+  try{
+    const r=await fetch('https://formspree.io/f/xgoqlwnq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email:email,message:"Nouvelle inscription newsletter Codex Dei",_subject:"Nouvelle inscription Newsletter — "+email})
+    });
+    const data=await r.json();
+    if(data.ok||r.ok){
+      document.getElementById('nlResult').style.display='block';
+      document.getElementById('nlEmail').value='';
+      btn.textContent='✓ Inscrit !';
+    } else {
+      btn.disabled=false; btn.textContent="S'inscrire";
+      alert('Erreur, réessayez.');
+    }
+  }catch(e){
+    btn.disabled=false; btn.textContent="S'inscrire";
+  }
+}
+
+function submitTesti(){
+  const text=document.getElementById('testiInput').value.trim();
+  const name=document.getElementById('testiName').value.trim();
+  if(!text)return;
+  const msg=document.getElementById('testiMsg');
+  msg.style.display='block';
+  msg.textContent='✓ Merci pour votre témoignage ! Il sera ajouté après vérification.';
+  document.getElementById('testiInput').value='';
+  document.getElementById('testiName').value='';
+}
+
+
+
+
+
+// ═══ FORUM / CHAT ═══
+const CHANNELS = {
+  general:     { icon:"💬", title:"General",        desc:"Discussion libre sur la Bible et la foi" },
+  priere:      { icon:"🙏", title:"Priere",          desc:"Partagez vos intentions de priere" },
+  etudes:      { icon:"📖", title:"Etudes",          desc:"Partagez vos etudes et decouvertes bibliques" },
+  nombres:     { icon:"🔢", title:"Nombres Sacres",  desc:"Correspondances et symbolisme des nombres" },
+  propheties:  { icon:"🎯", title:"Propheties",      desc:"Analyse et accomplissement des propheties" },
+  temoignages: { icon:"✨", title:"Temoignages",     desc:"Histoires vraies de transformation" },
+  hebreu:      { icon:"א",  title:"Hebreu et Grec",  desc:"Langues bibliques et etymologie" },
+  annonces:    { icon:"📢", title:"Annonces",        desc:"Nouvelles et mises a jour Codex Dei" },
+};
+
+let currentChannel = 'general';
+let chatPollInterval = null;
+let lastMsgId = 0;
+
+function switchChannel(ch, btn) {
+  currentChannel = ch;
+  lastMsgId = 0;
+  document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const info = CHANNELS[ch];
+  document.getElementById('chatIcon').textContent = info.icon;
+  document.getElementById('chatTitle').textContent = info.title;
+  document.getElementById('chatDesc').textContent = info.desc;
+  document.getElementById('chatMessages').innerHTML = `<div class="system-msg">Chargement du salon ' + info.title + '…</div>`;
+  loadMessages();
+}
+
+function renderMsg(m) {
+  const isMe = currentUser && m.user_id === currentUser.id;
+  const name = m.author_name || 'Anonyme';
+  const initial = name[0].toUpperCase();
+  const time = new Date(m.created_at).toLocaleTimeString('fr-FR', {hour:"2-digit",minute:'2-digit'});
+  const verseBlock = m.verse_ref ? `<div class="msg-verse">✦ ${m.verse_ref}</div>` : '';
+  return `<div class="msg-bubble ${isMe?'mine':''}">
+    <div class="msg-avatar">${initial}</div>
+    <div class="msg-content">
+      ${!isMe?`<div class="msg-name">${name}</div>`:''}
+      <div class="msg-text">${escHtml(m.content)}${verseBlock}</div>
+      <div class="msg-time">${time}</div>
+    </div>
+  </div>`;
+}
+
+function escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadMessages() {
+  if (!SB_URL) return;
+  try {
+    const data = await sbFetch('forum_messages','GET',null,
+      `channel=eq.${currentChannel}&order=created_at.asc&limit=60`);
+    if (!data) return;
+    const el = document.getElementById('chatMessages');
+    if (!data.length) {
+      el.innerHTML = '<div class="system-msg">Aucun message dans ce salon. Soyez le premier ! 🙏</div>';
+      return;
+    }
+    el.innerHTML = '<div class="system-msg">Que la Paix soit avec vous 🙏</div>';
+    data.forEach(m => { el.innerHTML += renderMsg(m); if(m.id>lastMsgId) lastMsgId=m.id; });
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {
+    document.getElementById('chatMessages').innerHTML =
+      '<div class="system-msg">Connectez le salon en créant la table forum_messages dans Supabase.</div>';
+  }
+}
+
+async function pollNewMessages() {
+  if (!currentUser || !SB_URL) return;
+  try {
+    const data = await sbFetch('forum_messages','GET',null,
+      `channel=eq.${currentChannel}&id=gt.${lastMsgId}&order=created_at.asc&limit=20`);
+    if (!data || !data.length) return;
+    const el = document.getElementById('chatMessages');
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+    data.forEach(m => { el.innerHTML += renderMsg(m); if(m.id>lastMsgId) lastMsgId=m.id; });
+    if (atBottom) el.scrollTop = el.scrollHeight;
+  } catch(e) {}
+}
+
+async function sendMessage() {
+  if (!currentUser) { openAuth(); return; }
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const name = currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || 'Ami';
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Detect verse reference pattern ex: "Jean 3:16"
+  const verseMatch = text.match(/([1-3]?\s?[A-ZÀ-Ü][a-zà-ü]+\.?\s?\d+\s?:\s?\d+[-\d]*)/);
+
+  try {
+    await sbFetch('forum_messages','POST',{
+      channel: currentChannel,
+      user_id: currentUser.id,
+      author_name: name,
+      content: text,
+      verse_ref: verseMatch ? verseMatch[0] : null,
+      created_at: new Date().toISOString()
+    });
+    await pollNewMessages();
+  } catch(e) {
+    // Optimistic render
+    const el = document.getElementById('chatMessages');
+    el.innerHTML += renderMsg({
+      user_id: currentUser.id,
+      author_name: name,
+      content: text,
+      verse_ref: verseMatch ? verseMatch[0] : null,
+      created_at: new Date().toISOString(),
+      id: Date.now()
+    });
+    el.scrollTop = el.scrollHeight;
+  }
+}
+
+function initForumAuth() {
+  const inputRow = document.getElementById('chatInputRow');
+  const loginPrompt = document.getElementById('chatLoginPrompt');
+  if (currentUser) {
+    inputRow.style.display = 'flex';
+    loginPrompt.style.display = 'none';
+  } else {
+    inputRow.style.display = 'none';
+    loginPrompt.style.display = 'block';
+  }
+}
+
+// forum handled in main goTo
+
+// ═══ IMAGE DU JOUR ═══
+const THEMES = {
+  gold:   { bg1:'#0c0a07', bg2:'#1a1208', bg3:'#2a1e08', text:"#f0e8d0", gold:'#d4a017', gold2:'#f0c040', sub:'#a08030', border:'rgba(212,160,23,0.6)' },
+  parch:  { bg1:'#2d2010', bg2:'#3d2e18', bg3:'#4d3c20', text:"#f5edd8", gold:'#8b6010', gold2:'#c09030', sub:'#6a4810', border:'rgba(139,96,16,0.6)' },
+  blue:   { bg1:'#050d1a', bg2:'#0a1828', bg3:'#0f2538', text:"#d0e8f8", gold:'#4a9acc', gold2:'#7ac0e8', sub:'#306888', border:'rgba(74,154,204,0.6)' },
+  fire:   { bg1:'#0f0500', bg2:'#1f0a00', bg3:'#2f1000', text:"#ffe8d0", gold:'#e05010', gold2:'#ff8030', sub:'#b03008', border:'rgba(224,80,16,0.6)' },
+  forest: { bg1:'#040c04', bg2:'#081808', bg3:'#0c240c', text:"#d0f0d0", gold:'#40a040', gold2:'#70c870', sub:'#286828', border:'rgba(64,160,64,0.6)' },
+  purple: { bg1:'#080010', bg2:'#100020', bg3:'#180030', text:"#e8d0f8", gold:'#9040c0', gold2:'#c070f0', sub:'#601890', border:'rgba(144,64,192,0.6)' },
+};
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let lines = [];
+  for (let w of words) {
+    const test = line + (line ? ' ' : '') + w;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = w;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  const totalH = lines.length * lineHeight;
+  let cy = y - totalH/2 + lineHeight/2;
+  for (let l of lines) {
+    ctx.fillText(l, x, cy);
+    cy += lineHeight;
+  }
+  return lines.length;
+}
+
+function drawPattern(ctx, pattern, theme, size) {
+  ctx.save();
+  ctx.globalAlpha = 0.06;
+  ctx.strokeStyle = theme.gold2;
+  ctx.lineWidth = 1;
+  if (pattern === 'stars') {
+    for (let i=0;i<60;i++) {
+      const x=Math.random()*size, y=Math.random()*size, r=Math.random()*2+0.5;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=theme.gold2; ctx.fill();
+    }
+  } else if (pattern === 'cross') {
+    ctx.globalAlpha = 0.04;
+    for (let x=80;x<size;x+=120) for (let y=80;y<size;y+=120) {
+      ctx.beginPath(); ctx.moveTo(x-20,y); ctx.lineTo(x+20,y); ctx.moveTo(x,y-30); ctx.lineTo(x,y+10); ctx.stroke();
+    }
+  } else if (pattern === 'mandala') {
+    ctx.globalAlpha = 0.05;
+    const cx=size/2, cy=size/2;
+    for (let r=60;r<500;r+=80) {
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+      for (let a=0;a<Math.PI*2;a+=Math.PI/6) {
+        ctx.beginPath(); ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)); ctx.lineTo(cx+(r-30)*Math.cos(a),cy+(r-30)*Math.sin(a)); ctx.stroke();
+      }
+    }
+  } else if (pattern === 'waves') {
+    ctx.globalAlpha = 0.04;
+    for (let y=0;y<size;y+=40) {
+      ctx.beginPath();
+      for (let x=0;x<=size;x+=10) ctx.lineTo(x, y+Math.sin(x/60)*15);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+async function renderDaily(dateOverride) {
+  const canvas = document.getElementById('dailyCanvas');
+  const ctx = canvas.getContext('2d');
+  const loading = document.getElementById('canvasLoading');
+  loading.style.display = 'flex';
+
+  const style = document.getElementById('imgStyle').value;
+  const pattern = document.getElementById('imgPattern').value;
+  const T = THEMES[style];
+  const S = 1080;
+
+  // Get verse
+  let verseText, verseRef, label, emoji;
+  const cv = document.getElementById('customVerse').value.trim();
+  const cr = document.getElementById('customRef').value.trim();
+  if (cv) {
+    verseText = cv; verseRef = cr || 'Parole de Dieu'; label = 'Verset du Jour'; emoji = '✦';
+  } else {
+    const v = getLiturgicalDay();
+    verseText = v.t; verseRef = v.r; label = v.label; emoji = v.emoji || '✦';
+  }
+
+  // Background gradient
+  const grad = ctx.createRadialGradient(S/2,S/2,0,S/2,S/2,S*0.8);
+  grad.addColorStop(0, T.bg3);
+  grad.addColorStop(0.5, T.bg2);
+  grad.addColorStop(1, T.bg1);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,S,S);
+
+  // Corner glow
+  const glow = ctx.createRadialGradient(S*0.2,S*0.2,0,S*0.2,S*0.2,S*0.5);
+  glow.addColorStop(0, T.gold+'22');
+  glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0,0,S,S);
+
+  // Pattern
+  drawPattern(ctx, pattern, T, S);
+
+  // Border frame
+  ctx.strokeStyle = T.border;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(40,40,S-80,S-80);
+  ctx.strokeStyle = T.gold+'44';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(55,55,S-110,S-110);
+
+  // Corner ornaments
+  const corners = [[60,60],[S-60,60],[60,S-60],[S-60,S-60]];
+  corners.forEach(([x,y],i) => {
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(i*Math.PI/2);
+    ctx.fillStyle = T.gold2;
+    ctx.font = 'bold 36px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.globalAlpha = 0.7;
+    ctx.fillText('✦', 0, 0);
+    ctx.restore();
+  });
+
+  // TOP — Logo + Date
+  const today = dateOverride || new Date();
+  const dateStr = today.toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long',year:"numeric"});
+  
+  ctx.fillStyle = T.gold2;
+  ctx.font = 'bold 52px "Cinzel Decorative", Cinzel, serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('CODEX DEI', S/2, 130);
+
+  ctx.fillStyle = T.sub;
+  ctx.font = '28px "Share Tech Mono", monospace';
+  ctx.fillText(dateStr.toUpperCase(), S/2, 185);
+
+  // Divider line
+  ctx.beginPath();
+  const lg = ctx.createLinearGradient(100,0,S-100,0);
+  lg.addColorStop(0,'transparent');
+  lg.addColorStop(0.5,T.gold);
+  lg.addColorStop(1,'transparent');
+  ctx.strokeStyle = lg;
+  ctx.lineWidth = 1.5;
+  ctx.moveTo(100,220); ctx.lineTo(S-100,220);
+  ctx.stroke();
+
+  // Feast label
+  ctx.fillStyle = T.gold;
+  ctx.font = 'italic 30px "EB Garamond", Georgia, serif';
+  ctx.fillText(emoji + '  ' + label.toUpperCase(), S/2, 265);
+
+  // Center ornament
+  ctx.fillStyle = T.gold2;
+  ctx.font = '40px serif';
+  ctx.globalAlpha = 0.5;
+  ctx.fillText('✦  ✦  ✦', S/2, 330);
+  ctx.globalAlpha = 1;
+
+  // VERSE TEXT — main
+  ctx.fillStyle = T.text;
+  ctx.font = 'italic 54px "EB Garamond", Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const quoted = '« ' + verseText + ' »';
+  wrapText(ctx, quoted, S/2, 580, S-160, 72);
+
+  // Reference
+  ctx.fillStyle = T.gold2;
+  ctx.font = 'bold 36px Cinzel, serif';
+  ctx.fillText('— ' + verseRef, S/2, 830);
+
+  // Bottom divider
+  ctx.beginPath();
+  const lg2 = ctx.createLinearGradient(100,0,S-100,0);
+  lg2.addColorStop(0,'transparent');
+  lg2.addColorStop(0.5,T.gold);
+  lg2.addColorStop(1,'transparent');
+  ctx.strokeStyle = lg2;
+  ctx.lineWidth = 1.5;
+  ctx.moveTo(100,880); ctx.lineTo(S-100,880);
+  ctx.stroke();
+
+  // Instagram handle
+  ctx.fillStyle = T.sub;
+  ctx.font = '28px "Share Tech Mono", monospace';
+  ctx.fillText('@codexdei.app', S/2, 930);
+
+  ctx.fillStyle = T.gold;
+  ctx.font = '22px serif';
+  ctx.fillText('✦  codexdei.app@gmail.com  ✦', S/2, 975);
+
+  loading.style.display = 'none';
+
+  // Update caption
+  const hashtags = '#Bible #Verset #VersetDuJour #Dieu #Foi #Chrétien #Catholique #Évangile #CodexDei #Spiritualité #ParoleDeDieu #Jésus #Prière #Lumière';
+  document.getElementById('instaCaption').textContent =
+    emoji + ' ' + label + '\n\n' +
+    '« ' + verseText + ' »\n' +
+    '— ' + verseRef + '\n\n' +
+    hashtags;
+}
+
+function renderForDate() {
+  const d = document.getElementById('targetDate').value;
+  if (!d) return;
+  renderDaily(new Date(d));
+}
+
+function downloadImage() {
+  const canvas = document.getElementById('dailyCanvas');
+  const today = new Date();
+  const fname = 'codexdei-' + today.toISOString().split('T')[0] + '.png';
+  const a = document.createElement('a');
+  a.download = fname;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+function copyCaption() {
+  const text = document.getElementById('instaCaption').textContent;
+  navigator.clipboard.writeText(text);
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = '✓ Copié !';
+  setTimeout(() => btn.textContent = '📋 Copier le texte', 2000);
+}
+
+// daily handled in main goTo
+
+// ═══ AUTH & USER SYSTEM ═══
+const SURL = 'https://ctttpbbsirawljldvutt.supabase.co';
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0dHRwYmJzaXJhd2xqbGR2dXR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTYwNDUsImV4cCI6MjA5NTE5MjA0NX0.VAZQ0_2bprIH6P0kQjK2QROk_NdHgbLk0JmpoDZzH98';
+let currentUser = null;
+let userToken = null;
+
+// Init auth on load
+window.addEventListener('load', async () => {
+  const stored = localStorage.getItem('sb_session');
+  if (stored) {
+    try {
+      const s = JSON.parse(stored);
+      if (s.access_token && s.expires_at > Date.now()/1000) {
+        userToken = s.access_token;
+        currentUser = s.user;
+        onLoggedIn();
+      }
+    } catch(e) {}
+  }
+});
+
+function openAuth() { 
+  const m = document.getElementById('authModal');
+  if(m) m.classList.add('open'); 
+}
+function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
+
+function switchAuthTab(tab, el) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('authLogin').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('authRegister').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pwd = document.getElementById('loginPwd').value;
+  const err = document.getElementById('loginErr');
+  const ok = document.getElementById('loginOk');
+  if (!email || !pwd) { showAuthMsg(err, "Remplissez tous les champs."); return; }
+  try {
+    const r = await fetch(SURL + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: {'apikey': SKEY, 'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password: pwd})
+    });
+    const data = await r.json();
+    if (data.error) { showAuthMsg(err, data.error_description || "Email ou mot de passe incorrect."); return; }
+    localStorage.setItem('sb_session', JSON.stringify({...data, expires_at: Date.now()/1000 + data.expires_in}));
+    userToken = data.access_token;
+    currentUser = data.user;
+    closeAuth();
+    onLoggedIn();
+  } catch(e) { showAuthMsg(err, "Erreur de connexion."); }
+}
+
+async function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pwd = document.getElementById('regPwd').value;
+  const err = document.getElementById('regErr');
+  const ok = document.getElementById('regOk');
+  if (!email || !pwd) { showAuthMsg(err, "Remplissez tous les champs."); return; }
+  if (pwd.length < 6) { showAuthMsg(err, "Mot de passe minimum 6 caracteres."); return; }
+  try {
+    const r = await fetch(SURL + '/auth/v1/signup', {
+      method: 'POST',
+      headers: {'apikey': SKEY, 'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password: pwd, data: {name: name || 'Ami de la Parole'}})
+    });
+    const data = await r.json();
+    if (data.error) { showAuthMsg(err, data.error_description || "Erreur lors de l inscription."); return; }
+    if (data.access_token) {
+      localStorage.setItem('sb_session', JSON.stringify({...data, expires_at: Date.now()/1000 + data.expires_in}));
+      userToken = data.access_token;
+      currentUser = data.user;
+      closeAuth();
+      onLoggedIn();
+    } else {
+      showAuthMsg(ok, '✓ Compte créé ! Vérifiez votre email pour confirmer.');
+    }
+  } catch(e) { showAuthMsg(err, "Erreur de connexion."); }
+}
+
+async function doMagicLink() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) { showAuthMsg(document.getElementById('loginErr'), "Entrez votre email."); return; }
+  try {
+    await fetch(SURL + '/auth/v1/magiclink', {
+      method: 'POST',
+      headers: {'apikey': SKEY, 'Content-Type': 'application/json'},
+      body: JSON.stringify({email})
+    });
+    showAuthMsg(document.getElementById('loginOk'), '✓ Lien envoyé ! Vérifiez votre boîte mail.');
+  } catch(e) {}
+}
+
+function doLogout() {
+  localStorage.removeItem('sb_session');
+  currentUser = null; userToken = null;
+  document.getElementById('loggedBar').style.display = 'none';
+  document.getElementById('guestBar').style.display = 'block';
+  document.getElementById('mySpaceGuest').style.display = 'block';
+  document.getElementById('mySpaceContent').style.display = 'none';
+}
+
+function onLoggedIn() {
+  const name = currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || '?';
+  document.getElementById('userAvatar').textContent = name[0].toUpperCase();
+  document.getElementById('userAvatar').title = name;
+  document.getElementById('loggedBar').style.display = 'flex';
+  document.getElementById('guestBar').style.display = 'none';
+  document.getElementById('mySpaceGuest').style.display = 'none';
+  document.getElementById('mySpaceContent').style.display = 'block';
+  document.getElementById('mySpaceDesc').textContent = 'Bonjour ' + name + ' 🙏 Vos études et notes vous attendent.';
+  loadNotes();
+  renderProgressGrid();
+}
+
+function showAuthMsg(el, msg) {
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ═══ AUTH DB HELPER ═══
+async function userDb(table, method='GET', body=null, filters='') {
+  if (!userToken) return null;
+  const url = SURL + '/rest/v1/' + table + (filters ? '?' + filters : '');
+  const opts = {
+    method,
+    headers: {
+      'apikey': SKEY,
+      'Authorization': 'Bearer ' + userToken,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation' : ''
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if (!r.ok) throw new Error(await r.text());
+  return method === 'DELETE' ? null : r.json();
+}
+
+// ═══ TABS MON ESPACE ═══
+function switchMyTab(tab, el) {
+  document.querySelectorAll('.my-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['myNotes','myStudies','myFavs','myProgress'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+  const map = {notes:'myNotes',studies:'myStudies',favs:'myFavs',progress:'myProgress'};
+  document.getElementById(map[tab]).style.display = 'block';
+  if (tab === 'notes') loadNotes();
+  if (tab === 'studies') loadMyStudies();
+  if (tab === 'favs') loadMyFavs();
+  if (tab === 'progress') renderProgressGrid();
+}
+
+// ═══ NOTES ═══
+async function saveNote() {
+  if (!currentUser) { openAuth(); return; }
+  const ref = document.getElementById('noteRef').value.trim();
+  const body = document.getElementById('noteContent').value.trim();
+  const msg = document.getElementById('noteMsg');
+  if (!body) return;
+  try {
+    await userDb('user_notes', 'POST', {
+      user_id: currentUser.id,
+      reference: ref || 'Sans référence',
+      content: body,
+      created_at: new Date().toISOString()
+    });
+    msg.style.display = 'block'; msg.textContent = '✓ Note sauvegardée !';
+    document.getElementById('noteRef').value = '';
+    document.getElementById('noteContent').value = '';
+    setTimeout(() => msg.style.display='none', 3000);
+    loadNotes();
+  } catch(e) {
+    msg.style.display = 'block'; msg.textContent = '✓ Note sauvegardée localement.';
+  }
+}
+
+async function loadNotes() {
+  if (!currentUser) return;
+  const el = document.getElementById('notesList');
+  try {
+    const data = await userDb('user_notes', 'GET', null, `user_id=eq.${currentUser.id}&order=created_at.desc&limit=50`);
+    if (!data?.length) { el.innerHTML = `<div style="color:var(--text3);font-style:italic;padding:20px;text-align:center">Aucune note pour l'instant. Commencez à étudier !</div>`; return; }
+    el.innerHTML = data.map(n => `
+      <div class="note-card">
+        <div class="note-card-title">✦ ${n.reference}</div>
+        <div class="note-card-body">${n.content}</div>
+        <div class="note-card-date">${new Date(n.created_at).toLocaleDateString('fr-FR')}</div>
+        <button class="note-del" onclick="delNote(${n.id})">✕</button>
+      </div>`).join('');
+  } catch(e) { el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:20px;text-align:center">Chargement des notes...</div>'; }
+}
+
+async function delNote(id) {
+  try {
+    await userDb('user_notes', 'DELETE', null, `id=eq.${id}&user_id=eq.${currentUser.id}`);
+    loadNotes();
+  } catch(e) {}
+}
+
+// ═══ MES ÉTUDES ═══
+async function saveMyStudy() {
+  if (!currentUser) { openAuth(); return; }
+  const title = document.getElementById('myStudyTitle').value.trim();
+  const body = document.getElementById('myStudyContent').value.trim();
+  const pub = document.getElementById('studyPublic').checked;
+  const msg = document.getElementById('myStudyMsg');
+  if (!title || !body) return;
+  const name = currentUser?.user_metadata?.name || 'Anonyme';
+  try {
+    await userDb('studies', 'POST', {
+      user_id: currentUser.id,
+      title, author: name,
+      content: body,
+      approved: pub ? false : null,
+      created_at: new Date().toISOString()
+    });
+    msg.style.display = 'block';
+    msg.textContent = pub ? '✓ Étude soumise pour publication !' : '✓ Étude sauvegardée !';
+    document.getElementById('myStudyTitle').value = '';
+    document.getElementById('myStudyContent').value = '';
+    setTimeout(() => msg.style.display='none', 3000);
+    loadMyStudies();
+  } catch(e) {
+    msg.style.display = 'block'; msg.textContent = '✓ Étude sauvegardée !';
+  }
+}
+
+async function loadMyStudies() {
+  if (!currentUser) return;
+  const el = document.getElementById('myStudiesList');
+  try {
+    const data = await userDb('studies', 'GET', null, `user_id=eq.${currentUser.id}&order=created_at.desc`);
+    if (!data?.length) { el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:20px;text-align:center">Aucune étude sauvegardée. Commencez à écrire !</div>'; return; }
+    el.innerHTML = data.map(s => `
+      <div class="note-card">
+        <div class="note-card-title">✦ ${s.title}</div>
+        <div class="note-card-body">${s.content.substring(0,300)}${s.content.length>300?'…':''}</div>
+        <div class="note-card-date">${new Date(s.created_at).toLocaleDateString('fr-FR')} ${s.approved===false?'· En attente de publication':s.approved===true?'· Publié':''}
+        </div>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+// ═══ MES FAVORIS CLOUD ═══
+async function loadMyFavs() {
+  const el = document.getElementById('myFavsList');
+  const localFavs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+  if (!localFavs.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:20px;text-align:center">Aucun favori sauvegardé.<br>Cliquez sur ⭐ après chaque analyse.</div>';
+    return;
+  }
+  el.innerHTML = localFavs.map((f,i) => `
+    <div class="note-card" style="cursor:pointer" onclick="replayFav(${i})">
+      <div class="note-card-title">✦ ${f.title}</div>
+      <div class="note-card-body">${f.content}</div>
+      <div class="note-card-date">${f.date}</div>
+      <button class="note-del" onclick="delFav(event,${i})">✕</button>
+    </div>`).join('');
+}
+
+// ═══ PROGRESSION ═══
+const ALL_BOOKS = ['Genèse','Exode','Lévitique','Nombres','Deutéronome','Josué','Juges','Ruth','1 Samuel','2 Samuel','1 Rois','2 Rois','1 Chroniques','2 Chroniques','Esdras','Néhémie','Esther','Job','Psaumes','Proverbes','Ecclésiaste','Cantique','Ésaïe','Jérémie','Lamentations','Ézéchiel','Daniel','Osée','Joël','Amos','Abdias','Jonas','Michée','Nahum','Habacuc','Sophonie','Aggée','Zacharie','Malachie','Matthieu','Marc','Luc','Jean','Actes','Romains','1 Corinthiens','2 Corinthiens','Galates','Éphésiens','Philippiens','Colossiens','1 Thessaloniciens','2 Thessaloniciens','1 Timothée','2 Timothée','Tite','Philémon','Hébreux','Jacques','1 Pierre','2 Pierre','1 Jean','2 Jean','3 Jean','Jude','Apocalypse'];
+
+function renderProgressGrid() {
+  const el = document.getElementById('progressGrid');
+  const prog = JSON.parse(localStorage.getItem('codex_progress') || '[]');
+  el.innerHTML = ALL_BOOKS.map(b => `
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--bg2);border:1px solid ${prog.includes(b)?'var(--gold2)':'var(--border2)'};padding:6px 8px;transition:all .2s;font-size:.82rem;color:${prog.includes(b)?'var(--gold2)':'var(--text3)'}">
+      <input type="checkbox" ${prog.includes(b)?'checked':''} onchange="toggleBook('${b}',this)" style="accent-color:var(--gold2)">
+      ${b}
+    </label>`).join('');
+  const pct = Math.round(prog.length/66*100);
+  const existing = document.getElementById('progressBar');
+  if(!existing) {
+    el.insertAdjacentHTML('beforebegin', `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--text3);margin-bottom:6px"><span>Progression</span><span id="progressPct">${pct}% (${prog.length}/66)</span></div><div style="height:4px;background:var(--border2);overflow:hidden"><div id="progressBar" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));width:${pct}%;transition:width .4s"></div></div></div>`);
+  } else {
+    existing.style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '% (' + prog.length + '/66)';
+  }
+}
+
+function toggleBook(book, cb) {
+  let prog = JSON.parse(localStorage.getItem('codex_progress') || '[]');
+  if (cb.checked) { if (!prog.includes(book)) prog.push(book); }
+  else { prog = prog.filter(b => b !== book); }
+  localStorage.setItem('codex_progress', JSON.stringify(prog));
+  renderProgressGrid();
+}
+
+function saveProgress() {
+  const msg = document.getElementById('progressMsg');
+  msg.style.display = 'block'; msg.textContent = '✓ Progression sauvegardée !';
+  setTimeout(() => msg.style.display='none', 2000);
+}
+
+
+// ═══ DONATION POPUP ═══
+let analysisCount = parseInt(localStorage.getItem('codex_analysis_count') || '0');
+let lastPopup = parseInt(localStorage.getItem('codex_last_popup') || '0');
+const POPUP_EVERY = 5; // show every 5 analyses
+
+function checkDonPopup() {
+  analysisCount++;
+  localStorage.setItem('codex_analysis_count', analysisCount);
+  updateCounters();
+  
+  const now = Date.now();
+  const hoursSinceLastPopup = (now - lastPopup) / (1000 * 60 * 60);
+  
+  // Show after every POPUP_EVERY analyses, but not more than once per hour
+  if (analysisCount % POPUP_EVERY === 0 && hoursSinceLastPopup > 1) {
+    setTimeout(() => openDonPopup(), 3000); // wait 3s after analysis loads
+  }
+}
+
+function openDonPopup() {
+  const popup = document.getElementById('donPopup');
+  const counter = document.getElementById('donPopupCounter');
+  counter.textContent = '✦ ' + analysisCount + ' ANALYSES EFFECTUÉES ✦';
+  popup.classList.add('open');
+  lastPopup = Date.now();
+  localStorage.setItem('codex_last_popup', lastPopup);
+}
+
+function closeDonPopup() {
+  document.getElementById('donPopup').classList.remove('open');
+}
+
+// Close on background click
+document.getElementById('donPopup').addEventListener('click', function(e) {
+  if (e.target === this) closeDonPopup();
+});
+
+// ═══ SUPABASE CONFIG ═══
+const SB_URL = 'https://ctttpbbsirawljldvutt.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0dHRwYmJzaXJhd2xqbGR2dXR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTYwNDUsImV4cCI6MjA5NTE5MjA0NX0.VAZQ0_2bprIH6P0kQjK2QROk_NdHgbLk0JmpoDZzH98';
+
+async function sbFetch(table, method='GET', body=null, filters='') {
+  const url = SB_URL + '/rest/v1/' + table + (filters ? '?' + filters : '');
+  const opts = {
+    method,
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation' : ''
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if (!r.ok) throw new Error(await r.text());
+  return method === 'DELETE' ? null : r.json();
+}
+
+// ═══ ÉTUDES ═══
+function setStudy(t) { document.getElementById('studyTopic').value = t; generateStudy(); }
+
+function generateStudy() {
+  const topic = document.getElementById('studyTopic').value.trim();
+  if (!topic) return;
+  callClaude(
+    `Génère une étude biblique complète et approfondie sur : ${topic}
+
+Structure l'étude ainsi :
+### Introduction
+### 1. Contexte biblique et historique
+### 2. Textes clés (avec références précises et analyse verset par verset)
+### 3. Thèmes théologiques majeurs
+### 4. Correspondances dans toute la Bible (AT et NT)
+### 5. Application pratique et spirituelle
+### 6. Questions de méditation et discussion
+### 7. Conclusion et promesse biblique
+
+Sois profond, pédagogique et inspirant.`,
+    'studyAIResult',
+    `Étude : ${topic}`
+  );
+}
+
+async function submitStudy() {
+  const title = document.getElementById('studyTitle').value.trim();
+  const author = document.getElementById('studyAuthor').value.trim();
+  const content = document.getElementById('studyContent').value.trim();
+  const msg = document.getElementById('studyMsg');
+  if (!title || !content) { msg.style.display='block'; msg.textContent="Veuillez remplir le titre et le contenu."; return; }
+  try {
+    await sbFetch('studies', 'POST', { title, author: author||'Anonyme', content, approved: false, created_at: new Date().toISOString() });
+    msg.style.display = 'block';
+    msg.textContent = '✓ Étude soumise ! Elle sera publiée après validation.';
+    document.getElementById('studyTitle').value = '';
+    document.getElementById('studyAuthor').value = '';
+    document.getElementById('studyContent').value = '';
+  } catch(e) {
+    msg.style.display = 'block';
+    msg.textContent = '✓ Merci ! Votre étude a été reçue.';
+    document.getElementById('studyTitle').value = '';
+    document.getElementById('studyAuthor').value = '';
+    document.getElementById('studyContent').value = '';
+  }
+}
+
+async function loadStudies() {
+  const el = document.getElementById('studiesList');
+  try {
+    const data = await sbFetch('studies', 'GET', null, 'approved=eq.true&order=created_at.desc&limit=20');
+    if (!data || !data.length) { el.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text3);font-style:italic">Aucune étude partagée pour l'instant. Soyez le premier !</div>`; return; }
+    el.innerHTML = data.map(s => `
+      <div class="testi-card" style="margin-bottom:14px">
+        <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:1rem;margin-bottom:8px;letter-spacing:.5px">✦ ${s.title}</div>
+        <div class="testi-text">${s.content}</div>
+        <div class="testi-author">— ${s.author} · ${new Date(s.created_at).toLocaleDateString('fr-FR')}</div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--text3);font-style:italic;text-align:center;padding:20px">Les études partagées apparaîtront ici.</div>';
+  }
+}
+
+// ═══ TÉMOIGNAGES RÉELS ═══
+async function submitRealTesti() {
+  const name = document.getElementById('testiRealName').value.trim();
+  const title = document.getElementById('testiRealTitle').value.trim();
+  const content = document.getElementById('testiRealContent').value.trim();
+  const msg = document.getElementById('testiRealMsg');
+  if (!content) { msg.style.display='block'; msg.textContent="Veuillez ecrire votre temoignage."; return; }
+  try {
+    await sbFetch('testimonials', 'POST', { name: name||'Anonyme', title: title||'Mon témoignage', content, approved: false, created_at: new Date().toISOString() });
+    msg.style.display = 'block';
+    msg.textContent = '✓ Merci pour votre témoignage ! Il sera publié après validation.';
+    document.getElementById('testiRealName').value = '';
+    document.getElementById('testiRealTitle').value = '';
+    document.getElementById('testiRealContent').value = '';
+    setTimeout(() => loadTestimonials(), 1000);
+  } catch(e) {
+    msg.style.display = 'block';
+    msg.textContent = '✓ Merci ! Votre témoignage a bien été reçu.';
+    document.getElementById('testiRealName').value = '';
+    document.getElementById('testiRealTitle').value = '';
+    document.getElementById('testiRealContent').value = '';
+  }
+}
+
+async function loadTestimonials() {
+  const el = document.getElementById('testiRealList');
+  try {
+    const data = await sbFetch('testimonials', 'GET', null, 'approved=eq.true&order=created_at.desc&limit=30');
+    if (!data || !data.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-style:italic">Soyez le premier à partager votre témoignage !</div>'; return; }
+    el.innerHTML = data.map(t => `
+      <div class="testi-card">
+        <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;margin-bottom:6px;letter-spacing:.5px">${t.title}</div>
+        <div class="testi-text">${t.content}</div>
+        <div class="testi-author">— ${t.name} · ${new Date(t.created_at).toLocaleDateString('fr-FR')}</div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--text3);font-style:italic;text-align:center;padding:20px">Les témoignages approuvés apparaîtront ici.</div>';
+  }
+}
+
+// studies/testimonials handled in main goTo
+
+
+// ═══ FREEMIUM SYSTEM ═══
+const FREE_LIMIT = 10;
+const PREMIUM_KEY = 'codex_premium';
+const DAILY_KEY = 'codex_daily_searches';
+const DATE_KEY = 'codex_search_date';
+
+function isPremium() {
+  return localStorage.getItem(PREMIUM_KEY) === 'true';
+}
+
+function getTodaySearches() {
+  const today = new Date().toDateString();
+  const savedDate = localStorage.getItem(DATE_KEY);
+  if (savedDate !== today) {
+    localStorage.setItem(DATE_KEY, today);
+    localStorage.setItem(DAILY_KEY, '0');
+    return 0;
+  }
+  return parseInt(localStorage.getItem(DAILY_KEY) || '0');
+}
+
+function incrementDailySearch() {
+  const count = getTodaySearches() + 1;
+  localStorage.setItem(DAILY_KEY, count.toString());
+  updateSearchCounter(count);
+  return count;
+}
+
+function updateSearchCounter(count) {
+  if (isPremium()) {
+    document.getElementById('searchCounter').style.display = 'none';
+    return;
+  }
+  const remaining = Math.max(0, FREE_LIMIT - count);
+  const pct = (remaining / FREE_LIMIT * 100) + '%';
+  const el = document.getElementById('counterText');
+  const fill = document.getElementById('counterFill');
+  if(el) el.textContent = remaining + '/' + FREE_LIMIT + ' 🔍';
+  if(fill) fill.style.width = pct;
+  
+  // Show upgrade banner when 3 or fewer remaining
+  if (remaining <= 3 && remaining > 0) {
+    const banner = document.getElementById('upgradeBanner');
+    const rt = document.getElementById('remainingText');
+    if(rt) rt.textContent = remaining + ' analyse' + (remaining > 1 ? 's' : '');
+    if(banner) banner.classList.add('show');
+  }
+}
+
+function checkSearchLimit() {
+  if (isPremium()) return true;
+  const count = getTodaySearches();
+  if (count >= FREE_LIMIT) {
+    showLimitOverlay();
+    return false;
+  }
+  incrementDailySearch();
+  return true;
+}
+
+function showLimitOverlay() {
+  const count = getTodaySearches();
+  const el = document.getElementById('limitCounter');
+  if(el) el.textContent = '✦ ' + count + ' ANALYSES UTILISÉES AUJOURD\'HUI ✦';
+  const overlay = document.getElementById('limitOverlay');
+  if(overlay) overlay.classList.add('show');
+}
+
+function closeLimitOverlay() {
+  const overlay = document.getElementById('limitOverlay');
+  if(overlay) overlay.classList.remove('show');
+}
+
+function goGooglePlay() {
+  // Will be updated with real Google Play link
+  window.open('https://play.google.com/store/apps/details?id=app.codexdei', '_blank');
+  closeLimitOverlay();
+}
+
+// Initialize counter on load
+window.addEventListener('load', function() {
+  const count = getTodaySearches();
+  updateSearchCounter(count);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.key==='Enter'){
+    const active=document.querySelector('.section.active')?.id;
+    if(active==='sec-search')universalSearch();
+    else if(active==='sec-word')analyzeWord();
+    else if(active==='sec-hebrew')analyzeHebrew();
+    else if(active==='sec-compare')doCompare();
+  }
+});
+</script>
+
+<!-- AUTH MODAL -->
+<div class="modal-bg" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAuth()">✕</button>
+    <div style="text-align:center;font-size:2rem;margin-bottom:10px">✦</div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchAuthTab('login',this)">Se connecter</button>
+      <button class="modal-tab" onclick="switchAuthTab('register',this)">Créer un compte</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="authLogin">
+      <h2>Bon retour</h2>
+      <p>Retrouvez vos études, notes et favoris</p>
+      <input class="modal-input" type="email" id="loginEmail" placeholder="Email">
+      <input class="modal-input" type="password" id="loginPwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="modal-err" id="loginErr"></div>
+      <div class="modal-ok" id="loginOk"></div>
+      <button class="modal-btn" onclick="doLogin()">✦ Se connecter ✦</button>
+      <button class="modal-btn secondary" onclick="doMagicLink()">📧 Connexion par email magique</button>
+    </div>
+    <!-- REGISTER -->
+    <div id="authRegister" style="display:none">
+      <h2>Rejoindre Codex Dei</h2>
+      <p>Créez votre espace d'étude biblique personnel</p>
+      <input class="modal-input" type="text" id="regName" placeholder="Votre prénom">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email">
+      <input class="modal-input" type="password" id="regPwd" placeholder="Mot de passe (min. 6 caractères)" onkeydown="if(event.key==='Enter')doRegister()">
+      <div class="modal-err" id="regErr"></div>
+      <div class="modal-ok" id="regOk"></div>
+      <button class="modal-btn" onclick="doRegister()">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- USER BAR -->
+<div class="user-bar" id="userBar">
+  <div id="guestBar">
+    <button class="user-btn" onclick="openAuth()">👤 Mon espace</button>
+  </div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:8px;display:none">
+    <button class="user-btn" onclick="goTo('myspace')">📖 Mon espace</button>
+    <div class="user-avatar" id="userAvatar" onclick="goTo('myspace')" title="Mon profil">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:8px 10px;font-size:.75rem">Déco.</button>
+  </div>
+</div>
+
+
+<!-- DONATION POPUP -->
+<div class="don-popup-bg" id="donPopup">
+  <div class="don-popup">
+    <button class="don-popup-close" onclick="closeDonPopup()">✕</button>
+    <div class="don-popup-icon">🙏</div>
+    <div class="don-popup-counter" id="donPopupCounter"></div>
+    <div class="don-popup-title">Ce site vit grâce à vous</div>
+    <div class="don-popup-text">
+      Chaque analyse que vous faites a un coût pour maintenir ce service.<br>
+      Si le Codex Dei vous apporte quelque chose, un petit don fait une grande différence.
+    </div>
+    <div class="don-popup-amounts">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" onclick="closeDonPopup()">2 CHF ☕</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" onclick="closeDonPopup()">5 CHF 🙏</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" onclick="closeDonPopup()">10 CHF ✨</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" 
+       style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:12px;font-family:Cinzel,serif;font-size:.9rem;font-weight:600;letter-spacing:2px;text-decoration:none;margin-bottom:12px"
+       onclick="closeDonPopup()">
+      ☆ Faire un don libre ☆
+    </a>
+    <button class="don-popup-skip" onclick="closeDonPopup()">Continuer sans donner</button>
+    <div style="margin-top:14px;font-size:.75rem;color:var(--text3);font-style:italic">
+      « Que celui qui reçoit la Parole la partage. » — Galates 6:6
+    </div>
+  </div>
+</div>
+
+
+<!-- SEARCH COUNTER -->
+<div class="search-counter" id="searchCounter">
+  <span id="counterText">10/10 🔍</span>
+  <div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div>
+</div>
+
+<!-- LIMIT OVERLAY -->
+<div class="limit-overlay" id="limitOverlay">
+  <div class="limit-box">
+    <div class="limit-icon">🔐</div>
+    <div class="limit-counter" id="limitCounter">✦ 10 RECHERCHES UTILISÉES AUJOURD'HUI ✦</div>
+    <div class="limit-title">Limite quotidienne atteinte</div>
+    <div class="limit-text">
+      Vous avez utilisé vos 10 analyses gratuites d'aujourd'hui.<br>
+      Passez à Premium pour un accès <strong>illimité</strong> à toute la puissance du Codex Dei.
+    </div>
+    <div class="limit-plans">
+      <div class="plan-free">
+        <div class="plan-name">Gratuit</div>
+        <div class="plan-price">0€</div>
+        <div class="plan-desc">10 recherches/jour</div>
+      </div>
+      <div class="plan-premium">
+        <div class="plan-badge">⭐ RECOMMANDÉ</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-price">2.99€<span style="font-size:.7rem;opacity:.7">/mois</span></div>
+        <div class="plan-desc">Illimité · Sans restriction</div>
+      </div>
+    </div>
+    <button class="gplay-btn" onclick="goGooglePlay()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.37.6 1.23 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
+      S'abonner sur Google Play — 2.99€/mois
+    </button>
+    <button class="limit-skip" onclick="closeLimitOverlay()">Revenir demain (gratuit)</button>
+    <div style="margin-top:14px;font-size:.72rem;color:var(--text3);font-style:italic">
+      Résiliation à tout moment · Aucun engagement
+    </div>
+  </div>
+</div>
+
+<!-- UPGRADE BANNER -->
+<div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes aujourd'hui</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium Illimité — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1.2rem">✕</button>
+</div>
+
+</body>
+</html>
