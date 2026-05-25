@@ -1399,6 +1399,12 @@ footer{position:relative;z-index:10;text-align:center;padding:22px;color:var(--t
   <p style="margin-top:10px"><a href="https://www.instagram.com/codexdei.app?igsh=N200b2dzODhpODZs" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text3);font-style:normal;transition:all .3s;padding:7px 16px;border:1px solid rgba(184,134,11,0.2);border-radius:2px;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold2)'" onmouseout="this.style.borderColor='rgba(184,134,11,0.2)';this.style.color='var(--text3)'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> @codexdei</a></p>
 </footer>
 <script>
+// ═══ FREEMIUM CONSTANTS ═══
+var FREE_LIMIT = 10;
+var PREMIUM_KEY = 'codex_premium';
+var DAILY_KEY = 'codex_daily_searches';
+var DATE_KEY = 'codex_search_date';
+
 // ═══ DATA ═══
 
 // ═══ CALENDRIER LITURGIQUE ═══
@@ -2562,9 +2568,7 @@ function closeDonPopup() {
 }
 
 // Close on background click
-document.getElementById('donPopup').addEventListener('click', function(e) {
-  if (e.target === this) closeDonPopup();
-});
+window.addEventListener('load', function() { var dp=document.getElementById('donPopup'); if(dp) dp.addEventListener('click', function(e){ if(e.target===this) closeDonPopup(); }); });
 
 // ═══ SUPABASE CONFIG ═══
 const SB_URL = 'https://ctttpbbsirawljldvutt.supabase.co';
@@ -2694,10 +2698,7 @@ async function loadTestimonials() {
 
 
 // ═══ FREEMIUM SYSTEM ═══
-const FREE_LIMIT = 10;
-const PREMIUM_KEY = 'codex_premium';
-const DAILY_KEY = 'codex_daily_searches';
-const DATE_KEY = 'codex_search_date';
+
 
 function isPremium() {
   return localStorage.getItem(PREMIUM_KEY) === 'true';
