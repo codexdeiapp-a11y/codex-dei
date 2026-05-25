@@ -324,8 +324,8 @@ header {
 .don-amount:hover{background:rgba(184,134,11,.18);border-color:var(--gold2);transform:translateY(-2px)}
 
 /* AUTH */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.modal-bg.open{display:flex}
+.modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal-bg.open{display:flex !important;z-index:9999 !important}
 .modal{background:var(--bg2);border:1px solid var(--border);padding:32px;width:100%;max-width:420px;position:relative;animation:fadeS .3s ease}
 .modal h2{font-family:'Cinzel',serif;color:var(--gold2);font-size:1.2rem;letter-spacing:2px;margin-bottom:6px;text-align:center}
 .modal p{color:var(--text3);font-style:italic;font-size:.9rem;text-align:center;margin-bottom:20px}
