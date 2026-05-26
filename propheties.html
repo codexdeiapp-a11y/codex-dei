@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prophéties Bibliques — CODEX DEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-canvas"></div>
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
+<div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div>
+<header>
+  <div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div>
+  <a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a>
+  <div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div>
+  <div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div>
+</header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
+    <a class="nav-item" href="index.html">🔍 Recherche</a>
+    <a class="nav-item" href="mots.html">📖 Mots</a>
+    <a class="nav-item" href="nombres.html">🔢 Nombres</a>
+    <a class="nav-item" href="livres.html">📚 Livres</a>
+    <a class="nav-item" href="personnages.html">👤 Personnages</a>
+    <a class="nav-item" href="themes.html">🌿 Thèmes</a>
+    <a class="nav-item" href="correspondances.html">⚡ Correspondances</a>
+    <a class="nav-item" href="propheties.html" class="nav-item active">🎯 Prophéties</a>
+    <a class="nav-item" href="langues.html">א Langues</a>
+    <a class="nav-item" href="chronologie.html">📅 Chronologie</a>
+    <a class="nav-item" href="carte.html">🗺️ Carte</a>
+    <a class="nav-item" href="priere.html">🙏 Prière IA</a>
+    <a class="nav-item" href="lecture.html">📋 Plan Lecture</a>
+    <a class="nav-item" href="comparaison.html">🔀 Comparaison</a>
+    <a class="nav-item" href="favoris.html">⭐ Favoris</a>
+    <a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a>
+    <a class="nav-item" href="forum.html">💬 Forum</a>
+    <a class="nav-item" href="mon-espace.html">👤 Mon Espace</a>
+    <a class="nav-item" href="etudes.html">📚 Études</a>
+    <a class="nav-item" href="temoignages.html">💬 Témoignages</a>
+    <a class="nav-item" href="apropos.html">ℹ️ À propos</a>
+    <a class="nav-item special" href="soutenir.html">💛 Soutenir</a>
+    <a class="nav-item" href="contact.html">✉️ Contact</a>
+</div></nav>
+<div class="main-content"><div class="sec-title">Prophéties Bibliques</div>
+<div class="sec-desc">Accomplissement · Probabilités · Précision historique</div>
+<div class="g3" style="margin-bottom:16px">
+  <div class="card" onclick="ap('Les 300 propheties messianiques accomplies par Jesus-Christ — analyse probabiliste complete')">🎯<div class="card-title" style="margin-top:7px">300+ Prophéties Messianiques</div><div class="card-desc">Probabilités · Accomplissement</div></div>
+  <div class="card" onclick="ap('Les 70 semaines de Daniel 9:24-27 — prophetie de la venue du Messie')">📅<div class="card-title" style="margin-top:7px">70 Semaines de Daniel</div><div class="card-desc">Daniel 9 · Chronologie exacte</div></div>
+  <div class="card" onclick="ap('Esaie 53 : le serviteur souffrant — prophetie 700 ans avant la croix')">📜<div class="card-title" style="margin-top:7px">Ésaïe 53</div><div class="card-desc">700 ans avant · Détails précis</div></div>
+  <div class="card" onclick="ap('La prophetie de la destruction de Tyr (Ezechiel 26) — accomplissement historique')">🏙️<div class="card-title" style="margin-top:7px">Destruction de Tyr</div><div class="card-desc">Ézéchiel 26 · Accompli</div></div>
+  <div class="card" onclick="ap('Le retour d Israel en 1948 — propheties bibliques sur la renaissance d Israel')">🕎<div class="card-title" style="margin-top:7px">Retour d'Israël 1948</div><div class="card-desc">Ézéchiel 37 · Nation en un jour</div></div>
+  <div class="card" onclick="ap('L Apocalypse de Jean — 7 sceaux, 7 trompettes, 7 coupes, analyse symbolique complete')">🔮<div class="card-title" style="margin-top:7px">L'Apocalypse</div><div class="card-desc">7 sceaux · 7 trompettes</div></div>
+</div>
+<div id="prophecyResult"></div></div>
+<footer>
+  <p>CODEX DEI — Encyclopédie Biblique Universelle</p>
+  <p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p>
+  <p style="margin-top:8px"><a href="https://www.instagram.com/codexdei.app" target="_blank" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--text3);padding:5px 12px;border:1px solid rgba(184,134,11,0.2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> @codexdei.app</a></p>
+</footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+    <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer;line-height:1">✕</button>
+    <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
+    <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;background:transparent;border:none;border-bottom:2px solid #d4a017;color:#d4a017;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Se connecter</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:#6a5838;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Créer un compte</button>
+    </div>
+    <div id="authLoginForm">
+      <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1rem;text-align:center;margin-bottom:4px">Bon retour</div>
+      <p style="color:#6a5838;font-style:italic;font-size:.86rem;text-align:center;margin-bottom:13px">Retrouvez vos études et favoris</p>
+      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
+      <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique par email</button>
+    </div>
+    <div id="authRegForm" style="display:none">
+      <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1rem;text-align:center;margin-bottom:4px">Rejoindre Codex Dei</div>
+      <p style="color:#6a5838;font-style:italic;font-size:.86rem;text-align:center;margin-bottom:13px">Votre espace biblique personnel</p>
+      <input id="regName" type="text" placeholder="Votre prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div><div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
+    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
+    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
+  </div>
+</div><div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
+    <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-size:2.2rem;margin-bottom:9px">🙏</div>
+    <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:9px;opacity:.7"></div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:1rem;letter-spacing:2px;margin-bottom:7px">Ce site vit grâce à vous</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.7;margin-bottom:14px">Chaque analyse a un coût. Si le Codex Dei vous aide, un petit don fait une grande différence.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:11px">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF ☕</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF 🙏</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF ✨</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;text-decoration:none;margin-bottom:9px;text-align:center">☆ Faire un don libre ☆</a>
+    <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
+    <div style="margin-top:10px;font-size:.7rem;color:var(--text3);font-style:italic">« Que celui qui reçoit la Parole la partage. » — Galates 6:6</div>
+  </div>
+</div><div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
+    <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
+    <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées.<br>Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px">
+      <div style="background:rgba(184,134,11,.06);border:1px solid var(--border);padding:12px"><div style="font-family:Cinzel,serif;font-size:.86rem;color:var(--text2);margin-bottom:3px">Gratuit</div><div style="font-size:1.2rem;font-weight:700;color:var(--text2)">0€</div><div style="font-size:.72rem;color:var(--text3);font-style:italic">10 analyses/jour</div></div>
+      <div style="background:linear-gradient(135deg,rgba(0,48,135,.3),rgba(0,156,222,.2));border:2px solid #009cde;padding:12px;position:relative"><div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#009cde;color:white;font-size:.64rem;padding:2px 7px;font-family:Share Tech Mono,monospace;white-space:nowrap">⭐ RECOMMANDÉ</div><div style="font-family:Cinzel,serif;font-size:.86rem;color:#7ac0e8;margin-bottom:3px">Premium</div><div style="font-size:1.2rem;font-weight:700;color:white">2.99€<span style="font-size:.66rem;opacity:.7">/mois</span></div><div style="font-size:.72rem;color:var(--text3);font-style:italic">Illimité</div></div>
+    </div>
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
+  </div>
+</div><div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
+</div>
+<script src="js/core.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script>
+function ap(topic){
+  if(!checkSearchLimit())return;
+  callClaude(topic+'\n\nAnalyse complete avec references, contexte historique et signification profonde.','prophecyResult','Analyse prophetique');
+  checkDonPopup();
+  setTimeout(function(){document.getElementById('prophecyResult').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+}
+</script>
+</body></html>

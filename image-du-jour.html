@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Image du Jour — CODEX DEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-canvas"></div><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button><div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div><header><div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div><a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a><div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div><div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div></header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
+<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item" href="carte.html">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html" class="nav-item active">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html">👤 Mon Espace</a><a class="nav-item" href="etudes.html">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
+</div></nav>
+<div class="main-content"><div class="sec-title">Image du Jour</div>
+<div class="sec-desc">Verset liturgique du jour · Format Instagram 1080×1080 · Prêt à publier</div>
+<div style="max-width:580px;margin:0 auto">
+  <div class="panel" style="margin-bottom:14px"><div class="panel-accent"></div>
+    <div class="panel-title">🎨 Personnaliser l'image</div>
+    <div class="g2" style="gap:9px;margin-bottom:10px">
+      <div><div style="font-size:.68rem;color:var(--gold);font-family:Share Tech Mono,monospace;letter-spacing:2px;margin-bottom:5px">STYLE</div>
+      <select class="styled-select" id="imgStyle" onchange="renderDaily()">
+        <option value="gold">✦ Or & Nuit</option>
+        <option value="parch">📜 Parchemin Antique</option>
+        <option value="blue">🌊 Bleu Céleste</option>
+        <option value="fire">🔥 Feu & Gloire</option>
+        <option value="forest">🌿 Vert Éden</option>
+        <option value="purple">👑 Pourpre Royal</option>
+      </select></div>
+      <div><div style="font-size:.68rem;color:var(--gold);font-family:Share Tech Mono,monospace;letter-spacing:2px;margin-bottom:5px">MOTIF</div>
+      <select class="styled-select" id="imgPattern" onchange="renderDaily()">
+        <option value="stars">✦ Étoiles</option>
+        <option value="cross">✝️ Croix</option>
+        <option value="mandala">⬡ Géométrie Sacrée</option>
+        <option value="waves">〰️ Ondes</option>
+        <option value="clean">◻️ Épuré</option>
+      </select></div>
+    </div>
+    <div style="margin-bottom:9px">
+      <div style="font-size:.68rem;color:var(--gold);font-family:Share Tech Mono,monospace;letter-spacing:2px;margin-bottom:5px">VERSET PERSONNALISÉ (optionnel)</div>
+      <input type="text" class="search-input" id="customVerse" placeholder="Laissez vide pour le verset du jour..." style="margin-bottom:5px">
+      <input type="text" class="search-input" id="customRef" placeholder="Référence (ex: Jean 3:16)">
+    </div>
+    <button class="action-btn full" onclick="renderDaily()">✦ Générer l'image ✦</button>
+  </div>
+  <div style="position:relative;margin-bottom:14px">
+    <canvas id="dailyCanvas" width="1080" height="1080" style="width:100%;height:auto;display:block;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,0.5)"></canvas>
+    <div id="canvasLoading" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-family:Cinzel,serif;color:var(--gold2);font-size:1rem;letter-spacing:2px">Génération en cours…</div>
+  </div>
+  <div class="panel"><div class="panel-accent"></div>
+    <div class="panel-title">📱 Publier sur Instagram</div>
+    <div style="background:rgba(184,134,11,0.06);border:1px solid var(--border2);padding:14px;margin-bottom:12px">
+      <div style="font-size:.68rem;color:var(--gold);font-family:Share Tech Mono,monospace;letter-spacing:2px;margin-bottom:7px">TEXTE À COPIER</div>
+      <div id="instaCaption" style="font-style:italic;color:var(--text2);font-size:.9rem;line-height:1.7;margin-bottom:9px"></div>
+      <button class="action-btn" onclick="copyCaption()" id="copyBtn">📋 Copier le texte</button>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <button class="action-btn" onclick="downloadImage()" style="flex:1">⬇️ Télécharger</button>
+      <a href="https://www.instagram.com/codexdei.app" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:1px;text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+        Instagram
+      </a>
+    </div>
+    <hr class="gold-div">
+    <div style="font-size:.8rem;color:var(--text3);font-style:italic;line-height:1.7">
+      <strong style="color:var(--gold2)">Comment publier :</strong><br>
+      1. Téléchargez l'image · 2. Copiez le texte · 3. Ouvrez Instagram · 4. Publiez ✦
+    </div>
+  </div>
+  <div class="panel" style="margin-top:13px"><div class="panel-accent"></div>
+    <div class="panel-title">📅 Générer pour une autre date</div>
+    <div style="display:flex;gap:9px;align-items:center">
+      <input type="date" class="search-input" id="targetDate" style="flex:1">
+      <button class="action-btn" onclick="renderForDate()">Générer</button>
+    </div>
+  </div>
+</div></div>
+<footer><p>CODEX DEI — Encyclopédie Biblique Universelle</p><p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p></footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+    <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer">✕</button>
+    <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
+    <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;background:transparent;border:none;border-bottom:2px solid #d4a017;color:#d4a017;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Se connecter</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:#6a5838;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Créer un compte</button>
+    </div>
+    <div id="authLoginForm">
+      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
+      <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique</button>
+    </div>
+    <div id="authRegForm" style="display:none">
+      <input id="regName" type="text" placeholder="Prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div><div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
+    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
+    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
+  </div>
+</div>
+<div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
+    <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-size:2rem;margin-bottom:8px">🙏</div>
+    <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px;opacity:.7"></div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;letter-spacing:2px;margin-bottom:6px">Ce site vit grâce à vous</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.84rem;font-weight:600;text-decoration:none;margin-bottom:8px;text-align:center">☆ Don libre ☆</a>
+    <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.76rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
+  </div>
+</div>
+<div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
+    <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
+    <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées. Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
+  </div>
+</div>
+<div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
+</div>
+<script src="js/core.js"></script><script src="js/auth.js"></script><script src="js/layout.js"></script>
+<script>
+var THEMES={
+  gold:{bg1:'#0c0a07',bg2:'#1a1208',bg3:'#2a1e08',text:'#f0e8d0',gold:'#d4a017',gold2:'#f0c040',sub:'#a08030',border:'rgba(212,160,23,0.6)'},
+  parch:{bg1:'#2d2010',bg2:'#3d2e18',bg3:'#4d3c20',text:'#f5edd8',gold:'#8b6010',gold2:'#c09030',sub:'#6a4810',border:'rgba(139,96,16,0.6)'},
+  blue:{bg1:'#050d1a',bg2:'#0a1828',bg3:'#0f2538',text:'#d0e8f8',gold:'#4a9acc',gold2:'#7ac0e8',sub:'#306888',border:'rgba(74,154,204,0.6)'},
+  fire:{bg1:'#0f0500',bg2:'#1f0a00',bg3:'#2f1000',text:'#ffe8d0',gold:'#e05010',gold2:'#ff8030',sub:'#b03008',border:'rgba(224,80,16,0.6)'},
+  forest:{bg1:'#040c04',bg2:'#081808',bg3:'#0c240c',text:'#d0f0d0',gold:'#40a040',gold2:'#70c870',sub:'#286828',border:'rgba(64,160,64,0.6)'},
+  purple:{bg1:'#080010',bg2:'#100020',bg3:'#180030',text:'#e8d0f8',gold:'#9040c0',gold2:'#c070f0',sub:'#601890',border:'rgba(144,64,192,0.6)'}
+};
+
+function wrapText(ctx,text,x,y,maxW,lh){
+  var words=text.split(' '),line='',lines=[];
+  for(var i=0;i<words.length;i++){var t=line+(line?' ':'')+words[i];if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=words[i];}else line=t;}
+  if(line)lines.push(line);
+  var cy=y-lines.length*lh/2+lh/2;
+  for(var j=0;j<lines.length;j++){ctx.fillText(lines[j],x,cy);cy+=lh;}
+}
+
+function drawPattern(ctx,pat,T,S){
+  ctx.save();ctx.globalAlpha=0.06;ctx.strokeStyle=T.gold2;ctx.lineWidth=1;
+  if(pat==='stars'){for(var i=0;i<60;i++){var x=Math.random()*S,y=Math.random()*S,r=Math.random()*2+0.5;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=T.gold2;ctx.fill();}}
+  else if(pat==='cross'){ctx.globalAlpha=0.04;for(var x=80;x<S;x+=120)for(var y=80;y<S;y+=120){ctx.beginPath();ctx.moveTo(x-20,y);ctx.lineTo(x+20,y);ctx.moveTo(x,y-30);ctx.lineTo(x,y+10);ctx.stroke();}}
+  else if(pat==='mandala'){ctx.globalAlpha=0.05;var cx=S/2,cy=S/2;for(var r=60;r<500;r+=80){ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();for(var a=0;a<Math.PI*2;a+=Math.PI/6){ctx.beginPath();ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));ctx.lineTo(cx+(r-30)*Math.cos(a),cy+(r-30)*Math.sin(a));ctx.stroke();}}}
+  else if(pat==='waves'){ctx.globalAlpha=0.04;for(var y=0;y<S;y+=40){ctx.beginPath();for(var x=0;x<=S;x+=10)ctx.lineTo(x,y+Math.sin(x/60)*15);ctx.stroke();}}
+  ctx.restore();
+}
+
+async function renderDaily(dateOverride){
+  var canvas=document.getElementById('dailyCanvas');
+  var ctx=canvas.getContext('2d');
+  var loading=document.getElementById('canvasLoading');
+  loading.style.display='flex';
+  var style=document.getElementById('imgStyle').value;
+  var pattern=document.getElementById('imgPattern').value;
+  var T=THEMES[style];var S=1080;
+  var verseText,verseRef,label,emoji;
+  var cv=document.getElementById('customVerse').value.trim();
+  var cr=document.getElementById('customRef').value.trim();
+  if(cv){verseText=cv;verseRef=cr||'Parole de Dieu';label='Verset du Jour';emoji='✦';}
+  else{var v=getLiturgicalDay();verseText=v.t;verseRef=v.r;label=v.label;emoji=v.emoji||'✦';}
+  var grad=ctx.createRadialGradient(S/2,S/2,0,S/2,S/2,S*0.8);
+  grad.addColorStop(0,T.bg3);grad.addColorStop(0.5,T.bg2);grad.addColorStop(1,T.bg1);
+  ctx.fillStyle=grad;ctx.fillRect(0,0,S,S);
+  drawPattern(ctx,pattern,T,S);
+  ctx.strokeStyle=T.border;ctx.lineWidth=3;ctx.strokeRect(40,40,S-80,S-80);
+  ctx.strokeStyle=T.gold+'44';ctx.lineWidth=1;ctx.strokeRect(55,55,S-110,S-110);
+  [[60,60],[S-60,60],[60,S-60],[S-60,S-60]].forEach(function(c,i){ctx.save();ctx.translate(c[0],c[1]);ctx.rotate(i*Math.PI/2);ctx.fillStyle=T.gold2;ctx.font='bold 34px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.globalAlpha=0.7;ctx.fillText('✦',0,0);ctx.restore();});
+  var today=dateOverride||new Date();
+  var dateStr=today.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  ctx.fillStyle=T.gold2;ctx.font='bold 50px Cinzel,serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('CODEX DEI',S/2,130);
+  ctx.fillStyle=T.sub;ctx.font='26px Share Tech Mono,monospace';ctx.fillText(dateStr.toUpperCase(),S/2,182);
+  var lg=ctx.createLinearGradient(100,0,S-100,0);lg.addColorStop(0,'transparent');lg.addColorStop(0.5,T.gold);lg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.strokeStyle=lg;ctx.lineWidth=1.5;ctx.moveTo(100,216);ctx.lineTo(S-100,216);ctx.stroke();
+  ctx.fillStyle=T.gold;ctx.font='italic 28px EB Garamond,Georgia,serif';ctx.fillText(emoji+'  '+label.toUpperCase(),S/2,258);
+  ctx.fillStyle=T.gold2;ctx.font='38px serif';ctx.globalAlpha=0.5;ctx.fillText('✦  ✦  ✦',S/2,320);ctx.globalAlpha=1;
+  ctx.fillStyle=T.text;ctx.font='italic 52px EB Garamond,Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  wrapText(ctx,'« '+verseText+' »',S/2,570,S-160,70);
+  ctx.fillStyle=T.gold2;ctx.font='bold 34px Cinzel,serif';ctx.fillText('— '+verseRef,S/2,822);
+  var lg2=ctx.createLinearGradient(100,0,S-100,0);lg2.addColorStop(0,'transparent');lg2.addColorStop(0.5,T.gold);lg2.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.strokeStyle=lg2;ctx.lineWidth=1.5;ctx.moveTo(100,870);ctx.lineTo(S-100,870);ctx.stroke();
+  ctx.fillStyle=T.sub;ctx.font='26px Share Tech Mono,monospace';ctx.fillText('@codexdei.app',S/2,920);
+  ctx.fillStyle=T.gold;ctx.font='20px serif';ctx.fillText('✦  codexdei.app@gmail.com  ✦',S/2,964);
+  loading.style.display='none';
+  var hashtags='#Bible #Verset #VersetDuJour #Dieu #Foi #Chretien #Catholique #Evangile #CodexDei #Spiritualite #ParoleDeDieu';
+  document.getElementById('instaCaption').textContent=emoji+' '+label+'
+
+« '+verseText+' »
+— '+verseRef+'
+
+'+hashtags;
+}
+function renderForDate(){var d=document.getElementById('targetDate').value;if(d)renderDaily(new Date(d));}
+function downloadImage(){
+  var canvas=document.getElementById('dailyCanvas');
+  var today=new Date();
+  var a=document.createElement('a');a.download='codexdei-'+today.toISOString().split('T')[0]+'.png';a.href=canvas.toDataURL('image/png');a.click();
+}
+function copyCaption(){
+  var text=document.getElementById('instaCaption').textContent;
+  navigator.clipboard.writeText(text);
+  var btn=document.getElementById('copyBtn');btn.textContent='✓ Copié !';
+  setTimeout(function(){btn.textContent='📋 Copier le texte';},2000);
+}
+window.addEventListener('DOMContentLoaded',function(){renderDaily();});
+</script>
+</body></html>

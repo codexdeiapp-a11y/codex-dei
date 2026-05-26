@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Carte Biblique — CODEX DEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-canvas"></div>
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
+<div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div>
+<header><div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div><a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a><div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div><div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div></header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
+<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item" href="carte.html" class="nav-item active">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html">👤 Mon Espace</a><a class="nav-item" href="etudes.html">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
+</div></nav>
+<div class="main-content"><div class="sec-title">Carte Biblique Interactive</div>
+<div class="sec-desc">Cliquez sur un lieu pour son analyse historique et spirituelle</div>
+<div class="map-wrap">
+  <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="500" fill="#0d1a2a"/>
+    <ellipse cx="300" cy="200" rx="280" ry="120" fill="#1a3a5c" opacity="0.7"/>
+    <ellipse cx="520" cy="320" rx="30" ry="80" fill="#1a3a5c" opacity="0.6"/>
+    <path d="M420 400 Q410 350 415 280 Q420 230 430 200" stroke="#2a5a8c" stroke-width="6" fill="none" opacity="0.6"/>
+    <path d="M530 180 Q535 220 530 260 Q528 280 530 300" stroke="#2a5a8c" stroke-width="4" fill="none" opacity="0.7"/>
+    <rect x="400" y="280" width="120" height="140" rx="5" fill="#2d2010" opacity="0.8"/>
+    <text x="460" y="360" fill="#6a5030" font-size="14" text-anchor="middle" font-family="serif" font-style="italic">Égypte</text>
+    <rect x="490" y="160" width="80" height="140" rx="5" fill="#2d2510" opacity="0.8"/>
+    <text x="530" y="240" fill="#6a6030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Canaan</text>
+    <rect x="620" y="140" width="150" height="160" rx="5" fill="#252010" opacity="0.8"/>
+    <text x="695" y="225" fill="#6a5530" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Mésopotamie</text>
+    <ellipse cx="200" cy="230" rx="60" ry="50" fill="#202530" opacity="0.7"/>
+    <text x="200" y="235" fill="#405060" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Grèce</text>
+    <ellipse cx="80" cy="200" rx="55" ry="45" fill="#252020" opacity="0.7"/>
+    <text x="80" y="205" fill="#504030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Rome</text>
+    <g class="map-dot" onclick="aplace('Jérusalem')"><circle cx="530" cy="255" r="10" fill="#d4a017" opacity="0.9"/><circle cx="530" cy="255" r="5" fill="#f0c040"/><text x="530" y="244" fill="#f0c040" font-size="11" text-anchor="middle" font-family="serif" font-weight="bold">Jérusalem</text></g>
+    <g class="map-dot" onclick="aplace('Bethléem')"><circle cx="525" cy="268" r="6" fill="#b8860b"/><text x="512" y="280" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Bethléem</text></g>
+    <g class="map-dot" onclick="aplace('Nazareth')"><circle cx="520" cy="205" r="6" fill="#b8860b"/><text x="508" y="196" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Nazareth</text></g>
+    <g class="map-dot" onclick="aplace('Babylone')"><circle cx="660" cy="190" r="7" fill="#8b4a0b"/><text x="660" y="180" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Babylone</text></g>
+    <g class="map-dot" onclick="aplace('Mont Sinaï')"><polygon points="490,290 480,315 500,315" fill="#d4a017"/><text x="490" y="285" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Mt Sinaï</text></g>
+    <g class="map-dot" onclick="aplace('Rome')"><circle cx="80" cy="195" r="7" fill="#8b1a1a"/><text x="80" y="183" fill="#c04040" font-size="10" text-anchor="middle" font-family="serif" font-weight="bold">Rome</text></g>
+    <g class="map-dot" onclick="aplace('Alexandrie')"><circle cx="420" cy="265" r="6" fill="#8b4a0b"/><text x="410" y="256" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Alexandrie</text></g>
+    <g class="map-dot" onclick="aplace('Antioche de Syrie')"><circle cx="575" cy="165" r="6" fill="#8b4a0b"/><text x="575" y="155" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Antioche</text></g>
+    <g class="map-dot" onclick="aplace('Île de Patmos')"><circle cx="248" cy="232" r="5" fill="#7a5aa8"/><text x="240" y="245" fill="#a87adc" font-size="8" text-anchor="middle" font-family="serif">Patmos</text></g>
+    <g class="map-dot" onclick="aplace('Athènes')"><circle cx="195" cy="240" r="6" fill="#8b4a0b"/><text x="195" y="255" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Athènes</text></g>
+    <text x="400" y="22" fill="rgba(184,134,11,0.4)" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Cliquez sur un lieu pour son analyse biblique</text>
+  </svg>
+</div>
+<div id="mapResult" style="margin-top:14px"></div></div>
+<footer><p>CODEX DEI — Encyclopédie Biblique Universelle</p><p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p></footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+    <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer">✕</button>
+    <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
+    <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;background:transparent;border:none;border-bottom:2px solid #d4a017;color:#d4a017;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Se connecter</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:#6a5838;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Créer un compte</button>
+    </div>
+    <div id="authLoginForm">
+      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
+      <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique</button>
+    </div>
+    <div id="authRegForm" style="display:none">
+      <input id="regName" type="text" placeholder="Votre prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div><div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
+    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
+    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
+  </div>
+</div>
+<div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
+    <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-size:2rem;margin-bottom:8px">🙏</div>
+    <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px;opacity:.7"></div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:1rem;letter-spacing:2px;margin-bottom:6px">Ce site vit grâce à vous</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.86rem;line-height:1.7;margin-bottom:12px">Un petit don fait une grande différence.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.84rem;font-weight:600;text-decoration:none;margin-bottom:8px;text-align:center">☆ Don libre ☆</a>
+    <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.76rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
+  </div>
+</div>
+<div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
+    <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
+    <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées. Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
+  </div>
+</div>
+<div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
+</div>
+<script src="js/core.js"></script><script src="js/auth.js"></script><script src="js/layout.js"></script>
+<script>
+function aplace(place){
+  if(!checkSearchLimit())return;
+  callClaude('Analyse biblique complete du lieu : '+place+'\n\n1. **Geographie** — localisation, description\n2. **Occurrences bibliques** — tous les evenements majeurs qui s y deroulent\n3. **Signification du nom** — etymologie hebraique\n4. **Symbolisme spirituel** — ce que ce lieu represente theologiquement\n5. **Propheties** liees a ce lieu\n6. **Archeologie** — decouvertes historiques\n7. **Importance aujourd hui**','mapResult','Lieu : '+place);
+  checkDonPopup();
+  setTimeout(function(){document.getElementById('mapResult').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+}
+</script>
+</body></html>
