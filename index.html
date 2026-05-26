@@ -324,9 +324,9 @@ header {
 .don-amount:hover{background:rgba(184,134,11,.18);border-color:var(--gold2);transform:translateY(-2px)}
 
 /* AUTH */
-.modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
-.modal-bg.open{display:flex;z-index:9999}
-.modal{background:var(--bg2);border:1px solid var(--border);padding:32px;width:90%;max-width:420px;position:relative;animation:fadeS .3s ease;z-index:10000}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);padding:32px;width:100%;max-width:420px;position:relative;animation:fadeS .3s ease}
 .modal h2{font-family:'Cinzel',serif;color:var(--gold2);font-size:1.2rem;letter-spacing:2px;margin-bottom:6px;text-align:center}
 .modal p{color:var(--text3);font-style:italic;font-size:.9rem;text-align:center;margin-bottom:20px}
 .modal-close{position:absolute;top:12px;right:16px;background:transparent;border:none;color:var(--text3);font-size:1.3rem;cursor:pointer}
@@ -375,7 +375,6 @@ header {
 .don-popup-counter{font-size:.75rem;color:var(--gold);font-family:"Share Tech Mono",monospace;letter-spacing:2px;margin-bottom:14px;opacity:.7}
 
 /* FORUM */
-/* FREEMIUM */
 /* FOOTER */
 footer{position:relative;z-index:10;text-align:center;padding:22px;color:var(--text3);font-size:.83rem;font-style:italic;border-top:1px solid var(--border2);margin-top:40px}
 /* PRINT */
@@ -397,6 +396,28 @@ footer{position:relative;z-index:10;text-align:center;padding:22px;color:var(--t
 </style>
 </head>
 <body>
+<div class="bg-canvas"></div>
+<button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème" id="themeBtn">☀️</button>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">✦ Encyclopédie Biblique Universelle ✦</div>
+  <div class="site-title">CODEX DEI</div>
+  <div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div>
+  <div class="header-orn">
+    <span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span>
+  </div>
+  <p class="header-desc">Recherchez n'importe quel mot, thème, nombre ou personnage de la Bible.</p>
+</header>
+
+<!-- VERSET DU JOUR -->
+<div class="vdj-banner" id="vdjBanner">
+  <span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span>
+  <span class="vdj-text" id="vdjText">Chargement...</span>
+  <span class="vdj-ref" id="vdjRef"></span>
+  <button class="vdj-btn" onclick="analyzeVDJ()">Analyser ✦</button>
+  <button class="vdj-btn" onclick="loadVDJ()">Nouveau ↻</button>
+</div>
 
 <!-- COUNTER -->
 <div class="counter-banner">
@@ -1377,12 +1398,6 @@ footer{position:relative;z-index:10;text-align:center;padding:22px;color:var(--t
   <p style="margin-top:10px"><a href="https://www.instagram.com/codexdei.app?igsh=N200b2dzODhpODZs" target="_blank" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text3);font-style:normal;transition:all .3s;padding:7px 16px;border:1px solid rgba(184,134,11,0.2);border-radius:2px;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold2)'" onmouseout="this.style.borderColor='rgba(184,134,11,0.2)';this.style.color='var(--text3)'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> @codexdei</a></p>
 </footer>
 <script>
-// ═══ FREEMIUM CONSTANTS ═══
-var FREE_LIMIT = 10;
-var PREMIUM_KEY = 'codex_premium';
-var DAILY_KEY = 'codex_daily_searches';
-var DATE_KEY = 'codex_search_date';
-
 // ═══ DATA ═══
 
 // ═══ CALENDRIER LITURGIQUE ═══
@@ -1600,7 +1615,7 @@ async function callClaude(prompt,targetId,title){
   updateCounters();
 
   try{
-    const r=await fetch('/api/claude',{
+    const r=await fetch('/.netlify/functions/claude',{
       method:'POST',
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -1706,7 +1721,6 @@ function replayFav(i){
 function universalSearch(){
   const q=document.getElementById('uniSearch').value.trim();
   if(!q)return;
-  if(!checkSearchLimit())return;
   callClaude(`Analyse biblique complète et universelle : "${q}"\n\n1. **Occurrences** — toutes les mentions significatives (AT et NT) avec références\n2. **Étymologie** — hébraïque et/ou grecque, sens littéral profond\n3. **Symbolisme théologique** dans chaque tradition\n4. **Correspondances scientifiques** — biologie, physique, astronomie, mathématiques\n5. **Correspondances cosmiques** et culturelles\n6. **Connexions numériques** — gématrie si applicable\n7. **Prophéties** et accomplissements\n8. **Insight rare** — quelque chose que peu de gens connaissent`,'uniResult',`"${q}"`);
 }
 function qs(t){document.getElementById('uniSearch').value=t;universalSearch();}
@@ -1714,13 +1728,11 @@ function qs(t){document.getElementById('uniSearch').value=t;universalSearch();}
 function analyzeWord(){
   const w=document.getElementById('wordInput').value.trim();
   if(!w)return;
-  if(!checkSearchLimit())return;
   callClaude(`Analyse philologique et théologique du mot biblique : "${w}"\n\n1. **Étymologie** — racine hébraïque ou grecque\n2. **Gématrie** — valeur numérique, mots partageant cette valeur\n3. **Occurrences bibliques** clés avec contexte\n4. **Évolution sémantique** AT→NT\n5. **Symbolisme caché** — sens mystique\n6. **Correspondances** avec d'autres langues sacrées\n7. **Fait étonnant** peu connu`,'wordResult',`Mot : "${w}"`);
 }
 function sw(w){document.getElementById('wordInput').value=w;analyzeWord();}
 
 function an(num,desc){
-  if(!checkSearchLimit())return;
   callClaude(`Analyse exhaustive du nombre ${num} — ${desc}\n\n1. **Gématrie hébraïque** — valeur, mots correspondants\n2. **Occurrences bibliques** (AT et NT) avec références\n3. **Symbolisme théologique** juif et chrétien\n4. **Correspondances scientifiques** (biologie, physique, astronomie, mathématiques)\n5. **Propriétés mathématiques** remarquables\n6. **Correspondances culturelles** — autres religions\n7. **Insight le plus surprenant**`,'numberResult',`Nombre ${num} — ${desc}`);
   setTimeout(()=>document.getElementById('numberResult').scrollIntoView({behavior:"smooth",block:'nearest'}),100);
 }
@@ -2232,8 +2244,11 @@ window.addEventListener('load', async () => {
   }
 });
 
-function openAuth() { var m=document.getElementById('authModal'); if(m){m.style.display='flex';} }
-function closeAuth() { var m=document.getElementById('authModal'); if(m) m.style.display='none'; }
+function openAuth() { 
+  const m = document.getElementById('authModal');
+  if(m) m.classList.add('open'); 
+}
+function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
 
 function switchAuthTab(tab, el) {
   document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
@@ -2543,7 +2558,9 @@ function closeDonPopup() {
 }
 
 // Close on background click
-window.addEventListener('load', function() { var dp=document.getElementById('donPopup'); if(dp) dp.addEventListener('click', function(e){ if(e.target===this) closeDonPopup(); }); });
+document.getElementById('donPopup').addEventListener('click', function(e) {
+  if (e.target === this) closeDonPopup();
+});
 
 // ═══ SUPABASE CONFIG ═══
 const SB_URL = 'https://ctttpbbsirawljldvutt.supabase.co';
@@ -2671,89 +2688,6 @@ async function loadTestimonials() {
 
 // studies/testimonials handled in main goTo
 
-
-// ═══ FREEMIUM SYSTEM ═══
-
-
-function isPremium() {
-  return localStorage.getItem(PREMIUM_KEY) === 'true';
-}
-
-function getTodaySearches() {
-  const today = new Date().toDateString();
-  const savedDate = localStorage.getItem(DATE_KEY);
-  if (savedDate !== today) {
-    localStorage.setItem(DATE_KEY, today);
-    localStorage.setItem(DAILY_KEY, '0');
-    return 0;
-  }
-  return parseInt(localStorage.getItem(DAILY_KEY) || '0');
-}
-
-function incrementDailySearch() {
-  const count = getTodaySearches() + 1;
-  localStorage.setItem(DAILY_KEY, count.toString());
-  updateSearchCounter(count);
-  return count;
-}
-
-function updateSearchCounter(count) {
-  if (isPremium()) {
-    document.getElementById('searchCounter').style.display = 'none';
-    return;
-  }
-  const remaining = Math.max(0, FREE_LIMIT - count);
-  const pct = (remaining / FREE_LIMIT * 100) + '%';
-  const el = document.getElementById('counterText');
-  const fill = document.getElementById('counterFill');
-  if(el) el.textContent = remaining + '/' + FREE_LIMIT + ' 🔍';
-  if(fill) fill.style.width = pct;
-  
-  // Show upgrade banner when 3 or fewer remaining
-  if (remaining <= 3 && remaining > 0) {
-    const banner = document.getElementById('upgradeBanner');
-    const rt = document.getElementById('remainingText');
-    if(rt) rt.textContent = remaining + ' analyse' + (remaining > 1 ? 's' : '');
-    if(banner) banner.classList.add('show');
-  }
-}
-
-function checkSearchLimit() {
-  if (isPremium()) return true;
-  const count = getTodaySearches();
-  if (count >= FREE_LIMIT) {
-    showLimitOverlay();
-    return false;
-  }
-  incrementDailySearch();
-  return true;
-}
-
-function showLimitOverlay() {
-  const count = getTodaySearches();
-  const el = document.getElementById('limitCounter');
-  if(el) el.textContent = '✦ ' + count + ' ANALYSES UTILISÉES AUJOURD\'HUI ✦';
-  const overlay = document.getElementById('limitOverlay');
-  if(overlay) overlay.classList.add('show');
-}
-
-function closeLimitOverlay() {
-  const overlay = document.getElementById('limitOverlay');
-  if(overlay) overlay.classList.remove('show');
-}
-
-function goGooglePlay() {
-  // Will be updated with real Google Play link
-  window.open('https://play.google.com/store/apps/details?id=app.codexdei', '_blank');
-  closeLimitOverlay();
-}
-
-// Initialize counter on load
-window.addEventListener('load', function() {
-  const count = getTodaySearches();
-  updateSearchCounter(count);
-});
-
 // Keyboard shortcuts
 document.addEventListener('keydown',e=>{
   if(e.ctrlKey&&e.key==='Enter'){
@@ -2766,12 +2700,46 @@ document.addEventListener('keydown',e=>{
 });
 </script>
 
+<!-- AUTH MODAL -->
+<div class="modal-bg" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAuth()">✕</button>
+    <div style="text-align:center;font-size:2rem;margin-bottom:10px">✦</div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchAuthTab('login',this)">Se connecter</button>
+      <button class="modal-tab" onclick="switchAuthTab('register',this)">Créer un compte</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="authLogin">
+      <h2>Bon retour</h2>
+      <p>Retrouvez vos études, notes et favoris</p>
+      <input class="modal-input" type="email" id="loginEmail" placeholder="Email">
+      <input class="modal-input" type="password" id="loginPwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="modal-err" id="loginErr"></div>
+      <div class="modal-ok" id="loginOk"></div>
+      <button class="modal-btn" onclick="doLogin()">✦ Se connecter ✦</button>
+      <button class="modal-btn secondary" onclick="doMagicLink()">📧 Connexion par email magique</button>
+    </div>
+    <!-- REGISTER -->
+    <div id="authRegister" style="display:none">
+      <h2>Rejoindre Codex Dei</h2>
+      <p>Créez votre espace d'étude biblique personnel</p>
+      <input class="modal-input" type="text" id="regName" placeholder="Votre prénom">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email">
+      <input class="modal-input" type="password" id="regPwd" placeholder="Mot de passe (min. 6 caractères)" onkeydown="if(event.key==='Enter')doRegister()">
+      <div class="modal-err" id="regErr"></div>
+      <div class="modal-ok" id="regOk"></div>
+      <button class="modal-btn" onclick="doRegister()">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div>
+
 <!-- USER BAR -->
 <div class="user-bar" id="userBar">
   <div id="guestBar">
     <button class="user-btn" onclick="openAuth()">👤 Mon espace</button>
   </div>
-  <div id="loggedBar" style="display:none;align-items:center;gap:8px">
+  <div id="loggedBar" style="display:none;align-items:center;gap:8px;display:none">
     <button class="user-btn" onclick="goTo('myspace')">📖 Mon espace</button>
     <div class="user-avatar" id="userAvatar" onclick="goTo('myspace')" title="Mon profil">?</div>
     <button class="user-btn" onclick="doLogout()" style="padding:8px 10px;font-size:.75rem">Déco.</button>
@@ -2805,54 +2773,6 @@ document.addEventListener('keydown',e=>{
       « Que celui qui reçoit la Parole la partage. » — Galates 6:6
     </div>
   </div>
-</div>
-
-
-<!-- SEARCH COUNTER -->
-<div class="search-counter" id="searchCounter">
-  <span id="counterText">10/10 🔍</span>
-  <div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div>
-</div>
-
-<!-- LIMIT OVERLAY -->
-<div class="limit-overlay" id="limitOverlay">
-  <div class="limit-box">
-    <div class="limit-icon">🔐</div>
-    <div class="limit-counter" id="limitCounter">✦ 10 RECHERCHES UTILISÉES AUJOURD'HUI ✦</div>
-    <div class="limit-title">Limite quotidienne atteinte</div>
-    <div class="limit-text">
-      Vous avez utilisé vos 10 analyses gratuites d'aujourd'hui.<br>
-      Passez à Premium pour un accès <strong>illimité</strong> à toute la puissance du Codex Dei.
-    </div>
-    <div class="limit-plans">
-      <div class="plan-free">
-        <div class="plan-name">Gratuit</div>
-        <div class="plan-price">0€</div>
-        <div class="plan-desc">10 recherches/jour</div>
-      </div>
-      <div class="plan-premium">
-        <div class="plan-badge">⭐ RECOMMANDÉ</div>
-        <div class="plan-name">Premium</div>
-        <div class="plan-price">2.99€<span style="font-size:.7rem;opacity:.7">/mois</span></div>
-        <div class="plan-desc">Illimité · Sans restriction</div>
-      </div>
-    </div>
-    <button class="gplay-btn" onclick="goGooglePlay()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l14 8.5c.6.37.6 1.23 0 1.6l-14 8.5c-.66.5-1.6.03-1.6-.8z"/></svg>
-      S'abonner sur Google Play — 2.99€/mois
-    </button>
-    <button class="limit-skip" onclick="closeLimitOverlay()">Revenir demain (gratuit)</button>
-    <div style="margin-top:14px;font-size:.72rem;color:var(--text3);font-style:italic">
-      Résiliation à tout moment · Aucun engagement
-    </div>
-  </div>
-</div>
-
-<!-- UPGRADE BANNER -->
-<div class="upgrade-banner" id="upgradeBanner">
-  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes aujourd'hui</div>
-  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium Illimité — 2.99€/mois</button>
-  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1.2rem">✕</button>
 </div>
 
 </body>
