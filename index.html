@@ -1615,7 +1615,7 @@ async function callClaude(prompt,targetId,title){
   updateCounters();
 
   try{
-    const r=await fetch('/.netlify/functions/claude',{
+    const r=await fetch('/api/claude',{
       method:'POST',
       method:'POST',
       headers:{'Content-Type':'application/json'},
