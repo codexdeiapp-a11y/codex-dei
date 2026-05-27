@@ -4,6 +4,7 @@ var userToken = null;
 
 // Init session on load
 window.addEventListener('DOMContentLoaded', function() {
+  var m = document.getElementById('authModal'); if(m) m.style.display='none';
   var stored = localStorage.getItem('sb_session');
   if (stored) {
     try {
