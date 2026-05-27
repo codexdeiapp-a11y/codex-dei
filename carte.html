@@ -5,49 +5,427 @@
 <title>Carte Biblique — CODEX DEI</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+.map-container { position:relative; width:100%; background:#0a1520; border:1px solid var(--border); overflow:hidden; border-radius:2px; }
+.map-container svg { width:100%; height:auto; display:block; }
+.place-dot { cursor:pointer; transition:all .2s; }
+.place-dot circle { transition:all .2s; }
+.place-dot:hover circle { r:9; filter:drop-shadow(0 0 8px #d4a017); }
+.place-dot.major:hover circle { r:12; }
+.map-tooltip {
+  position:absolute; background:rgba(12,10,7,0.97); border:1px solid #d4a017;
+  padding:10px 14px; font-size:.82rem; color:#e8dcc8; pointer-events:none;
+  z-index:50; max-width:220px; display:none; font-family:'EB Garamond',serif;
+  font-style:italic; line-height:1.6; box-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
+.map-tooltip strong { color:#d4a017; font-style:normal; font-family:'Cinzel',serif; font-size:.88rem; display:block; margin-bottom:3px; }
+.map-legend { display:flex; flex-wrap:wrap; gap:10px; padding:12px 16px; background:rgba(12,10,7,0.8); border-top:1px solid var(--border2); }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:.76rem; color:var(--text3); font-style:italic; }
+.legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.place-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:6px; margin-top:14px; }
+.place-btn { background:var(--panel); border:1px solid var(--border2); color:var(--text3); padding:8px 12px; font-family:'EB Garamond',serif; font-size:.86rem; font-style:italic; cursor:pointer; transition:all .22s; text-align:left; display:flex; align-items:center; gap:7px; }
+.place-btn:hover { border-color:var(--gold2); color:var(--gold2); background:rgba(184,134,11,.08); }
+</style>
 </head>
 <body>
 <div class="bg-canvas"></div>
 <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button>
 <div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div>
-<header><div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div><a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a><div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div><div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div></header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
-<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item" href="carte.html" class="nav-item active">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html">👤 Mon Espace</a><a class="nav-item" href="etudes.html">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
+
+<header>
+  <div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div>
+  <a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a>
+  <div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div>
+  <div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div>
+</header>
+
+<div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div>
+
+<nav class="main-nav"><div class="nav-links">
+<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item active" href="carte.html">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html">👤 Mon Espace</a><a class="nav-item" href="etudes.html">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
 </div></nav>
-<div class="main-content"><div class="sec-title">Carte Biblique Interactive</div>
-<div class="sec-desc">Cliquez sur un lieu pour son analyse historique et spirituelle</div>
-<div class="map-wrap">
-  <svg class="map-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="500" fill="#0d1a2a"/>
-    <ellipse cx="300" cy="200" rx="280" ry="120" fill="#1a3a5c" opacity="0.7"/>
-    <ellipse cx="520" cy="320" rx="30" ry="80" fill="#1a3a5c" opacity="0.6"/>
-    <path d="M420 400 Q410 350 415 280 Q420 230 430 200" stroke="#2a5a8c" stroke-width="6" fill="none" opacity="0.6"/>
-    <path d="M530 180 Q535 220 530 260 Q528 280 530 300" stroke="#2a5a8c" stroke-width="4" fill="none" opacity="0.7"/>
-    <rect x="400" y="280" width="120" height="140" rx="5" fill="#2d2010" opacity="0.8"/>
-    <text x="460" y="360" fill="#6a5030" font-size="14" text-anchor="middle" font-family="serif" font-style="italic">Égypte</text>
-    <rect x="490" y="160" width="80" height="140" rx="5" fill="#2d2510" opacity="0.8"/>
-    <text x="530" y="240" fill="#6a6030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Canaan</text>
-    <rect x="620" y="140" width="150" height="160" rx="5" fill="#252010" opacity="0.8"/>
-    <text x="695" y="225" fill="#6a5530" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Mésopotamie</text>
-    <ellipse cx="200" cy="230" rx="60" ry="50" fill="#202530" opacity="0.7"/>
-    <text x="200" y="235" fill="#405060" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Grèce</text>
-    <ellipse cx="80" cy="200" rx="55" ry="45" fill="#252020" opacity="0.7"/>
-    <text x="80" y="205" fill="#504030" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Rome</text>
-    <g class="map-dot" onclick="aplace('Jérusalem')"><circle cx="530" cy="255" r="10" fill="#d4a017" opacity="0.9"/><circle cx="530" cy="255" r="5" fill="#f0c040"/><text x="530" y="244" fill="#f0c040" font-size="11" text-anchor="middle" font-family="serif" font-weight="bold">Jérusalem</text></g>
-    <g class="map-dot" onclick="aplace('Bethléem')"><circle cx="525" cy="268" r="6" fill="#b8860b"/><text x="512" y="280" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Bethléem</text></g>
-    <g class="map-dot" onclick="aplace('Nazareth')"><circle cx="520" cy="205" r="6" fill="#b8860b"/><text x="508" y="196" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Nazareth</text></g>
-    <g class="map-dot" onclick="aplace('Babylone')"><circle cx="660" cy="190" r="7" fill="#8b4a0b"/><text x="660" y="180" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Babylone</text></g>
-    <g class="map-dot" onclick="aplace('Mont Sinaï')"><polygon points="490,290 480,315 500,315" fill="#d4a017"/><text x="490" y="285" fill="#d4a017" font-size="9" text-anchor="middle" font-family="serif">Mt Sinaï</text></g>
-    <g class="map-dot" onclick="aplace('Rome')"><circle cx="80" cy="195" r="7" fill="#8b1a1a"/><text x="80" y="183" fill="#c04040" font-size="10" text-anchor="middle" font-family="serif" font-weight="bold">Rome</text></g>
-    <g class="map-dot" onclick="aplace('Alexandrie')"><circle cx="420" cy="265" r="6" fill="#8b4a0b"/><text x="410" y="256" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Alexandrie</text></g>
-    <g class="map-dot" onclick="aplace('Antioche de Syrie')"><circle cx="575" cy="165" r="6" fill="#8b4a0b"/><text x="575" y="155" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Antioche</text></g>
-    <g class="map-dot" onclick="aplace('Île de Patmos')"><circle cx="248" cy="232" r="5" fill="#7a5aa8"/><text x="240" y="245" fill="#a87adc" font-size="8" text-anchor="middle" font-family="serif">Patmos</text></g>
-    <g class="map-dot" onclick="aplace('Athènes')"><circle cx="195" cy="240" r="6" fill="#8b4a0b"/><text x="195" y="255" fill="#c08030" font-size="9" text-anchor="middle" font-family="serif">Athènes</text></g>
-    <text x="400" y="22" fill="rgba(184,134,11,0.4)" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Cliquez sur un lieu pour son analyse biblique</text>
-  </svg>
+
+<div class="main-content">
+  <div class="sec-title">Carte Biblique Interactive</div>
+  <div class="sec-desc">Cliquez sur un lieu pour son analyse historique et spirituelle complète</div>
+
+  <div class="map-container" id="mapContainer">
+    <div class="map-tooltip" id="mapTooltip"></div>
+    <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="seaGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style="stop-color:#0d2a45;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#071828;stop-opacity:1"/>
+        </radialGradient>
+        <radialGradient id="landGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style="stop-color:#2a2010;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#1a1408;stop-opacity:1"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Fond océan -->
+      <rect width="900" height="620" fill="url(#seaGrad)"/>
+
+      <!-- Méditerranée -->
+      <path d="M0,180 Q50,160 120,170 Q180,175 220,190 Q270,200 310,195 Q350,188 370,195 Q400,205 420,200 Q450,192 470,185 Q510,175 540,180 Q570,178 590,175 Q610,170 630,165 Q650,158 670,155 Q700,150 730,148 Q760,145 790,148 Q830,152 870,158 L900,160 L900,300 Q850,295 800,300 Q750,305 710,300 Q670,295 640,298 Q600,305 570,310 Q540,315 510,308 Q480,300 460,305 Q440,315 420,320 Q395,322 370,318 Q340,310 310,308 Q280,308 260,315 Q230,325 200,320 Q160,310 130,315 Q90,325 50,320 Q20,315 0,318 Z" fill="url(#seaGrad)" opacity="0.9"/>
+
+      <!-- Mer Rouge -->
+      <path d="M600,320 Q608,340 612,370 Q615,400 610,430 Q605,460 598,480 Q592,500 588,490 Q585,475 588,450 Q590,420 588,395 Q585,370 588,350 Q592,330 600,320 Z" fill="#071828" opacity="0.85"/>
+
+      <!-- Golfe Persique -->
+      <path d="M720,300 Q750,310 780,325 Q800,335 810,350 Q800,355 780,350 Q760,345 740,340 Q720,335 710,325 Q712,312 720,300 Z" fill="#071828" opacity="0.8"/>
+
+      <!-- Nil -->
+      <path d="M480,580 Q475,540 472,500 Q470,460 465,420 Q462,390 460,360 Q458,330 455,305 Q452,280 450,260" stroke="#1a4a6a" stroke-width="4" fill="none" opacity="0.7"/>
+      <!-- Delta du Nil -->
+      <path d="M445,255 Q450,245 460,240 Q470,248 475,255 Q465,260 455,258 Z" fill="#1a3a50" opacity="0.7"/>
+
+      <!-- Jourdain -->
+      <path d="M570,195 Q572,220 570,245 Q568,265 565,285 Q562,305 558,320" stroke="#1a4a6a" stroke-width="3" fill="none" opacity="0.7"/>
+
+      <!-- Euphrate -->
+      <path d="M680,160 Q700,175 720,195 Q745,220 760,250 Q775,275 780,300" stroke="#1a4a6a" stroke-width="3" fill="none" opacity="0.6"/>
+
+      <!-- Tigre -->
+      <path d="M730,155 Q745,175 755,200 Q765,228 768,258 Q770,280 768,300" stroke="#1a4a6a" stroke-width="2.5" fill="none" opacity="0.6"/>
+
+      <!-- === RÉGIONS/PAYS === -->
+
+      <!-- Égypte -->
+      <path d="M390,260 Q420,255 455,258 Q480,262 490,280 Q500,305 495,340 Q490,375 485,410 Q480,445 475,480 Q470,510 465,540 Q460,570 455,595 L390,595 L380,540 Q375,500 372,460 Q368,420 365,380 Q362,340 362,305 Q363,280 375,265 Z" fill="#2a1e0a" opacity="0.85"/>
+      <text x="430" y="430" fill="#6a5030" font-size="14" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic" opacity="0.8">Égypte</text>
+
+      <!-- Canaan / Israël / Palestine -->
+      <path d="M540,195 Q560,190 578,192 Q595,195 605,208 Q612,222 608,240 Q604,258 598,272 Q590,288 580,300 Q568,312 555,318 Q542,322 532,315 Q522,305 518,290 Q514,272 516,255 Q518,238 525,222 Q532,208 540,195 Z" fill="#2d2808" opacity="0.9"/>
+      <text x="562" y="258" fill="#8a7030" font-size="11" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Canaan</text>
+
+      <!-- Syrie / Aram -->
+      <path d="M580,168 Q615,160 650,162 Q678,165 690,178 Q698,192 695,210 Q690,228 678,240 Q662,250 645,252 Q625,252 608,245 Q592,236 585,220 Q578,205 580,190 Z" fill="#251e0a" opacity="0.85"/>
+      <text x="638" y="210" fill="#7a6828" font-size="12" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Syrie/Aram</text>
+
+      <!-- Mésopotamie / Babylone -->
+      <path d="M678,155 Q720,148 762,150 Q800,152 825,165 Q845,178 848,198 Q850,220 840,242 Q828,262 808,275 Q785,285 760,288 Q732,290 708,280 Q682,268 668,248 Q655,228 655,205 Q655,182 665,168 Z" fill="#221a08" opacity="0.85"/>
+      <text x="755" y="222" fill="#7a6028" font-size="13" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Mésopotamie</text>
+
+      <!-- Perse / Iran -->
+      <path d="M830,158 Q870,152 900,155 L900,285 Q870,290 840,288 Q850,268 855,245 Q858,222 855,198 Q850,178 838,165 Z" fill="#1e1808" opacity="0.8"/>
+      <text x="875" y="225" fill="#6a5828" font-size="11" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Perse</text>
+
+      <!-- Arabie -->
+      <path d="M555,320 Q585,315 620,318 Q655,322 680,335 Q700,348 708,368 Q715,390 710,415 Q700,445 685,468 Q668,490 648,505 Q625,518 600,522 Q575,525 552,515 Q530,502 518,482 Q508,460 508,435 Q510,408 520,385 Q532,362 544,345 Z" fill="#241a08" opacity="0.8"/>
+      <text x="615" y="425" fill="#6a5028" font-size="13" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Arabie</text>
+
+      <!-- Désert du Sinaï -->
+      <path d="M490,295 Q518,290 535,300 Q548,312 550,330 Q550,350 540,365 Q528,378 512,380 Q495,380 482,368 Q470,355 468,338 Q466,318 475,306 Z" fill="#2a2008" opacity="0.8"/>
+      <text x="510" y="340" fill="#7a6028" font-size="10" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Sinaï</text>
+
+      <!-- Anatolie / Asie Mineure -->
+      <path d="M580,120 Q640,108 700,110 Q750,112 790,118 Q830,125 860,138 Q878,148 880,160 Q870,152 838,148 Q800,145 762,148 Q720,148 680,155 Q640,162 608,170 Q585,178 575,170 Q568,160 572,142 Z" fill="#201a08" opacity="0.8"/>
+      <text x="720" y="138" fill="#6a5828" font-size="12" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Asie Mineure</text>
+
+      <!-- Grèce -->
+      <path d="M180,180 Q220,170 258,175 Q285,180 298,195 Q308,210 302,228 Q294,245 278,252 Q258,258 238,254 Q218,248 205,235 Q192,220 188,205 Z" fill="#1e1a08" opacity="0.85"/>
+      <text x="245" y="218" fill="#6a5828" font-size="13" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Grèce</text>
+
+      <!-- Macédoine -->
+      <path d="M225,148 Q265,140 295,148 Q318,155 322,170 Q318,182 302,188 Q280,192 258,188 Q235,182 222,170 Q215,160 220,152 Z" fill="#1e1a08" opacity="0.8"/>
+      <text x="272" y="168" fill="#5a4a20" font-size="10" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Macédoine</text>
+
+      <!-- Italie / Rome -->
+      <path d="M85,148 Q118,138 148,142 Q172,148 182,162 Q188,175 182,190 Q174,205 158,210 Q138,215 118,208 Q98,200 88,185 Q80,170 82,158 Z" fill="#1e1808" opacity="0.85"/>
+      <text x="135" y="178" fill="#6a5028" font-size="13" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Rome/Italie</text>
+
+      <!-- Libye / Cyrénaïque -->
+      <path d="M195,280 Q240,272 278,278 Q305,282 315,298 Q320,315 312,332 Q300,348 278,352 Q252,355 228,346 Q205,336 195,318 Q188,302 192,288 Z" fill="#201808" opacity="0.75"/>
+      <text x="258" y="315" fill="#5a4820" font-size="10" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Cyrénaïque</text>
+
+      <!-- Phénicie / Liban -->
+      <path d="M560,178 Q575,172 590,175 Q600,180 600,192 Q598,205 588,210 Q575,212 562,207 Q552,200 552,190 Q552,182 560,178 Z" fill="#252008" opacity="0.9"/>
+
+      <!-- Philistie -->
+      <path d="M522,272 Q535,268 545,275 Q550,285 545,295 Q538,302 528,300 Q518,295 518,285 Z" fill="#282008" opacity="0.85"/>
+
+      <!-- ═══ LIEUX SAINTS ═══ -->
+
+      <!-- Jérusalem - ÉTOILE OR -->
+      <g class="place-dot major" onclick="aplace('Jérusalem', this)" data-info="Capitale spirituelle · Temple · Golgotha · Résurrection">
+        <circle cx="570" cy="280" r="8" fill="#d4a017" opacity="0.95" filter="url(#glow)"/>
+        <circle cx="570" cy="280" r="4" fill="#fff8e0"/>
+        <!-- Étoile de David -->
+        <polygon points="570,268 574,276 583,276 576,282 578,291 570,286 562,291 564,282 557,276 566,276" fill="#d4a017" opacity="0.6" transform="scale(0.6) translate(380,186)"/>
+        <text x="570" y="265" fill="#f0c040" font-size="11" text-anchor="middle" font-family="'Cinzel',serif" font-weight="bold" filter="url(#glow)">Jérusalem</text>
+        <text x="570" y="256" fill="#d4a017" font-size="9" text-anchor="middle">✦</text>
+      </g>
+
+      <!-- Bethléem -->
+      <g class="place-dot" onclick="aplace('Bethléem', this)" data-info="Nativité de Jésus · Maison de David · Ruth et Boaz">
+        <circle cx="565" cy="292" r="5" fill="#c09020" opacity="0.9"/>
+        <circle cx="565" cy="292" r="2.5" fill="#f0d060"/>
+        <text x="552" y="304" fill="#c09020" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Bethléem</text>
+      </g>
+
+      <!-- Nazareth -->
+      <g class="place-dot" onclick="aplace('Nazareth', this)" data-info="Enfance de Jésus · Annonciation à Marie · Synagogue de Nazareth">
+        <circle cx="558" cy="222" r="5" fill="#c09020" opacity="0.9"/>
+        <circle cx="558" cy="222" r="2.5" fill="#f0d060"/>
+        <text x="545" y="214" fill="#c09020" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Nazareth</text>
+      </g>
+
+      <!-- Mer de Galilée / Lac de Tibériade -->
+      <ellipse cx="572" cy="235" rx="14" ry="20" fill="#0d3a5a" opacity="0.85" stroke="#2a6a9a" stroke-width="1"/>
+      <g class="place-dot" onclick="aplace('Mer de Galilée', this)" data-info="Pêcheurs · Tempête apaisée · Multiplication des pains · Apparition ressuscitée">
+        <text x="592" y="238" fill="#4a9acc" font-size="9" font-family="'EB Garamond',serif" font-style="italic">Galilée</text>
+      </g>
+
+      <!-- Capernaüm -->
+      <g class="place-dot" onclick="aplace('Capharnaüm', this)" data-info="Centre du ministère de Jésus · Miracles · Demeure de Pierre">
+        <circle cx="578" cy="222" r="4" fill="#a08020" opacity="0.85"/>
+        <text x="590" y="220" fill="#a08020" font-size="8" font-family="'EB Garamond',serif">Capharnaüm</text>
+      </g>
+
+      <!-- Mer Morte -->
+      <ellipse cx="572" cy="300" rx="10" ry="16" fill="#0a2a3a" opacity="0.8" stroke="#1a4a5a" stroke-width="1"/>
+      <text x="590" y="302" fill="#3a6a7a" font-size="8" font-family="'EB Garamond',serif" font-style="italic">Mer Morte</text>
+
+      <!-- Jéricho -->
+      <g class="place-dot" onclick="aplace('Jéricho', this)" data-info="Première conquête de Canaan · Murailles effondrées · Zachée · Rahab">
+        <circle cx="578" cy="288" r="4" fill="#a08020" opacity="0.85"/>
+        <text x="590" y="290" fill="#a08020" font-size="8" font-family="'EB Garamond',serif">Jéricho</text>
+      </g>
+
+      <!-- Hébron -->
+      <g class="place-dot" onclick="aplace('Hébron', this)" data-info="Tombeau des Patriarches · Abraham · Isaac · Jacob · David roi">
+        <circle cx="562" cy="298" r="4" fill="#a08020" opacity="0.85"/>
+        <text x="548" y="310" fill="#a08020" font-size="8" font-family="'EB Garamond',serif">Hébron</text>
+      </g>
+
+      <!-- Mont Sinaï -->
+      <g class="place-dot" onclick="aplace('Mont Sinaï', this)" data-info="10 Commandements · Buisson ardent · Rencontre de Moïse avec Dieu · Loi divine">
+        <polygon points="512,342 506,358 518,358" fill="#d4a017" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="512" cy="342" r="3" fill="#f0c040"/>
+        <text x="512" y="338" fill="#d4a017" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Mt Sinaï</text>
+      </g>
+
+      <!-- Alexandrie -->
+      <g class="place-dot" onclick="aplace('Alexandrie en Égypte', this)" data-info="Grande bibliothèque · Diaspora juive · Septante · Marc l'évangéliste">
+        <circle cx="455" cy="270" r="6" fill="#906820" opacity="0.9"/>
+        <circle cx="455" cy="270" r="3" fill="#c09030"/>
+        <text x="442" y="262" fill="#906820" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Alexandrie</text>
+      </g>
+
+      <!-- Memphis / On -->
+      <g class="place-dot" onclick="aplace('Memphis et On (Héliopolis) en Égypte', this)" data-info="Joseph en Égypte · Captivité d'Israël · Exode · Plagues d'Égypte">
+        <circle cx="460" cy="295" r="5" fill="#806018" opacity="0.85"/>
+        <text x="445" y="308" fill="#806018" font-size="8" font-family="'EB Garamond',serif">Memphis</text>
+      </g>
+
+      <!-- Babylone -->
+      <g class="place-dot major" onclick="aplace('Babylone', this)" data-info="Tour de Babel · Exil des Juifs · Daniel · Nabuchodonosor · Chute prophétisée">
+        <circle cx="748" cy="225" r="7" fill="#8a4a10" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="748" cy="225" r="3.5" fill="#d07020"/>
+        <text x="748" y="213" fill="#c07020" font-size="10" text-anchor="middle" font-family="'Cinzel',serif" font-weight="bold">Babylone</text>
+      </g>
+
+      <!-- Ur des Chaldéens -->
+      <g class="place-dot" onclick="aplace('Ur des Chaldéens', this)" data-info="Ville natale d'Abraham · Départ vers Canaan · Civilisation sumérienne">
+        <circle cx="790" cy="268" r="5" fill="#7a4010" opacity="0.85"/>
+        <circle cx="790" cy="268" r="2.5" fill="#b06020"/>
+        <text x="790" y="280" fill="#7a4010" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Ur</text>
+      </g>
+
+      <!-- Ninive -->
+      <g class="place-dot" onclick="aplace('Ninive', this)" data-info="Jonas et la baleine · Capitale assyrienne · Repentance · Nahum">
+        <circle cx="760" cy="185" r="5" fill="#7a4010" opacity="0.85"/>
+        <circle cx="760" cy="185" r="2.5" fill="#b06020"/>
+        <text x="760" y="177" fill="#7a4010" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Ninive</text>
+      </g>
+
+      <!-- Antioche -->
+      <g class="place-dot" onclick="aplace('Antioche de Syrie', this)" data-info="Premiers chrétiens · Apôtre Paul · Barnabé · Missions apostoliques">
+        <circle cx="618" cy="182" r="6" fill="#6a4818" opacity="0.9"/>
+        <circle cx="618" cy="182" r="3" fill="#a07828"/>
+        <text x="618" y="172" fill="#a07828" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Antioche</text>
+      </g>
+
+      <!-- Damas -->
+      <g class="place-dot" onclick="aplace('Damas', this)" data-info="Conversion de Paul · Ananias · Plus ancienne capitale du monde">
+        <circle cx="600" cy="202" r="5" fill="#6a4818" opacity="0.85"/>
+        <circle cx="600" cy="202" r="2.5" fill="#a07828"/>
+        <text x="612" y="200" fill="#8a6828" font-size="8" font-family="'EB Garamond',serif">Damas</text>
+      </g>
+
+      <!-- Tyr -->
+      <g class="place-dot" onclick="aplace('Tyr', this)" data-info="Prophétie d'Ézéchiel accomplie · Commerce phénicien · Alexandre le Grand">
+        <circle cx="550" cy="202" r="4" fill="#6a4818" opacity="0.85"/>
+        <text x="538" y="198" fill="#7a5828" font-size="8" font-family="'EB Garamond',serif">Tyr</text>
+      </g>
+
+      <!-- Sidon -->
+      <g class="place-dot" onclick="aplace('Sidon', this)" data-info="Phénicie · Jésus guérit la fille d'une Cananéenne · Paul s'y arrête">
+        <circle cx="548" cy="193" r="4" fill="#6a4818" opacity="0.8"/>
+        <text x="536" y="188" fill="#7a5828" font-size="8" font-family="'EB Garamond',serif">Sidon</text>
+      </g>
+
+      <!-- Éphèse -->
+      <g class="place-dot major" onclick="aplace('Éphèse', this)" data-info="Temple d'Artémis · Lettres de Paul · Jean l'Apôtre · Apocalypse 2">
+        <circle cx="345" cy="198" r="6" fill="#6a5018" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="345" cy="198" r="3" fill="#a08028"/>
+        <text x="345" y="188" fill="#a08028" font-size="9" text-anchor="middle" font-family="'EB Garamond',serif">Éphèse</text>
+      </g>
+
+      <!-- Corinthe -->
+      <g class="place-dot" onclick="aplace('Corinthe', this)" data-info="Lettres de Paul · Église cosmopolite · 1 et 2 Corinthiens · Isthme">
+        <circle cx="252" cy="222" r="5" fill="#6a5018" opacity="0.85"/>
+        <circle cx="252" cy="222" r="2.5" fill="#a07828"/>
+        <text x="252" y="235" fill="#8a6828" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Corinthe</text>
+      </g>
+
+      <!-- Athènes -->
+      <g class="place-dot" onclick="aplace('Athènes', this)" data-info="Discours de Paul à l'Aréopage · Autel au Dieu inconnu · Actes 17">
+        <circle cx="268" cy="215" r="5" fill="#6a5018" opacity="0.85"/>
+        <circle cx="268" cy="215" r="2.5" fill="#a07828"/>
+        <text x="268" y="207" fill="#8a6828" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Athènes</text>
+      </g>
+
+      <!-- Thessalonique -->
+      <g class="place-dot" onclick="aplace('Thessalonique', this)" data-info="Paul et Silas · 1 et 2 Thessaloniciens · Synagogue · Émeute">
+        <circle cx="278" cy="175" r="4" fill="#6a5018" opacity="0.8"/>
+        <text x="278" y="167" fill="#7a6028" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Thessalonique</text>
+      </g>
+
+      <!-- Patmos -->
+      <g class="place-dot" onclick="aplace('Île de Patmos', this)" data-info="Apocalypse de Jean · Exil romain · 7 lettres aux Églises · Visions célestes">
+        <circle cx="320" cy="215" r="5" fill="#7a508a" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="320" cy="215" r="2.5" fill="#c090d8"/>
+        <text x="308" y="225" fill="#b07ac8" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Patmos</text>
+      </g>
+
+      <!-- Rome -->
+      <g class="place-dot major" onclick="aplace('Rome', this)" data-info="Paul prisonnier · Martyre de Pierre et Paul · Épître aux Romains · Empire romain">
+        <circle cx="120" cy="162" r="8" fill="#8a2020" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="120" cy="162" r="4" fill="#c04040"/>
+        <text x="120" y="150" fill="#c04040" font-size="11" text-anchor="middle" font-family="'Cinzel',serif" font-weight="bold">Rome</text>
+      </g>
+
+      <!-- Carthage -->
+      <g class="place-dot" onclick="aplace('Carthage', this)" data-info="Tertullien · Cyprien · Conciles · Augustin d'Hippone à proximité">
+        <circle cx="228" cy="188" r="4" fill="#703a10" opacity="0.8"/>
+        <text x="228" y="200" fill="#7a4818" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Carthage</text>
+      </g>
+
+      <!-- Pergame -->
+      <g class="place-dot" onclick="aplace('Pergame', this)" data-info="Trône de Satan · Lettre de l'Apocalypse · Grand autel de Zeus · Nicolaïtes">
+        <circle cx="330" cy="180" r="4" fill="#6a5018" opacity="0.8"/>
+        <text x="330" y="172" fill="#7a6028" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Pergame</text>
+      </g>
+
+      <!-- Smyrne -->
+      <g class="place-dot" onclick="aplace('Smyrne', this)" data-info="Lettre de l'Apocalypse · Église persécutée · Polycarpe martyr · Couronne de vie">
+        <circle cx="338" cy="190" r="4" fill="#6a5018" opacity="0.8"/>
+        <text x="352" y="190" fill="#7a6028" font-size="8" font-family="'EB Garamond',serif">Smyrne</text>
+      </g>
+
+      <!-- Harran -->
+      <g class="place-dot" onclick="aplace('Harran', this)" data-info="Étape d'Abraham · Mort de Térah · Jacob fuit vers Laban">
+        <circle cx="672" cy="172" r="4" fill="#7a4818" opacity="0.8"/>
+        <text x="672" y="164" fill="#8a5828" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Harran</text>
+      </g>
+
+      <!-- Suse / Persépolis -->
+      <g class="place-dot" onclick="aplace('Suse (Perse)', this)" data-info="Esther et Assuérus · Nehémie · Daniel · Capitale perse · Décret de Cyrus">
+        <circle cx="848" cy="225" r="5" fill="#6a4810" opacity="0.85"/>
+        <circle cx="848" cy="225" r="2.5" fill="#a07820"/>
+        <text x="862" y="225" fill="#8a6020" font-size="8" font-family="'EB Garamond',serif">Suse</text>
+      </g>
+
+      <!-- Gaza -->
+      <g class="place-dot" onclick="aplace('Gaza', this)" data-info="Samson et Dalila · Philistins · Philippe et l'Éthiopien · Actes 8">
+        <circle cx="538" cy="292" r="4" fill="#8a6020" opacity="0.85"/>
+        <text x="525" y="304" fill="#7a5820" font-size="8" font-family="'EB Garamond',serif">Gaza</text>
+      </g>
+
+      <!-- Beersheba -->
+      <g class="place-dot" onclick="aplace('Beersheba', this)" data-info="Puits d'Abraham · Alliance avec Abimélec · Limites d'Israël · Élie fuit Jézabel">
+        <circle cx="552" cy="308" r="4" fill="#8a6020" opacity="0.8"/>
+        <text x="552" y="320" fill="#7a5820" font-size="8" text-anchor="middle" font-family="'EB Garamond',serif">Beersheba</text>
+      </g>
+
+      <!-- Mont Horeb / Carmel -->
+      <g class="place-dot" onclick="aplace('Mont Carmel', this)" data-info="Élie contre les prophètes de Baal · 450 contre 1 · Feu du ciel · 1 Rois 18">
+        <polygon points="545,210 540,222 550,222" fill="#a07020" opacity="0.85"/>
+        <text x="535" y="208" fill="#a07020" font-size="8" font-family="'EB Garamond',serif">Carmel</text>
+      </g>
+
+      <!-- Samarie -->
+      <g class="place-dot" onclick="aplace('Samarie', this)" data-info="Capitale du Royaume du Nord · Femme samaritaine · Jésus et le puits de Jacob">
+        <circle cx="558" cy="250" r="4" fill="#8a6020" opacity="0.8"/>
+        <text x="545" y="245" fill="#7a5820" font-size="8" font-family="'EB Garamond',serif">Samarie</text>
+      </g>
+
+      <!-- Transjordanie / Pétra -->
+      <g class="place-dot" onclick="aplace('Pétra et la Transjordanie', this)" data-info="Édom · Nabatéens · Chemin des rois · Balaam · Moab et Ruth">
+        <circle cx="600" cy="302" r="4" fill="#8a5010" opacity="0.8"/>
+        <text x="612" y="302" fill="#8a5820" font-size="8" font-family="'EB Garamond',serif">Pétra</text>
+      </g>
+
+      <!-- Labels régions mers -->
+      <text x="250" y="158" fill="rgba(74,120,160,0.6)" font-size="14" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic">Mer Méditerranée</text>
+      <text x="630" y="355" fill="rgba(30,80,120,0.5)" font-size="11" text-anchor="middle" font-family="'EB Garamond',serif" font-style="italic" transform="rotate(-75,630,355)">Mer Rouge</text>
+
+      <!-- Titre carte -->
+      <text x="450" y="35" fill="rgba(212,160,23,0.35)" font-size="16" text-anchor="middle" font-family="'Cinzel',serif" letter-spacing="4">MONDE BIBLIQUE</text>
+      <text x="450" y="52" fill="rgba(212,160,23,0.2)" font-size="10" text-anchor="middle" font-family="'Share Tech Mono',monospace" letter-spacing="3">DU PROCHE-ORIENT ANCIEN</text>
+    </svg>
+
+    <div class="map-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d4a017"></div>Ville majeure</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a07820"></div>Ville biblique</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7a5020"></div>Site historique</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#8a2020"></div>Empire romain</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7a508a"></div>Visions apocalyptiques</div>
+      <div class="legend-item" style="margin-left:auto;color:var(--gold);font-family:'Cinzel',serif;font-size:.72rem">Cliquez sur un lieu pour l'analyse IA ✦</div>
+    </div>
+  </div>
+
+  <!-- Liste rapide des lieux -->
+  <div class="sec-title" style="margin-top:24px">Lieux Bibliques</div>
+  <div class="place-list">
+    <button class="place-btn" onclick="aplace('Jérusalem',null)">✦ Jérusalem</button>
+    <button class="place-btn" onclick="aplace('Bethléem',null)">🌟 Bethléem</button>
+    <button class="place-btn" onclick="aplace('Nazareth',null)">🕊️ Nazareth</button>
+    <button class="place-btn" onclick="aplace('Mer de Galilée',null)">🌊 Mer de Galilée</button>
+    <button class="place-btn" onclick="aplace('Mont Sinaï',null)">⛰️ Mont Sinaï</button>
+    <button class="place-btn" onclick="aplace('Babylone',null)">🏛️ Babylone</button>
+    <button class="place-btn" onclick="aplace('Rome',null)">🦅 Rome</button>
+    <button class="place-btn" onclick="aplace('Éphèse',null)">📜 Éphèse</button>
+    <button class="place-btn" onclick="aplace('Île de Patmos',null)">📖 Patmos</button>
+    <button class="place-btn" onclick="aplace('Antioche de Syrie',null)">✝️ Antioche</button>
+    <button class="place-btn" onclick="aplace('Alexandrie en Égypte',null)">📚 Alexandrie</button>
+    <button class="place-btn" onclick="aplace('Ur des Chaldéens',null)">🌙 Ur</button>
+    <button class="place-btn" onclick="aplace('Ninive',null)">🐟 Ninive</button>
+    <button class="place-btn" onclick="aplace('Damas',null)">⚡ Damas</button>
+    <button class="place-btn" onclick="aplace('Athènes',null)">🏺 Athènes</button>
+    <button class="place-btn" onclick="aplace('Corinthe',null)">💌 Corinthe</button>
+    <button class="place-btn" onclick="aplace('Jéricho',null)">🎺 Jéricho</button>
+    <button class="place-btn" onclick="aplace('Hébron',null)">🪨 Hébron</button>
+    <button class="place-btn" onclick="aplace('Tyr',null)">⚓ Tyr</button>
+    <button class="place-btn" onclick="aplace('Suse (Perse)',null)">👑 Suse</button>
+  </div>
+
+  <div id="mapResult" style="margin-top:18px"></div>
 </div>
-<div id="mapResult" style="margin-top:14px"></div></div>
-<footer><p>CODEX DEI — Encyclopédie Biblique Universelle</p><p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p></footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
-  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+
+<footer>
+  <p>CODEX DEI — Encyclopédie Biblique Universelle</p>
+  <p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p>
+</footer>
+
+<div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;overflow:hidden;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box;margin:auto;margin-top:10vh">
     <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer">✕</button>
     <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
     <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
@@ -57,65 +435,109 @@
     <div id="authLoginForm">
       <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
       <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
-      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
-      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
       <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
       <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique</button>
     </div>
     <div id="authRegForm" style="display:none">
-      <input id="regName" type="text" placeholder="Votre prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regName" type="text" placeholder="Prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
       <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
       <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
-      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
-      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none;font-style:italic"></div>
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
       <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
     </div>
   </div>
-</div><div class="user-bar" id="userBar">
-  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
-  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
-    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
-    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
-    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
-  </div>
 </div>
+
+<div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none"><a class="user-btn" href="mon-espace.html">📖 Mon espace</a><div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div><button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button></div>
+</div>
+
 <div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
   <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
     <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
     <div style="font-size:2rem;margin-bottom:8px">🙏</div>
     <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px;opacity:.7"></div>
-    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:1rem;letter-spacing:2px;margin-bottom:6px">Ce site vit grâce à vous</div>
-    <div style="color:var(--text3);font-style:italic;font-size:.86rem;line-height:1.7;margin-bottom:12px">Un petit don fait une grande différence.</div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;letter-spacing:2px;margin-bottom:10px">Ce site vit grâce à vous</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
       <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF</a>
       <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF</a>
       <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF</a>
     </div>
-    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.84rem;font-weight:600;text-decoration:none;margin-bottom:8px;text-align:center">☆ Don libre ☆</a>
     <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.76rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
   </div>
 </div>
+
 <div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
   <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
     <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
     <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
-    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées. Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
-    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées.</div>
     <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
   </div>
 </div>
+
 <div class="upgrade-banner" id="upgradeBanner">
   <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
   <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
   <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
 </div>
-<script src="js/core.js"></script><script src="js/auth.js"></script><script src="js/layout.js"></script>
+
+<script src="js/core.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
 <script>
-function aplace(place){
-  if(!checkSearchLimit())return;
-  callClaude('Analyse biblique complete du lieu : '+place+'\n\n1. **Geographie** — localisation, description\n2. **Occurrences bibliques** — tous les evenements majeurs qui s y deroulent\n3. **Signification du nom** — etymologie hebraique\n4. **Symbolisme spirituel** — ce que ce lieu represente theologiquement\n5. **Propheties** liees a ce lieu\n6. **Archeologie** — decouvertes historiques\n7. **Importance aujourd hui**','mapResult','Lieu : '+place);
+var tooltip = document.getElementById('mapTooltip');
+var mapContainer = document.getElementById('mapContainer');
+
+function aplace(place, el) {
+  // Show tooltip
+  if (el && tooltip) {
+    var info = el.getAttribute('data-info');
+    if (info) {
+      tooltip.innerHTML = '<strong>' + place + '</strong>' + info;
+      tooltip.style.display = 'block';
+      var rect = mapContainer.getBoundingClientRect();
+      var elRect = el.getBoundingClientRect();
+      var x = elRect.left - rect.left + 15;
+      var y = elRect.top - rect.top - 10;
+      if (x + 230 > rect.width) x = x - 240;
+      if (y < 0) y = 5;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+      setTimeout(function(){ tooltip.style.display = 'none'; }, 4000);
+    }
+  }
+  // AI Analysis
+  if (!checkSearchLimit()) return;
+  callClaude(
+    'Analyse biblique complete et approfondie du lieu : ' + place + '\n\n' +
+    '1. **Geographie** — localisation precise, description physique, nom hébreu/grec\n' +
+    '2. **Occurrences bibliques** — tous les evenements majeurs (AT et NT) avec references\n' +
+    '3. **Signification du nom** — etymologie hebraique ou grecque\n' +
+    '4. **Symbolisme spirituel** — ce que ce lieu represente theologiquement\n' +
+    '5. **Personnages bibliques** qui y ont vecu ou y sont passes\n' +
+    '6. **Propheties** liees a ce lieu et leur accomplissement\n' +
+    '7. **Archeologie** — decouvertes confirmant la Bible\n' +
+    '8. **Fait etonnant** peu connu',
+    'mapResult',
+    'Lieu biblique : ' + place
+  );
   checkDonPopup();
-  setTimeout(function(){document.getElementById('mapResult').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+  setTimeout(function(){
+    document.getElementById('mapResult').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }, 100);
 }
+
+// Hide tooltip on map click outside
+document.getElementById('mapContainer').addEventListener('click', function(e) {
+  if (e.target.tagName === 'svg' || e.target.tagName === 'rect') {
+    tooltip.style.display = 'none';
+  }
+});
 </script>
-</body></html>
+</body>
+</html>
