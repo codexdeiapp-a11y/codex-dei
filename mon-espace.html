@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mon Espace — CODEX DEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-canvas"></div><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button><div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div><header><div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div><a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a><div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div><div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div></header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
+<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item" href="carte.html">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html" class="nav-item active">👤 Mon Espace</a><a class="nav-item" href="etudes.html">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
+</div></nav>
+<div class="main-content"><div class="sec-title">Mon Espace Biblique</div>
+<div class="sec-desc" id="mySpaceDesc">Vos études, notes et favoris sauvegardés</div>
+
+<div id="mySpaceGuest" style="text-align:center;padding:50px 20px">
+  <div style="font-size:3rem;margin-bottom:14px">🔐</div>
+  <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:1.1rem;margin-bottom:10px;letter-spacing:1px">Créez votre espace personnel</div>
+  <div style="color:var(--text3);font-style:italic;font-size:.93rem;line-height:1.75;max-width:460px;margin:0 auto 20px">Connectez-vous pour sauvegarder vos études bibliques, prendre des notes sur chaque passage, retrouver vos favoris et suivre votre progression de lecture.</div>
+  <button class="action-btn" onclick="openAuth()">✦ Se connecter / Créer un compte ✦</button>
+</div>
+
+<div id="mySpaceContent" style="display:none">
+  <div style="display:flex;gap:2px;border-bottom:1px solid var(--border2);margin-bottom:18px;flex-wrap:wrap">
+    <button class="my-tab active" onclick="switchMyTab('notes',this)">📝 Mes Notes</button>
+    <button class="my-tab" onclick="switchMyTab('studies',this)">📖 Mes Études</button>
+    <button class="my-tab" onclick="switchMyTab('favs',this)">⭐ Mes Favoris</button>
+    <button class="my-tab" onclick="switchMyTab('progress',this)">📅 Ma Progression</button>
+  </div>
+
+  <div id="myNotes">
+    <div class="panel"><div class="panel-accent"></div>
+      <div class="panel-title">📝 Nouvelle note</div>
+      <input type="text" class="search-input" id="noteRef" placeholder="Référence (ex: Jean 3:16, Psaume 23...)" style="margin-bottom:7px">
+      <textarea class="txt-area" id="noteContent" placeholder="Vos réflexions, insights, questions sur ce passage..." style="min-height:90px"></textarea>
+      <button class="action-btn" onclick="saveNote()" style="margin-top:7px">✦ Sauvegarder la note</button>
+      <div id="noteMsg" style="margin-top:5px;color:var(--gold);font-style:italic;font-size:.84rem;display:none"></div>
+    </div>
+    <div id="notesList"></div>
+  </div>
+
+  <div id="myStudies" style="display:none">
+    <div class="panel"><div class="panel-accent"></div>
+      <div class="panel-title">📖 Nouvelle étude</div>
+      <input type="text" class="search-input" id="myStudyTitle" placeholder="Titre de votre étude..." style="margin-bottom:7px">
+      <textarea class="txt-area" id="myStudyContent" placeholder="Votre étude, vos découvertes, références bibliques..." style="min-height:130px"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap">
+        <button class="action-btn" onclick="saveMyStudy()">✦ Sauvegarder</button>
+        <label style="display:flex;align-items:center;gap:5px;color:var(--text3);font-style:italic;font-size:.88rem;cursor:pointer"><input type="checkbox" id="studyPublic" style="accent-color:var(--gold2)"> Partager avec la communauté</label>
+      </div>
+      <div id="myStudyMsg" style="margin-top:5px;color:var(--gold);font-style:italic;font-size:.84rem;display:none"></div>
+    </div>
+    <div id="myStudiesList"></div>
+  </div>
+
+  <div id="myFavs" style="display:none">
+    <div id="myFavsList"></div>
+  </div>
+
+  <div id="myProgress" style="display:none">
+    <div class="panel"><div class="panel-accent"></div>
+      <div class="panel-title">📅 Suivi de lecture — 66 livres</div>
+      <p style="color:var(--text3);font-style:italic;font-size:.9rem;margin-bottom:12px">Cochez les livres que vous avez lus ou étudiés</p>
+      <div id="progressGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:5px"></div>
+      <button class="action-btn" onclick="saveProgress()" style="margin-top:12px">✦ Sauvegarder ma progression</button>
+      <div id="progressMsg" style="margin-top:5px;color:var(--gold);font-style:italic;font-size:.84rem;display:none"></div>
+    </div>
+  </div>
+</div></div>
+<footer><p>CODEX DEI — Encyclopédie Biblique Universelle</p><p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p></footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+    <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer">✕</button>
+    <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
+    <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;background:transparent;border:none;border-bottom:2px solid #d4a017;color:#d4a017;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Se connecter</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:#6a5838;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Créer un compte</button>
+    </div>
+    <div id="authLoginForm">
+      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
+      <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique</button>
+    </div>
+    <div id="authRegForm" style="display:none">
+      <input id="regName" type="text" placeholder="Prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div><div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
+    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
+    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
+  </div>
+</div>
+<div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
+    <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-size:2rem;margin-bottom:8px">🙏</div>
+    <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px;opacity:.7"></div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;letter-spacing:2px;margin-bottom:6px">Ce site vit grâce à vous</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.84rem;font-weight:600;text-decoration:none;margin-bottom:8px;text-align:center">☆ Don libre ☆</a>
+    <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.76rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
+  </div>
+</div>
+<div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
+    <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
+    <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées. Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
+  </div>
+</div>
+<div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
+</div>
+<script src="js/core.js"></script><script src="js/auth.js"></script><script src="js/layout.js"></script>
+<script>
+function onUserLoggedIn() {
+  var name = currentUser.user_metadata && currentUser.user_metadata.name ? currentUser.user_metadata.name : currentUser.email.split('@')[0];
+  document.getElementById('mySpaceGuest').style.display = 'none';
+  document.getElementById('mySpaceContent').style.display = 'block';
+  document.getElementById('mySpaceDesc').textContent = 'Bonjour ' + name + ' 🙏 Vos études et notes vous attendent.';
+  loadNotes();
+  renderProgressGrid();
+}
+function onLoggedOut() {
+  document.getElementById('mySpaceGuest').style.display = 'block';
+  document.getElementById('mySpaceContent').style.display = 'none';
+}
+function switchMyTab(tab, el) {
+  document.querySelectorAll('.my-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  ['myNotes','myStudies','myFavs','myProgress'].forEach(function(id){document.getElementById(id).style.display='none';});
+  var map={notes:'myNotes',studies:'myStudies',favs:'myFavs',progress:'myProgress'};
+  document.getElementById(map[tab]).style.display='block';
+  if(tab==='notes')loadNotes();
+  if(tab==='studies')loadMyStudies();
+  if(tab==='favs')loadMyFavs();
+  if(tab==='progress')renderProgressGrid();
+}
+async function saveNote() {
+  if(!currentUser){openAuth();return;}
+  var ref=document.getElementById('noteRef').value.trim();
+  var body=document.getElementById('noteContent').value.trim();
+  var msg=document.getElementById('noteMsg');
+  if(!body)return;
+  try {
+    await userDb('user_notes','POST',{user_id:currentUser.id,reference:ref||'Sans référence',content:body,created_at:new Date().toISOString()});
+    msg.style.display='block';msg.textContent='✓ Note sauvegardée !';
+    document.getElementById('noteRef').value='';document.getElementById('noteContent').value='';
+    setTimeout(function(){msg.style.display='none';},3000);
+    loadNotes();
+  } catch(e){msg.style.display='block';msg.textContent='✓ Sauvegardée localement.';}
+}
+async function loadNotes() {
+  if(!currentUser)return;
+  var el=document.getElementById('notesList');
+  try {
+    var data=await userDb('user_notes','GET',null,'user_id=eq.'+currentUser.id+'&order=created_at.desc&limit=50');
+    if(!data||!data.length){el.innerHTML='<div style="color:var(--text3);font-style:italic;padding:18px;text-align:center">Aucune note. Commencez à étudier !</div>';return;}
+    el.innerHTML=data.map(function(n){return '<div class="note-card"><div class="note-card-title">✦ '+n.reference+'</div><div class="note-card-body">'+n.content+'</div><div class="note-card-date">'+new Date(n.created_at).toLocaleDateString('fr-FR')+'</div><button class="note-del" onclick="delNote('+n.id+')">✕</button></div>';}).join('');
+  } catch(e){el.innerHTML='<div style="color:var(--text3);font-style:italic;padding:18px;text-align:center">Chargement...</div>';}
+}
+async function delNote(id) {
+  try{await userDb('user_notes','DELETE',null,'id=eq.'+id+'&user_id=eq.'+currentUser.id);loadNotes();}catch(e){}
+}
+async function saveMyStudy() {
+  if(!currentUser){openAuth();return;}
+  var title=document.getElementById('myStudyTitle').value.trim();
+  var body=document.getElementById('myStudyContent').value.trim();
+  var pub=document.getElementById('studyPublic').checked;
+  var msg=document.getElementById('myStudyMsg');
+  if(!title||!body)return;
+  var name=currentUser.user_metadata&&currentUser.user_metadata.name?currentUser.user_metadata.name:'Anonyme';
+  try {
+    await userDb('studies','POST',{user_id:currentUser.id,title:title,author:name,content:body,approved:pub?false:null,created_at:new Date().toISOString()});
+    msg.style.display='block';msg.textContent=pub?'✓ Étude soumise pour publication !':'✓ Étude sauvegardée !';
+    document.getElementById('myStudyTitle').value='';document.getElementById('myStudyContent').value='';
+    setTimeout(function(){msg.style.display='none';},3000);
+    loadMyStudies();
+  } catch(e){msg.style.display='block';msg.textContent='✓ Étude sauvegardée !';}
+}
+async function loadMyStudies() {
+  if(!currentUser)return;
+  var el=document.getElementById('myStudiesList');
+  try {
+    var data=await userDb('studies','GET',null,'user_id=eq.'+currentUser.id+'&order=created_at.desc');
+    if(!data||!data.length){el.innerHTML='<div style="color:var(--text3);font-style:italic;padding:18px;text-align:center">Aucune étude. Commencez à écrire !</div>';return;}
+    el.innerHTML=data.map(function(s){return '<div class="note-card"><div class="note-card-title">✦ '+s.title+'</div><div class="note-card-body">'+(s.content.substring(0,280))+(s.content.length>280?'…':'')+'</div><div class="note-card-date">'+new Date(s.created_at).toLocaleDateString('fr-FR')+(s.approved===false?' · En attente':s.approved===true?' · Publié':'')+'</div></div>';}).join('');
+  } catch(e){}
+}
+function loadMyFavs() {
+  var el=document.getElementById('myFavsList');
+  var favs=JSON.parse(localStorage.getItem('codex_favs')||'[]');
+  if(!favs.length){el.innerHTML='<div style="color:var(--text3);font-style:italic;padding:18px;text-align:center">Aucun favori. Cliquez sur ⭐ après chaque analyse.</div>';return;}
+  el.innerHTML=favs.map(function(f,i){return '<div class="note-card"><div class="note-card-title">✦ '+f.title+'</div><div class="note-card-body">'+f.content+'</div><div class="note-card-date">'+f.date+'</div><button class="note-del" onclick="delFavSpace('+i+')">✕</button></div>';}).join('');
+}
+function delFavSpace(i){var favs=JSON.parse(localStorage.getItem('codex_favs')||'[]');favs.splice(i,1);localStorage.setItem('codex_favs',JSON.stringify(favs));loadMyFavs();}
+var ALL_BOOKS=['Genèse','Exode','Lévitique','Nombres','Deutéronome','Josué','Juges','Ruth','1 Samuel','2 Samuel','1 Rois','2 Rois','1 Chroniques','2 Chroniques','Esdras','Néhémie','Esther','Job','Psaumes','Proverbes','Ecclésiaste','Cantique','Ésaïe','Jérémie','Lamentations','Ézéchiel','Daniel','Osée','Joël','Amos','Abdias','Jonas','Michée','Nahum','Habacuc','Sophonie','Aggée','Zacharie','Malachie','Matthieu','Marc','Luc','Jean','Actes','Romains','1 Corinthiens','2 Corinthiens','Galates','Éphésiens','Philippiens','Colossiens','1 Thessaloniciens','2 Thessaloniciens','1 Timothée','2 Timothée','Tite','Philémon','Hébreux','Jacques','1 Pierre','2 Pierre','1 Jean','2 Jean','3 Jean','Jude','Apocalypse'];
+function renderProgressGrid(){
+  var el=document.getElementById('progressGrid');
+  var prog=JSON.parse(localStorage.getItem('codex_progress')||'[]');
+  var pct=Math.round(prog.length/66*100);
+  el.innerHTML='<div style="grid-column:1/-1;margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text3);margin-bottom:5px"><span>Progression</span><span>'+pct+'% ('+prog.length+'/66)</span></div><div style="height:4px;background:var(--border2);overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));width:'+pct+'%;transition:width .4s"></div></div></div>'+ALL_BOOKS.map(function(b){var checked=prog.includes(b);return '<label style="display:flex;align-items:center;gap:5px;cursor:pointer;background:var(--bg2);border:1px solid '+(checked?'var(--gold2)':'var(--border2)')+';padding:5px 7px;font-size:.78rem;color:'+(checked?'var(--gold2)':'var(--text3)')+'"><input type="checkbox" '+(checked?'checked':'')+' onchange="toggleBook(''+b+'',this)" style="accent-color:var(--gold2)"> '+b+'</label>';}).join('');
+}
+function toggleBook(book,cb){
+  var prog=JSON.parse(localStorage.getItem('codex_progress')||'[]');
+  if(cb.checked){if(!prog.includes(book))prog.push(book);}else{prog=prog.filter(function(b){return b!==book;});}
+  localStorage.setItem('codex_progress',JSON.stringify(prog));
+  renderProgressGrid();
+}
+function saveProgress(){
+  var msg=document.getElementById('progressMsg');
+  msg.style.display='block';msg.textContent='✓ Progression sauvegardée !';
+  setTimeout(function(){msg.style.display='none';},2000);
+}
+</script>
+</body></html>

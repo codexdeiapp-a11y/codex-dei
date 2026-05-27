@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Études Bibliques — CODEX DEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-canvas"></div><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️</button><div class="search-counter" id="searchCounter"><span id="counterText">10/10 🔍</span><div class="counter-bar"><div class="counter-bar-fill" id="counterFill" style="width:100%"></div></div></div><header><div style="font-family:Share Tech Mono,monospace;font-size:.66rem;color:var(--gold);letter-spacing:6px;margin-bottom:9px">✦ Encyclopédie Biblique Universelle ✦</div><a href="index.html" style="text-decoration:none"><div class="site-title">CODEX DEI</div></a><div class="site-subtitle">Toute la Bible · Analysée · Décodée · Révélée</div><div class="header-ornament"><span class="orn-line"></span><span style="color:var(--gold)">✦</span><span class="orn-line"></span></div></header><div class="vdj-banner"><span class="vdj-label" id="vdjLabel">✦ VERSET DU JOUR</span><span class="vdj-text" id="vdjText">Chargement...</span><span class="vdj-ref" id="vdjRef"></span><a class="vdj-btn" href="index.html">Analyser ✦</a></div><nav class="main-nav"><div class="nav-links">
+<a class="nav-item" href="index.html">🔍 Recherche</a><a class="nav-item" href="mots.html">📖 Mots</a><a class="nav-item" href="nombres.html">🔢 Nombres</a><a class="nav-item" href="livres.html">📚 Livres</a><a class="nav-item" href="personnages.html">👤 Personnages</a><a class="nav-item" href="themes.html">🌿 Thèmes</a><a class="nav-item" href="correspondances.html">⚡ Correspondances</a><a class="nav-item" href="propheties.html">🎯 Prophéties</a><a class="nav-item" href="langues.html">א Langues</a><a class="nav-item" href="chronologie.html">📅 Chronologie</a><a class="nav-item" href="carte.html">🗺️ Carte</a><a class="nav-item" href="priere.html">🙏 Prière IA</a><a class="nav-item" href="lecture.html">📋 Plan Lecture</a><a class="nav-item" href="comparaison.html">🔀 Comparaison</a><a class="nav-item" href="favoris.html">⭐ Favoris</a><a class="nav-item special" href="image-du-jour.html">📸 Image du Jour</a><a class="nav-item" href="forum.html">💬 Forum</a><a class="nav-item" href="mon-espace.html">👤 Mon Espace</a><a class="nav-item" href="etudes.html" class="nav-item active">📚 Études</a><a class="nav-item" href="temoignages.html">💬 Témoignages</a><a class="nav-item" href="apropos.html">ℹ️ À propos</a><a class="nav-item special" href="soutenir.html">💛 Soutenir</a><a class="nav-item" href="contact.html">✉️ Contact</a>
+</div></nav>
+<div class="main-content"><div class="sec-title">Études Bibliques</div>
+<div class="sec-desc">Études approfondies par l'IA · Partagez vos propres études</div>
+<div class="panel"><div class="panel-accent"></div>
+  <div class="panel-title">✦ Générer une étude complète</div>
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="studyTopic" placeholder="Ex: La foi selon Abraham, Le pardon dans les Psaumes, La lumière en Jean..." onkeydown="if(event.key==='Enter')generateStudy()">
+    <button class="search-btn" onclick="generateStudy()">→</button>
+  </div>
+  <div class="chips">
+    <button class="chip" onclick="setStudy('La foi — de Abraham a Hebreux 11')">La Foi</button>
+    <button class="chip" onclick="setStudy('Le pardon selon Jesus — Matthieu 18 et Luc 15')">Le Pardon</button>
+    <button class="chip" onclick="setStudy('La priere — modeles bibliques du Notre Pere aux Psaumes')">La Prière</button>
+    <button class="chip" onclick="setStudy('L amour agape dans 1 Corinthiens 13 et 1 Jean')">L'Amour</button>
+    <button class="chip" onclick="setStudy('La resurrection — preuves et signification theologique')">La Résurrection</button>
+    <button class="chip" onclick="setStudy('Le Saint-Esprit dans la Bible — AT et NT')">Le Saint-Esprit</button>
+  </div>
+</div>
+<div id="studyAIResult"></div>
+<hr class="gold-div" style="margin:22px 0">
+<div class="panel"><div class="panel-accent"></div>
+  <div class="panel-title">📖 Partager votre étude</div>
+  <input type="text" class="search-input" id="studyTitle" placeholder="Titre de votre étude..." style="margin-bottom:8px">
+  <input type="text" class="search-input" id="studyAuthor" placeholder="Votre prénom et ville" style="margin-bottom:8px">
+  <textarea class="txt-area" id="studyContent" placeholder="Partagez votre étude, vos découvertes, vos références bibliques..." style="min-height:130px"></textarea>
+  <button class="action-btn full" onclick="submitStudy()" style="margin-top:9px">✦ Partager mon étude ✦</button>
+  <div id="studyMsg" style="margin-top:7px;color:var(--gold);font-style:italic;font-size:.86rem;display:none"></div>
+</div>
+<div id="studiesList" style="margin-top:18px"></div></div>
+<footer><p>CODEX DEI — Encyclopédie Biblique Universelle</p><p style="margin-top:6px;font-size:.76rem;opacity:.55">« Au commencement était la Parole » — Jean 1:1 · <a href="mailto:codexdei.app@gmail.com" style="color:var(--gold);text-decoration:none">codexdei.app@gmail.com</a></p></footer><div id="authModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:26px;width:100%;max-width:390px;position:relative;max-height:92vh;overflow-y:auto;box-sizing:border-box">
+    <button onclick="closeAuth()" style="position:absolute;top:9px;right:12px;background:transparent;border:none;color:#6a5838;font-size:1.15rem;cursor:pointer">✕</button>
+    <div style="text-align:center;font-size:1.7rem;margin-bottom:11px">✦</div>
+    <div style="display:flex;margin-bottom:16px;border-bottom:1px solid rgba(184,134,11,0.2)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;background:transparent;border:none;border-bottom:2px solid #d4a017;color:#d4a017;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Se connecter</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:#6a5838;padding:7px;font-family:serif;font-size:.9rem;cursor:pointer;font-style:italic">Créer un compte</button>
+    </div>
+    <div id="authLoginForm">
+      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="loginPwd" type="password" placeholder="Mot de passe" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="loginErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="loginOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;margin-bottom:6px;text-transform:uppercase">✦ Se connecter ✦</button>
+      <button onclick="doMagicLink()" style="width:100%;background:transparent;border:1px solid rgba(184,134,11,0.25);color:#a89878;padding:9px;font-family:serif;font-size:.86rem;cursor:pointer;font-style:italic">📧 Lien magique</button>
+    </div>
+    <div id="authRegForm" style="display:none">
+      <input id="regName" type="text" placeholder="Prénom" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regEmail" type="email" placeholder="Email" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif;font-style:italic">
+      <input id="regPwd" type="password" placeholder="Mot de passe (min. 6 caractères)" style="width:100%;background:#0c0a07;border:1px solid rgba(184,134,11,0.3);color:#e8dcc8;font-size:.96rem;padding:10px 12px;outline:none;margin-bottom:8px;box-sizing:border-box;font-family:serif" onkeydown="if(event.key==='Enter')doRegister()">
+      <div id="regErr" style="color:#e08070;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <div id="regOk" style="color:#d4a017;font-size:.82rem;margin-bottom:6px;display:none"></div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#8b6914,#d4a017);color:#0c0a07;border:none;padding:11px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase">✦ Créer mon compte ✦</button>
+    </div>
+  </div>
+</div><div class="user-bar" id="userBar">
+  <div id="guestBar"><button class="user-btn" onclick="openAuth()">👤 Mon espace</button></div>
+  <div id="loggedBar" style="display:none;align-items:center;gap:5px">
+    <a class="user-btn" href="mon-espace.html">📖 Mon espace</a>
+    <div class="user-avatar" id="userAvatar" onclick="window.location='mon-espace.html'">?</div>
+    <button class="user-btn" onclick="doLogout()" style="padding:5px 9px;font-size:.72rem">Déco.</button>
+  </div>
+</div>
+<div id="donPopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#141009;border:2px solid #d4a017;padding:24px;width:100%;max-width:380px;text-align:center;position:relative">
+    <button onclick="closeDonPopup()" style="position:absolute;top:8px;right:11px;background:transparent;border:none;color:#6a5838;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-size:2rem;margin-bottom:8px">🙏</div>
+    <div id="donPopupCounter" style="font-family:Share Tech Mono,monospace;font-size:.68rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px;opacity:.7"></div>
+    <div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;letter-spacing:2px;margin-bottom:6px">Ce site vit grâce à vous</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+      <a href="https://paypal.me/cadexdi/2" target="_blank" class="don-amount" onclick="closeDonPopup()">2 CHF</a>
+      <a href="https://paypal.me/cadexdi/5" target="_blank" class="don-amount" onclick="closeDonPopup()">5 CHF</a>
+      <a href="https://paypal.me/cadexdi/10" target="_blank" class="don-amount" onclick="closeDonPopup()">10 CHF</a>
+    </div>
+    <a href="https://paypal.me/cadexdi" target="_blank" onclick="closeDonPopup()" style="display:block;background:linear-gradient(135deg,#003087,#009cde);color:white;padding:10px;font-family:Cinzel,serif;font-size:.84rem;font-weight:600;text-decoration:none;margin-bottom:8px;text-align:center">☆ Don libre ☆</a>
+    <button onclick="closeDonPopup()" style="background:transparent;border:none;color:var(--text3);font-size:.76rem;font-style:italic;cursor:pointer;text-decoration:underline">Continuer sans donner</button>
+  </div>
+</div>
+<div id="limitOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box">
+  <div style="background:#0c0a07;border:2px solid #d4a017;padding:26px;max-width:390px;width:100%;text-align:center">
+    <div style="font-size:2.4rem;margin-bottom:9px">🔐</div>
+    <div style="font-family:Cinzel,serif;color:#d4a017;font-size:1.1rem;letter-spacing:2px;margin-bottom:7px">Limite quotidienne atteinte</div>
+    <div style="color:var(--text3);font-style:italic;font-size:.88rem;line-height:1.75;margin-bottom:15px">Vos 10 analyses gratuites sont utilisées. Passez à Premium pour un accès <strong style="color:var(--gold3)">illimité</strong>.</div>
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=app.codexdei','_blank');closeLimitOverlay()" style="background:linear-gradient(135deg,#1a73e8,#0d47a1);color:white;padding:12px;font-family:Cinzel,serif;font-size:.86rem;font-weight:600;width:100%;border:none;cursor:pointer;margin-bottom:7px">S'abonner Google Play — 2.99€/mois</button>
+    <button onclick="closeLimitOverlay()" style="background:transparent;border:none;color:var(--text3);font-size:.78rem;font-style:italic;cursor:pointer;text-decoration:underline">Revenir demain (gratuit)</button>
+  </div>
+</div>
+<div class="upgrade-banner" id="upgradeBanner">
+  <div class="upgrade-text">🔍 <strong id="remainingText">3 analyses</strong> restantes</div>
+  <button class="upgrade-btn" onclick="showLimitOverlay()">⭐ Premium — 2.99€/mois</button>
+  <button onclick="document.getElementById('upgradeBanner').classList.remove('show')" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1rem">✕</button>
+</div>
+<script src="js/core.js"></script><script src="js/auth.js"></script><script src="js/layout.js"></script>
+<script>
+function setStudy(t){document.getElementById('studyTopic').value=t;generateStudy();}
+function generateStudy(){
+  var topic=document.getElementById('studyTopic').value.trim();
+  if(!topic)return;
+  if(!checkSearchLimit())return;
+  callClaude('Genere une etude biblique complete et approfondie sur : '+topic+'\n\n### Introduction\n### 1. Contexte biblique et historique\n### 2. Textes cles avec references et analyse\n### 3. Themes theologiques majeurs\n### 4. Correspondances dans toute la Bible\n### 5. Application pratique et spirituelle\n### 6. Questions de meditation\n### 7. Conclusion et promesse biblique\n\nSois profond, pedagogique et inspirant.','studyAIResult','Etude : '+topic);
+  checkDonPopup();
+}
+async function submitStudy(){
+  var title=document.getElementById('studyTitle').value.trim();
+  var author=document.getElementById('studyAuthor').value.trim();
+  var content=document.getElementById('studyContent').value.trim();
+  var msg=document.getElementById('studyMsg');
+  if(!title||!content){msg.style.display='block';msg.textContent='Veuillez remplir le titre et le contenu.';return;}
+  try{
+    await sbFetch('studies','POST',{title:title,author:author||'Anonyme',content:content,approved:false,created_at:new Date().toISOString()});
+    msg.style.display='block';msg.textContent='✓ Étude soumise ! Elle sera publiée après validation.';
+    document.getElementById('studyTitle').value='';document.getElementById('studyAuthor').value='';document.getElementById('studyContent').value='';
+    loadStudies();
+  }catch(e){msg.style.display='block';msg.textContent='✓ Merci ! Votre étude a été reçue.';}
+}
+async function loadStudies(){
+  var el=document.getElementById('studiesList');
+  try{
+    var data=await sbFetch('studies','GET',null,'approved=eq.true&order=created_at.desc&limit=20');
+    if(!data||!data.length){el.innerHTML='<div style="text-align:center;padding:28px;color:var(--text3);font-style:italic">Aucune étude partagée pour l'instant. Soyez le premier !</div>';return;}
+    el.innerHTML=data.map(function(s){return '<div class="testi-card"><div style="font-family:Cinzel,serif;color:var(--gold2);font-size:.95rem;margin-bottom:7px">✦ '+s.title+'</div><div class="testi-text">'+s.content+'</div><div class="testi-author">— '+s.author+' · '+new Date(s.created_at).toLocaleDateString('fr-FR')+'</div></div>';}).join('');
+  }catch(e){el.innerHTML='';}
+}
+window.addEventListener('DOMContentLoaded',loadStudies);
+</script>
+</body></html>
