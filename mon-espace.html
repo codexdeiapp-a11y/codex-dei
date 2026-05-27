@@ -209,7 +209,7 @@ function loadMyFavs() {
   var el = document.getElementById('myFavsList');
   var favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
   if (!favs.length) {
-    el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:28px;text-align:center"><div style="font-size:1.8rem;margin-bottom:8px">⭐</div>Aucun favori pour l'instant.<br>Après chaque analyse, cliquez sur ⭐ Sauvegarder.</div>';
+    el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:28px;text-align:center"><div style="font-size:1.8rem;margin-bottom:8px">&#11088;</div>Aucun favori pour le moment.<br>Cliquez sur Sauvegarder apres chaque analyse.</div>';
     return;
   }
   el.innerHTML = favs.map(function(f, i) {
