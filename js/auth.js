@@ -4,7 +4,6 @@ var userToken = null;
 
 // Init session on load
 window.addEventListener('DOMContentLoaded', function() {
-  var m = document.getElementById('authModal'); if(m) m.style.display='none';
   var stored = localStorage.getItem('sb_session');
   if (stored) {
     try {
@@ -22,7 +21,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 function openAuth() {
   var modal = document.getElementById('authModal');
-  if (modal) modal.style.display = 'flex';
+  if (modal) { modal.style.display = 'flex'; modal.style.alignItems = 'center'; modal.style.justifyContent = 'center'; }
 }
 
 function closeAuth() {
@@ -142,7 +141,7 @@ function updateUserBar() {
   if (currentUser) {
     var name = currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || '?';
     if (guest) guest.style.display = 'none';
-    if (logged) logged.style.display = 'flex';
+    if (logged) { logged.style.display = 'flex'; logged.style.alignItems = 'center'; logged.style.gap = '5px'; }
     if (avatar) { avatar.textContent = name[0].toUpperCase(); avatar.title = name; }
   } else {
     if (guest) guest.style.display = 'block';
