@@ -206,12 +206,67 @@ async function loadMyStudies() {
   } catch(e){}
 }
 function loadMyFavs() {
-  var el=document.getElementById('myFavsList');
-  var favs=JSON.parse(localStorage.getItem('codex_favs')||'[]');
-  if(!favs.length){el.innerHTML='<div style="color:var(--text3);font-style:italic;padding:18px;text-align:center">Aucun favori. Cliquez sur ⭐ après chaque analyse.</div>';return;}
-  el.innerHTML=favs.map(function(f,i){return '<div class="note-card"><div class="note-card-title">✦ '+f.title+'</div><div class="note-card-body">'+f.content+'</div><div class="note-card-date">'+f.date+'</div><button class="note-del" onclick="delFavSpace('+i+')">✕</button></div>';}).join('');
+  var el = document.getElementById('myFavsList');
+  var favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+  if (!favs.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-style:italic;padding:28px;text-align:center"><div style="font-size:1.8rem;margin-bottom:8px">⭐</div>Aucun favori pour l'instant.<br>Après chaque analyse, cliquez sur ⭐ Sauvegarder.</div>';
+    return;
+  }
+  el.innerHTML = favs.map(function(f, i) {
+    var hasFullContent = f.fullContent ? true : false;
+    return '<div class="note-card" style="cursor:pointer;border-left:3px solid var(--gold)" onclick="openFav(' + i + ')">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">' +
+      '<div style="flex:1">' +
+      '<div class="note-card-title">✦ ' + f.title + '</div>' +
+      '<div class="note-card-body" style="margin-top:5px">' + f.content + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-top:7px">' +
+      '<div class="note-card-date">' + f.date + '</div>' +
+      (hasFullContent ? '<span style="font-size:.72rem;color:var(--gold);font-family:Share Tech Mono,monospace;letter-spacing:1px">✓ ANALYSE COMPLÈTE</span>' : '<span style="font-size:.72rem;color:var(--text3);font-family:Share Tech Mono,monospace;letter-spacing:1px">aperçu</span>') +
+      '</div></div>' +
+      '<button class="note-del" onclick="delFavSpace(event,' + i + ')">✕</button>' +
+      '</div></div>';
+  }).join('');
 }
-function delFavSpace(i){var favs=JSON.parse(localStorage.getItem('codex_favs')||'[]');favs.splice(i,1);localStorage.setItem('codex_favs',JSON.stringify(favs));loadMyFavs();}
+
+function openFav(i) {
+  var favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+  var fav = favs[i];
+  if (!fav) return;
+  // Show the result directly without re-searching
+  var el = document.getElementById('favResult');
+  if (!el) {
+    // Create result div if not exists
+    var container = document.getElementById('myFavsList');
+    var resultDiv = document.createElement('div');
+    resultDiv.id = 'favResult';
+    resultDiv.style.marginTop = '16px';
+    container.parentNode.insertBefore(resultDiv, container.nextSibling);
+    el = resultDiv;
+  }
+  if (fav.fullContent) {
+    // Show full saved analysis
+    el.innerHTML = '<div class="ai-result">' +
+      '<div class="result-header">' +
+      '<span style="color:var(--gold)">✦</span>' +
+      '<span class="result-label">' + fav.title + '</span>' +
+      '<span style="margin-left:auto;font-size:.72rem;color:var(--gold);font-family:Share Tech Mono,monospace">SAUVEGARDÉ LE ' + fav.date + '</span>' +
+      '</div>' +
+      '<div class="result-body">' + fav.fullContent + '</div>' +
+      '</div>';
+    el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  } else {
+    // No full content saved - redirect to search
+    window.location = 'index.html?q=' + encodeURIComponent(fav.title);
+  }
+}
+
+function delFavSpace(e, i) {
+  e.stopPropagation();
+  var favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+  favs.splice(i, 1);
+  localStorage.setItem('codex_favs', JSON.stringify(favs));
+  loadMyFavs();
+}
 var ALL_BOOKS=['Genèse','Exode','Lévitique','Nombres','Deutéronome','Josué','Juges','Ruth','1 Samuel','2 Samuel','1 Rois','2 Rois','1 Chroniques','2 Chroniques','Esdras','Néhémie','Esther','Job','Psaumes','Proverbes','Ecclésiaste','Cantique','Ésaïe','Jérémie','Lamentations','Ézéchiel','Daniel','Osée','Joël','Amos','Abdias','Jonas','Michée','Nahum','Habacuc','Sophonie','Aggée','Zacharie','Malachie','Matthieu','Marc','Luc','Jean','Actes','Romains','1 Corinthiens','2 Corinthiens','Galates','Éphésiens','Philippiens','Colossiens','1 Thessaloniciens','2 Thessaloniciens','1 Timothée','2 Timothée','Tite','Philémon','Hébreux','Jacques','1 Pierre','2 Pierre','1 Jean','2 Jean','3 Jean','Jude','Apocalypse'];
 function renderProgressGrid(){
   var el=document.getElementById('progressGrid');

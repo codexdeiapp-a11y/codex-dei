@@ -63,7 +63,7 @@ async function callClaude(prompt, targetId, title) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 2000,
+        max_tokens: 1000,
         system: SYS,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -113,13 +113,19 @@ function copyText(btn) {
 
 // Favoris
 function saveFav(title, btn) {
-  const content = btn.closest('.ai-result').querySelector('.result-body').innerText.substring(0, 200) + '…';
-  let favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
-  favs.unshift({ title, content, date: new Date().toLocaleDateString('fr-FR'), id: Date.now() });
+  var resultBody = btn.closest('.ai-result').querySelector('.result-body');
+  var preview = resultBody.innerText.substring(0, 200) + '…';
+  var fullContent = resultBody.innerHTML; // Save full HTML content
+  var favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+  // Check if already saved
+  var exists = favs.findIndex(function(f) { return f.title === title; });
+  if (exists >= 0) favs.splice(exists, 1); // Remove old version
+  favs.unshift({ title: title, content: preview, fullContent: fullContent, date: new Date().toLocaleDateString('fr-FR'), id: Date.now() });
   if (favs.length > 50) favs.pop();
   localStorage.setItem('codex_favs', JSON.stringify(favs));
   btn.textContent = '✓ Sauvegardé';
   btn.style.color = 'var(--gold2)';
+  btn.style.borderColor = 'var(--gold2)';
 }
 
 // Calendrier liturgique
