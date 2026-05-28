@@ -902,5 +902,206 @@ document.getElementById('mapContainer').addEventListener('click', function(e) {
   }
 });
 </script>
+
+
+<script>
+// ═══ MIGRATIONS BIBLIQUES ═══
+var MIGRATIONS = [
+  {title:"Adam & Eve — L Eden et la Chute",era:"~4000 AV. J.-C.",ref:"Genese 2-4",color:"#40c060",steps:[
+    {x:720,y:195,label:"Eden (Mesopotamie)",era:"Creation",desc:"Dieu cree Adam du limon de la terre. Le Jardin d Eden est arrose par 4 fleuves : Pishon, Guihon, Tigre, Euphrate — localise en Mesopotamie (Irak actuel). La vie parfaite avec Dieu.",ref:"Gn 2:10-14"},
+    {x:650,y:230,label:"Expulsion vers l Est",era:"La Chute",desc:"Apres la faute, Adam et Eve sont chasses du Jardin. Un cherubin garde l entree avec un glaive flamboyant. Ils s etablissent a l est de l Eden. Cain et Abel naissent.",ref:"Gn 3:23-24"},
+    {x:590,y:260,label:"Pays de Nod",era:"Cain",desc:"Apres le meurtre d Abel, Cain est banni et s installe au pays de Nod, a l orient d Eden. Les descendants humains se repandent progressivement sur toute la terre.",ref:"Gn 4:16"}
+  ]},
+  {title:"Noe & l Arche — Le Deluge",era:"~2350 AV. J.-C.",ref:"Genese 6-9",color:"#4080d0",steps:[
+    {x:680,y:175,label:"Construction de l Arche",era:"Preparation",desc:"Dieu ordonne a Noe de construire une arche de 300 coudees (~135m). 120 ans de construction. Sa famille (8 personnes) et 2 de chaque espece embarquent.",ref:"Gn 6:14-22"},
+    {x:660,y:155,label:"Mont Ararat",era:"L Arche s echoue",desc:"40 jours de pluie + 150 jours d eau. L arche s arrete sur les monts Ararat (Turquie/Armenie, 5165m). Corbeau et colombe envoyes. La colombe revient avec un rameau d olivier.",ref:"Gn 8:4"},
+    {x:700,y:190,label:"Plaine de Shinar",era:"Descente et Alliance",desc:"Noe, ses 3 fils (Sem, Cham, Japhet) descendent. Alliance avec Dieu symbolisee par l arc-en-ciel. Les peuples se repandent depuis Shinar (Mesopotamie).",ref:"Gn 9-10"},
+    {x:720,y:210,label:"Tour de Babel",era:"Dispersion",desc:"Les hommes batissent la Tour de Babel a Babylone. Dieu confond les langues. Dispersion des 70 nations a travers le monde. Origine de toutes les langues.",ref:"Gn 11:1-9"}
+  ]},
+  {title:"Abraham — Pere des Croyants",era:"~2000 AV. J.-C.",ref:"Genese 12-25",color:"#d4a017",steps:[
+    {x:790,y:252,label:"Ur des Chaldeens",era:"Depart",desc:"Abraham (Abram) nait a Ur des Chaldeens (sud Irak actuel). Dieu l appelle : Quitte ton pays, ta parente. Il obeeit a 75 ans, sans savoir ou il va. Foi totale.",ref:"Gn 12:1-4"},
+    {x:668,y:165,label:"Harran",era:"Etape",desc:"Abraham s arrete a Harran (Turquie actuelle) avec son pere Terah. Terah meurt a 205 ans. Abraham repart vers Canaan sur ordre divin.",ref:"Gn 11:31-12:4"},
+    {x:520,y:205,label:"Sichem (Naplouse)",era:"Premiere promesse",desc:"Abraham entre en Canaan. A Sichem, Dieu apparait : C est a ta descendance que je donnerai ce pays. Premier autel construit. Le pays est habite par les Cananéens.",ref:"Gn 12:6-7"},
+    {x:430,y:295,label:"Egypte",era:"Sejour temporaire",desc:"Famine en Canaan. Abraham descend en Egypte. Episode de Sara avec le Pharaon. Il repart enrichi en troupeaux, argent et or.",ref:"Gn 12:10-20"},
+    {x:530,y:238,label:"Hebron / Mamre",era:"Alliance",desc:"Abraham s installe a Hebron pres du chene de Mamre. Dieu conclut l Alliance : Je te donnerai ce pays, du fleuve d Egypte a l Euphrate.",ref:"Gn 15:18-21"},
+    {x:532,y:218,label:"Moriah (Jerusalem)",era:"Sacrifice d Isaac",desc:"Dieu ordonne a Abraham d offrir Isaac. Mont Moriah = futur emplacement du Temple. A la derniere seconde, l ange arrete la main. Un belier est sacrifie. Test de foi supreme.",ref:"Gn 22:2-14"}
+  ]},
+  {title:"Jacob & Joseph — Egypte",era:"~1876 AV. J.-C.",ref:"Genese 37-50",color:"#e08030",steps:[
+    {x:530,y:218,label:"Hebron",era:"Depart de Joseph",desc:"Les 10 freres de Joseph, jaloux de sa tunique et ses reves, le vendent a des marchands pour 20 pieces d argent. Joseph emmene en Egypte comme esclave.",ref:"Gn 37:28"},
+    {x:438,y:270,label:"Egypte — Memphis",era:"Joseph esclave",desc:"Joseph achete par Potiphar. Emprisonne injustement. Interprete les reves des prisonniers, puis ceux de Pharaon : 7 vaches grasses et 7 maigres.",ref:"Gn 39-41"},
+    {x:438,y:260,label:"Vice-roi d Egypte",era:"Elevation",desc:"Joseph nomme vice-roi a 30 ans. Il stocke du ble pendant 7 ans d abondance pour les 7 ans de famine. Sa sagesse sauve l Egypte et les peuples voisins.",ref:"Gn 41:40-46"},
+    {x:438,y:252,label:"Terre de Gosen",desc:"Jacob descend avec 70 personnes dans la terre de Gosen (delta du Nil). Apres la mort de Jacob et Joseph, les Hebreux prosperent et multiplient. Debut de la nation.",era:"Installation",ref:"Gn 46:27, 47:27"}
+  ]},
+  {title:"L Exode — Moise libere Israel",era:"~1446 AV. J.-C.",ref:"Exode 1-40",color:"#e03030",steps:[
+    {x:438,y:260,label:"Egypte — Esclavage",era:"400 ans",desc:"400 ans d esclavage. Les Hebreux construisent Pitom et Ramses. Pharaon ordonne de noyer les bebes hebreux. Moise sauve dans un panier de roseaux et eleve a la cour.",ref:"Ex 1-2"},
+    {x:495,y:318,label:"Desert de Madian",era:"Moise en exil",desc:"Moise fuit en Madian. Epouse Tsipora. 40 ans de berger. Rencontre Dieu au buisson ardent du Mont Horeb. Appel divin : Va, delivre mon peuple.",ref:"Ex 2-3"},
+    {x:438,y:260,label:"Retour en Egypte — 10 Plaies",era:"Liberation",desc:"10 plaies s abattent sur l Egypte. Institution de la Paque. Pharaon libere 600 000 hommes + familles apres la mort des premiers-nes.",ref:"Ex 7-12"},
+    {x:460,y:278,label:"Passage de la Mer Rouge",era:"Miracle",desc:"Pharaon poursuit avec 600 chars. Dieu separe la Mer Rouge. Israel passe a sec. L armee egyptienne englouti. Cantique de Moise : L Eternel est ma force et mon cantique.",ref:"Ex 14:21-31"},
+    {x:498,y:325,label:"Mont Sinai",era:"Loi Divine",desc:"3 mois de marche. Dieu descend sur le Sinai dans le feu et la fumee. Donne les 10 Commandements a Moise. Alliance avec Israel. Construction du Tabernacle.",ref:"Ex 19-20"},
+    {x:525,y:225,label:"Refus d entrer — 40 ans",era:"Errance",desc:"Les 12 espions rapportent : geants invincibles. Le peuple refuse d entrer. Dieu condamne cette generation a 40 ans d errance. Seuls Caleb et Josue survivront.",ref:"Nb 13-14"}
+  ]},
+  {title:"Josue — Conquete de Canaan",era:"~1406 AV. J.-C.",ref:"Josue 1-24",color:"#50a050",steps:[
+    {x:543,y:275,label:"Traversee du Jourdain",era:"Entree en Canaan",desc:"Josue dirige Israel. Les pretres portant l Arche entrent dans le Jourdain qui s arrete miraculeusement. Tout Israel passe a sec. 12 pierres commemoratives.",ref:"Jos 3-4"},
+    {x:548,y:268,label:"Jericho",era:"Premiere victoire",desc:"7 jours, 7 pretres, 7 trompettes. Au 7e jour, 7 fois autour. Les murailles s effondrent au son du shofar. Rahab et sa famille sont sauvees.",ref:"Jos 6"},
+    {x:528,y:255,label:"Centre — Ai",era:"Conquete du centre",desc:"Conquete d Ai. Alliance avec les Gabaonites. Josue lit la Loi sur les monts Ebal et Garizim. Le soleil s arrete pendant la bataille de Gabaon.",ref:"Jos 7-10"},
+    {x:560,y:210,label:"Nord — Hazor",era:"Conquete du Nord",desc:"Coalition de rois du nord sous Jabin de Hazor. Josue les defait. Hazor brulee. La totalite du pays conquis apres 7 ans de campagne.",ref:"Jos 11"},
+    {x:535,y:240,label:"Partage des 12 Tribus",era:"Fin de la conquete",desc:"Le pays est partage entre les 12 tribus. Jerusalem non encore conquise. Les Levites n ont pas de territoire. Josue meurt a 110 ans : Choisissez aujourd hui qui vous servirez.",ref:"Jos 13-24"}
+  ]},
+  {title:"L Exil a Babylone — 70 ans",era:"605-538 AV. J.-C.",ref:"2 Rois 25, Daniel",color:"#a050a0",steps:[
+    {x:528,y:258,label:"Jerusalem assiégée",era:"605-597 av. J.-C.",desc:"Nabuchodonosor attaque Jerusalem 3 fois. 605 : premiere deportation (dont Daniel). 597 : deportation du roi Joiakin et 10 000 habitants.",ref:"2 R 24:1-15"},
+    {x:528,y:258,label:"Temple detruit",era:"586 av. J.-C.",desc:"Sedécias se revolte. Nabuchodonosor detruit Jerusalem et le Temple de Salomon. Les murs rases. Deportation massive a Babylone. Les torches de Dieu s eteignent.",ref:"2 R 25:8-12"},
+    {x:748,y:218,label:"Babylone — 70 ans d exil",era:"586-538 av. J.-C.",desc:"70 ans d exil (prophetie de Jeremie). Daniel devient conseiller du roi. Ezechiel prophetise le retour. Psaume 137 : Au bord des fleuves de Babylone nous pleurions.",ref:"Jr 25:11, Dan 1-6"},
+    {x:840,y:218,label:"Decret de Cyrus",era:"538 av. J.-C.",desc:"Cyrus de Perse libere les Juifs. Ainsi parle Cyrus : l Eternel m a donne tous les royaumes, qu il monte a Jerusalem. Prophetie d Esaie accomplie 150 ans avant.",ref:"Esd 1:1-4"},
+    {x:528,y:258,label:"Retour a Jerusalem",era:"538-445 av. J.-C.",desc:"Zorobabel mene 50 000 Juifs au retour. 2e Temple reconstruit (516). Esdras ramene la Torah. Nehemie rebatit les murs de Jerusalem en 52 jours.",ref:"Esd 1-6, Ne 2-6"}
+  ]},
+  {title:"Paul — Voyages Missionnaires",era:"47-67 AP. J.-C.",ref:"Actes 13-28",color:"#5080e0",steps:[
+    {x:610,y:180,label:"Antioche de Syrie",era:"1er voyage (47)",desc:"Paul et Barnabe envoyes en mission par l Eglise d Antioche. Premier evangelisation organisee du monde mediterraneen. Paul : Apotre des Gentils.",ref:"Ac 13:1-3"},
+    {x:370,y:185,label:"Chypre et Asie Mineure",era:"1er voyage",desc:"Chypre, Antioche de Pisidie, Iconium, Lystres, Derbe. Guerison d un boiteux. Lapidation de Paul a Lystres. Retour en confirmant les Eglises.",ref:"Ac 13-14"},
+    {x:275,y:175,label:"Macedoine — Philippes",era:"2e voyage (49-52)",desc:"Vision : Viens en Macedoine. Paul en Europe pour la premiere fois. Lydie baptisee. Prison miraculeuse ouverte. Evangelisation de Thessalonique et Beree.",ref:"Ac 16:9-12"},
+    {x:252,y:218,label:"Corinthe",era:"2e voyage",desc:"Paul reste 18 mois a Corinthe. Aquilas et Priscille. Redige 1 et 2 Thessaloniciens. Gallio refuse de juger Paul. Grand centre apostolique.",ref:"Ac 18:1-18"},
+    {x:338,y:192,label:"Ephese",era:"3e voyage (53-57)",desc:"Paul reste 3 ans a Ephese. Miracles extraordinaires. Emeute des orfevres d Artemis. Redige 1 Corinthiens, Galates, Romains.",ref:"Ac 19"},
+    {x:528,y:258,label:"Jerusalem — Arrestation",era:"57 ap. J.-C.",desc:"Paul arrete dans le Temple. 2 ans de prison a Cesaree devant Felix, Festus, Agrippa. Appel a Cesar.",ref:"Ac 21:27-26:32"},
+    {x:120,y:152,label:"Rome — Prison et Martyre",era:"60-67 ap. J.-C.",desc:"Naufrage en route. Paul arrive a Rome assigne a residence 2 ans. Ecrit Ephesiens, Philippiens, Colossiens, Philemon. Martyre sous Neron ~67 ap. J.-C.",ref:"Ac 27-28"}
+  ]},
+  {title:"Diaspora & Retour — 70 ap. J.-C. a 1948",era:"70 AP. J.-C. — 1948",ref:"Ezechiel 37, Matthieu 24",color:"#d4a017",steps:[
+    {x:528,y:258,label:"Destruction de Jerusalem",era:"70 ap. J.-C.",desc:"Titus detruit Jerusalem et le 2e Temple. 1,1 million de morts. 97 000 deportes comme esclaves. Prophetie de Jesus accomplie. Debut de la grande Diaspora.",ref:"Mt 24:2"},
+    {x:200,y:185,label:"Diaspora en Europe",era:"70-1800",desc:"Les Juifs se dispersent dans tout l empire romain puis l Europe. Communautes a Rome, Alexandrie, Espagne, France, Allemagne, Pologne. 1900 ans sans Etat juif.",ref:"Ez 36-37"},
+    {x:530,y:242,label:"Premieres Aliyot",era:"1882-1917",desc:"Premieres vagues d immigration juive en Palestine. Theodor Herzl fonde le sionisme (1897). Declaration Balfour (1917). Population juive croi en Palestine.",ref:"Ez 37:21"},
+    {x:530,y:242,label:"Shoah",era:"1939-1945",desc:"6 millions de Juifs tues par les nazis. Survivants cherchent a rejoindre la Palestine. L horreur de la Shoah accelere la creation d un Etat juif.",ref:"Ez 37:11"},
+    {x:530,y:242,label:"Etat d Israel fonde",era:"14 MAI 1948",desc:"David Ben Gourion proclame l independance d Israel. Les ossements d Ezechiel 37 revivent ! 5 pays arabes attaquent. Israel survit. Le peuple est rentre dans sa terre.",ref:"Ez 37:12-14"}
+  ]}
+];
+
+var currentMig = 0;
+var currentStep = 0;
+var autoPlayInterval = null;
+var isPlaying = false;
+
+function loadMigration(idx, btn) {
+  currentMig = idx;
+  currentStep = 0;
+  isPlaying = false;
+  clearInterval(autoPlayInterval);
+  var playBtn = document.getElementById('migPlayBtn');
+  if (playBtn) playBtn.textContent = '▶ Auto';
+  document.querySelectorAll('.mig-btn:not(.play)').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  var mig = MIGRATIONS[idx];
+  var stepsHtml = '';
+  for (var i = 0; i < mig.steps.length; i++) {
+    stepsHtml += '<div class="mig-step" id="step_'+i+'" onclick="goToStep('+i+')"></div>';
+  }
+  var stepsEl = document.getElementById('migSteps');
+  if (stepsEl) stepsEl.innerHTML = stepsHtml;
+  showStep(0);
+}
+
+function showStep(stepIdx) {
+  var mig = MIGRATIONS[currentMig];
+  if (stepIdx >= mig.steps.length) stepIdx = mig.steps.length - 1;
+  if (stepIdx < 0) stepIdx = 0;
+  currentStep = stepIdx;
+  var step = mig.steps[stepIdx];
+  var eraEl = document.getElementById('migEra');
+  var titleEl = document.getElementById('migTitle');
+  var descEl = document.getElementById('migDesc');
+  var refEl = document.getElementById('migRef');
+  var numEl = document.getElementById('migStepNum');
+  var fillEl = document.getElementById('migProgressFill');
+  if (eraEl) eraEl.textContent = step.era;
+  if (titleEl) titleEl.innerHTML = '<span style="color:'+mig.color+'">'+mig.title+'</span>';
+  if (descEl) descEl.textContent = step.desc;
+  if (refEl) refEl.textContent = '📖 '+step.ref+' · '+step.label;
+  if (numEl) numEl.textContent = 'Etape '+(stepIdx+1)+'/'+mig.steps.length;
+  if (fillEl) fillEl.style.width = ((stepIdx+1)/mig.steps.length*100)+'%';
+  for (var i = 0; i < mig.steps.length; i++) {
+    var dot = document.getElementById('step_'+i);
+    if (!dot) continue;
+    dot.className = 'mig-step' + (i < stepIdx ? ' done' : i === stepIdx ? ' current' : '');
+  }
+  drawMigrationMap(currentMig, stepIdx);
+}
+
+function drawMigrationMap(migIdx, upToStep) {
+  var mig = MIGRATIONS[migIdx];
+  var pathsEl = document.getElementById('animPaths');
+  var dotsEl = document.getElementById('animDots');
+  var labelsEl = document.getElementById('animLabels');
+  if (!pathsEl) return;
+  pathsEl.innerHTML = ''; dotsEl.innerHTML = ''; labelsEl.innerHTML = '';
+  var color = mig.color;
+  for (var i = 0; i <= upToStep; i++) {
+    var step = mig.steps[i];
+    var next = mig.steps[i+1];
+    if (next && i < upToStep) {
+      var dx = next.x - step.x, dy = next.y - step.y;
+      var cx = step.x + dx*0.5 + dy*0.3, cy = step.y + dy*0.5 - dx*0.3;
+      var line = document.createElementNS('http://www.w3.org/2000/svg','path');
+      line.setAttribute('d','M'+step.x+','+step.y+' Q'+cx+','+cy+' '+next.x+','+next.y);
+      line.setAttribute('stroke',color); line.setAttribute('stroke-width','2.5');
+      line.setAttribute('fill','none'); line.setAttribute('stroke-dasharray','6,3');
+      line.setAttribute('opacity','0.7'); line.setAttribute('marker-end','url(#arrowGold)');
+      pathsEl.appendChild(line);
+    }
+    var circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',step.x); circle.setAttribute('cy',step.y);
+    circle.setAttribute('r', i===upToStep ? '9' : '5');
+    circle.setAttribute('fill', i===upToStep ? color : color+'88');
+    if (i===upToStep) { circle.setAttribute('stroke','#fff'); circle.setAttribute('stroke-width','2'); circle.setAttribute('filter','url(#glow2)'); }
+    dotsEl.appendChild(circle);
+    if (i===upToStep) {
+      var num = document.createElementNS('http://www.w3.org/2000/svg','text');
+      num.setAttribute('x',step.x); num.setAttribute('y',step.y+4);
+      num.setAttribute('text-anchor','middle'); num.setAttribute('fill','#0c0a07');
+      num.setAttribute('font-size','9'); num.setAttribute('font-weight','bold');
+      num.textContent = (upToStep+1); dotsEl.appendChild(num);
+    }
+    var tx = Math.max(80, Math.min(820, step.x));
+    var text = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x',tx); text.setAttribute('y',step.y-13);
+    text.setAttribute('text-anchor','middle');
+    text.setAttribute('fill', i===upToStep ? '#f0c040' : color+'aa');
+    text.setAttribute('font-size', i===upToStep ? '10' : '8');
+    text.setAttribute('font-family','EB Garamond,serif'); text.setAttribute('font-style','italic');
+    text.textContent = step.label; labelsEl.appendChild(text);
+  }
+}
+
+function goToStep(idx) { showStep(idx); }
+
+function nextStep() {
+  var mig = MIGRATIONS[currentMig];
+  if (currentStep < mig.steps.length - 1) showStep(currentStep+1);
+  else if (isPlaying) toggleAutoPlay();
+}
+
+function prevStep() { if (currentStep > 0) showStep(currentStep-1); }
+
+function toggleAutoPlay() {
+  isPlaying = !isPlaying;
+  var btn = document.getElementById('migPlayBtn');
+  if (isPlaying) {
+    if (btn) btn.textContent = '⏸ Pause';
+    autoPlayInterval = setInterval(function(){
+      var mig = MIGRATIONS[currentMig];
+      if (currentStep < mig.steps.length-1) nextStep();
+      else toggleAutoPlay();
+    }, 2500);
+  } else {
+    if (btn) btn.textContent = '▶ Auto';
+    clearInterval(autoPlayInterval);
+  }
+}
+
+document.addEventListener('keydown', function(e){
+  if (e.key==='ArrowRight') nextStep();
+  else if (e.key==='ArrowLeft') prevStep();
+  else if (e.key===' ') { e.preventDefault(); toggleAutoPlay(); }
+});
+
+window.addEventListener('DOMContentLoaded', function(){
+  loadMigration(0, document.querySelector('.mig-btn'));
+});
+</script>
+
 </body>
-</html>
