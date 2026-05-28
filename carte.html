@@ -418,6 +418,124 @@
 
   <div id="mapResult" style="margin-top:18px"></div>
 
+
+<style id="migrationStyles">
+.migration-panel { background:var(--panel); border:1px solid var(--border2); padding:20px; margin-bottom:16px; }
+.migration-title { font-family:Cinzel,serif; color:var(--gold2); font-size:1rem; letter-spacing:2px; margin-bottom:14px; border-bottom:1px solid var(--border2); padding-bottom:8px; }
+.migration-controls { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+.mig-btn { background:transparent; border:1px solid var(--border); color:var(--text3); padding:6px 14px; font-family:'EB Garamond',serif; font-size:.86rem; font-style:italic; cursor:pointer; transition:all .22s; }
+.mig-btn:hover, .mig-btn.active { border-color:var(--gold2); color:var(--gold2); background:rgba(184,134,11,.08); }
+.mig-btn.play { background:linear-gradient(135deg,#8b6914,#d4a017); color:#0c0a07; border:none; font-family:Cinzel,serif; font-weight:600; letter-spacing:1px; }
+.mig-info { background:rgba(184,134,11,0.06); border:1px solid var(--border2); padding:14px; margin-bottom:12px; min-height:80px; }
+.mig-info-era { font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--gold); letter-spacing:3px; margin-bottom:5px; }
+.mig-info-title { font-family:Cinzel,serif; color:var(--gold2); font-size:1rem; margin-bottom:6px; }
+.mig-info-desc { color:var(--text2); font-style:italic; font-size:.9rem; line-height:1.7; }
+.mig-info-ref { font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--gold3); margin-top:6px; letter-spacing:1px; }
+.mig-steps { display:flex; gap:4px; flex-wrap:wrap; margin-top:10px; }
+.mig-step { width:28px; height:6px; background:var(--border2); cursor:pointer; transition:all .2s; }
+.mig-step.done { background:var(--gold); }
+.mig-step.current { background:var(--gold2); }
+.mig-progress { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.mig-progress-bar { flex:1; height:4px; background:var(--border2); overflow:hidden; }
+.mig-progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold3)); transition:width .5s; }
+.anim-dot { transition: all 0.8s ease; }
+.path-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1s ease; }
+.path-line.drawn { stroke-dashoffset: 0; }
+</style>
+
+
+<!-- MIGRATIONS BIBLIQUES INTERACTIVES -->
+<div class="sec-title" style="margin-top:28px">🚶 Migrations Bibliques Interactives</div>
+<div class="sec-desc">D'Adam aux Juifs d'aujourd'hui — suivez les grands déplacements à travers les âges</div>
+
+<div class="migration-panel">
+  <div class="migration-title">✦ Sélectionnez une migration</div>
+  
+  <div class="migration-controls">
+    <button class="mig-btn active" onclick="loadMigration(0,this)">🌱 Adam & Ève</button>
+    <button class="mig-btn" onclick="loadMigration(1,this)">🌊 Noé & l'Arche</button>
+    <button class="mig-btn" onclick="loadMigration(2,this)">⭐ Abraham</button>
+    <button class="mig-btn" onclick="loadMigration(3,this)">🌾 Jacob en Égypte</button>
+    <button class="mig-btn" onclick="loadMigration(4,this)">⚡ L'Exode</button>
+    <button class="mig-btn" onclick="loadMigration(5,this)">🏹 Conquête Canaan</button>
+    <button class="mig-btn" onclick="loadMigration(6,this)">👑 Exil Babylone</button>
+    <button class="mig-btn" onclick="loadMigration(7,this)">✝️ Paul Apôtre</button>
+    <button class="mig-btn" onclick="loadMigration(8,this)">🕎 Diaspora & Retour</button>
+  </div>
+
+  <div class="mig-info" id="migInfo">
+    <div class="mig-info-era" id="migEra">~4000 AV. J.-C.</div>
+    <div class="mig-info-title" id="migTitle">🌱 Adam & Ève — L'Éden et la Chute</div>
+    <div class="mig-info-desc" id="migDesc">Dieu crée Adam et Ève dans le Jardin d'Éden, localisé entre les 4 fleuves (Pishon, Guihon, Tigre, Euphrate) — probablement en Mésopotamie. Après la chute, ils sont chassés vers l'est. Leurs descendants peuplent progressivement la terre.</div>
+    <div class="mig-info-ref" id="migRef">📖 Genèse 2-3 · 4 fleuves · Éden = délices en hébreu</div>
+  </div>
+
+  <div class="mig-progress">
+    <span id="migStepNum" style="font-family:Share Tech Mono,monospace;font-size:.7rem;color:var(--gold);white-space:nowrap">Étape 1/1</span>
+    <div class="mig-progress-bar"><div class="mig-progress-fill" id="migProgressFill" style="width:0%"></div></div>
+    <button class="mig-btn play" id="migPlayBtn" onclick="toggleAutoPlay()">▶ Auto</button>
+  </div>
+
+  <div class="mig-steps" id="migSteps"></div>
+</div>
+
+<!-- CARTE D'ANIMATION -->
+<div class="map-container" id="animMapContainer" style="margin-bottom:16px">
+  <svg id="animMap" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="seaGrad2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" style="stop-color:#0d2a45;stop-opacity:1"/>
+        <stop offset="100%" style="stop-color:#071828;stop-opacity:1"/>
+      </radialGradient>
+      <marker id="arrowGold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#d4a017"/>
+      </marker>
+      <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#e05050"/>
+      </marker>
+      <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#5080e0"/>
+      </marker>
+      <filter id="glow2">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Fond -->
+    <rect width="900" height="500" fill="url(#seaGrad2)"/>
+    <!-- Méditerranée -->
+    <path d="M0,160 Q200,145 350,155 Q480,165 560,158 Q660,148 780,145 L900,148 L900,280 Q700,285 560,290 Q420,295 280,300 Q150,305 0,298 Z" fill="#071828" opacity="0.85"/>
+    <!-- Mer Rouge -->
+    <path d="M600,295 Q608,320 612,355 Q610,385 600,400 Q590,388 588,360 Q586,330 590,305 Z" fill="#071828" opacity="0.8"/>
+    <!-- Terres -->
+    <rect x="360" y="240" width="130" height="160" rx="4" fill="#2a1e0a" opacity="0.8"/>
+    <text x="425" y="330" fill="#5a4020" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Égypte</text>
+    <rect x="490" y="145" width="85" height="130" rx="4" fill="#2d2808" opacity="0.85"/>
+    <text x="532" y="215" fill="#7a6828" font-size="10" text-anchor="middle" font-family="serif" font-style="italic">Canaan</text>
+    <rect x="630" y="125" width="160" height="155" rx="4" fill="#221a08" opacity="0.85"/>
+    <text x="710" y="205" fill="#6a5828" font-size="12" text-anchor="middle" font-family="serif" font-style="italic">Mésopotamie</text>
+    <rect x="810" y="130" width="90" height="140" rx="4" fill="#1e1808" opacity="0.75"/>
+    <text x="855" y="205" fill="#5a4820" font-size="10" text-anchor="middle" font-family="serif" font-style="italic">Perse</text>
+    <path d="M550,290 Q600,285 640,295 Q670,308 680,335 Q670,368 650,385 Q620,400 590,398 Q560,392 545,368 Q532,342 538,315 Z" fill="#241a08" opacity="0.75"/>
+    <text x="610" y="348" fill="#5a4020" font-size="11" text-anchor="middle" font-family="serif" font-style="italic">Arabie</text>
+    <path d="M80,130 Q148,122 182,140 Q195,155 188,172 Q175,188 152,192 Q125,194 100,182 Q80,168 78,152 Z" fill="#1e1808" opacity="0.8"/>
+    <text x="135" y="162" fill="#5a4820" font-size="11" text-anchor="middle" font-family="serif" font-style="italic">Rome</text>
+    <path d="M165,148 Q210,135 265,142 Q295,150 308,168 Q312,185 298,198 Q278,208 252,208 Q222,205 202,192 Q182,178 178,162 Z" fill="#1e1a08" opacity="0.8"/>
+    <text x="248" y="178" fill="#5a4820" font-size="11" text-anchor="middle" font-family="serif" font-style="italic">Grèce</text>
+    <!-- Fleuves -->
+    <path d="M440,430 Q438,380 435,335 Q432,295 430,255" stroke="#1a4a6a" stroke-width="3" fill="none" opacity="0.6"/>
+    <path d="M535,165 Q538,200 535,230 Q532,258 528,280" stroke="#1a4a6a" stroke-width="2.5" fill="none" opacity="0.6"/>
+    <path d="M680,138 Q700,158 718,182 Q738,210 745,242 Q748,268 745,288" stroke="#1a4a6a" stroke-width="2.5" fill="none" opacity="0.55"/>
+    <!-- Labels -->
+    <text x="350" y="130" fill="rgba(74,120,160,0.5)" font-size="13" text-anchor="middle" font-family="serif" font-style="italic">Mer Méditerranée</text>
+    <!-- Animation layer -->
+    <g id="animPaths"></g>
+    <g id="animDots"></g>
+    <g id="animLabels"></g>
+  </svg>
+</div>
+
 <!-- SECTION HISTOIRE -->
 <div class="sec-title" style="margin-top:32px">📜 Histoire du Peuple Hébreu & de la Terre de Canaan</div>
 <div class="sec-desc">Des origines à aujourd'hui — frise chronologique complète et illustrée</div>
